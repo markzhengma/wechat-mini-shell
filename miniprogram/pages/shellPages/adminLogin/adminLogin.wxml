@@ -1,0 +1,27 @@
+<!--miniprogram/pages/adminLogin/adminLogin.wxml-->
+<view class="container">
+
+  <!-- 用户 openid -->
+  <!-- <view class="userinfo">
+    <button 
+      open-type="getUserInfo" 
+      bindgetuserinfo="onGetUserInfo"
+      class="userinfo-avatar"
+      style="background-image: url({{avatarUrl}})"
+    ></button>
+    <view>
+      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+    </view>
+  </view> -->
+
+      <view class = 'logo'></view>
+      <text>呼伦贝尔市壳牌汽车养护中心</text>
+      <text>管理员登录</text>
+
+      <form bindsubmit="adminLogin">
+            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'admin_name' placeholder = "管理员账号" value = 'shellhd'/>
+            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'pass' type="password" placeholder = "管理员密码" value = 'hedong'/>
+            <button class = 'login-submit' form-type = "submit">登录</button>
+      </form>
+
+</view>

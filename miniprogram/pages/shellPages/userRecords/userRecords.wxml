@@ -1,0 +1,38 @@
+<!--miniprogram/pages/shellPages/userRecords/userRecords.wxml-->
+<text>欢迎，<text>{{userData.user_name}}</text></text>
+<text>换油证号：<text>{{userData.record_num}}</text></text>
+<text>联系电话：<text>{{userData.phone}}</text></text>
+<text>车牌号：<text>{{userData.plate}}</text></text>
+<text>车型：<text>{{userData.make}}</text></text>
+<view wx:if="{{userRecords != []}}">
+      <!-- <scroll-view wx:for="{{userRecords}}"> -->
+            <!-- <view>
+                  <text>{{item.date}}</text>
+                  <text>{{item.product_name}}</text>
+                  <text>{{item.milage}}</text>
+                  <text>{{item.gift}}</text>
+                  <text>{{item.operator}}</text>
+            </view> -->
+
+            <scroll-view wx:if="{{userRecords}}" class="table">
+                  <view class="tr bg-w">
+                        <view class="th">日期</view>
+                        <view class="th">项目</view>
+                        <view class="th ">里程</view>
+                  </view>
+                  <block wx:for="{{userRecords}}" wx:key="unique">
+                        <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+                              <view class="td">{{item.date}}</view>
+                              <view class="td">{{item.product_name}}</view>
+                              <view class="td">{{item.milage}}</view>
+                        </view>
+                        <view class="tr" wx:else>
+                              <view class="td">{{item.date}}</view>
+                              <view class="td">{{item.product_name}}</view>
+                              <view class="td">{{item.milage}}</view>
+                        </view>
+                  </block>
+            </scroll-view>
+      <!-- </scroll-view> -->
+</view>
+<view wx:else="{{userRecords == []}}"> 未找到保养记录 </view>

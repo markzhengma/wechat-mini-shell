@@ -1,0 +1,32 @@
+<!--index.wxml-->
+<view class="container">
+
+  <!-- 用户 openid -->
+  <!-- <view class="userinfo">
+    <button 
+      open-type="getUserInfo" 
+      bindgetuserinfo="onGetUserInfo"
+      class="userinfo-avatar"
+      style="background-image: url({{avatarUrl}})"
+    ></button>
+    <view>
+      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+    </view>
+  </view> -->
+
+  <view class = 'logo'></view>
+  <!-- <text>呼伦贝尔市壳牌汽车养护中心</text> -->
+  <text>保养查询系统</text>
+
+<form bindsubmit="userLogin">
+      <input class = 'login-input' name = 'phone' placeholder = "请输入手机号码" value = "13604706836"/>
+      <input class = 'login-input' name = 'plate' placeholder = "请输入车牌号" value = "蒙EC9657"/>
+      <button class = 'login-submit' form-type = "submit">查询</button>
+</form>
+
+<view class="weui-footer weui-footer_fixed-bottom footer">
+      <button class = 'footer-btn'>联系我们</button>
+      <button class = 'footer-btn' bindtap="toAdminPage">管理登录</button>
+</view>
+
+</view>
