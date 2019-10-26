@@ -1,70 +1,88 @@
 <!--miniprogram/pages/shellPages/adminPage/adminPage.wxml-->
 <scroll-view wx:if="{{adminData}}">
-      <text>欢迎，{{adminData.location}}</text>
-      <view class="page">
-            <view class="page__bd">
-                  <view class="weui-tab">
-                        <view class="weui-navbar">
-                              <block wx:for="{{tabs}}" wx:key="*this">
-                                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-                                          <view class="weui-navbar__title">{{item}}</view>
-                                    </view>
-                              </block>
-                              <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
-                        </view>
-                        <view class="weui-tab__panel">
-                              <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-                                    使用{{findMethods[methodIndex]}}查询
-                                    <picker bindchange="bindPickerChange" value="{{methodIndex}}" range="{{findMethods}}">
-                                          <button class="weui-btn mini-btn" type="primary" size="mini">更改查询方式</button>
-                                    </picker>
-
-                                    <form bindsubmit="findUserRecords">
-                                          <input class = 'login-input' name = 'input' placeholder = "请输入{{findMethods[methodIndex]}}"/>
-                                          <button class = 'login-submit' form-type = "submit">查询</button>
-                                    </form>
-
-                                    
-                                    <view wx:if = "{{userInfo}}">
-                                          <view>{{userInfo.user_name}}</view>
-                                          <view>换油证号：{{userInfo.record_num}}</view>
-                                          <view>联系电话：{{userInfo.phone}}</view>
-                                          <view>车牌号：{{userInfo.plate}}</view>
-                                          <view>车型：{{userInfo.make}}</view>
-                                    </view>
-
-                                     <scroll-view wx:if="{{userRecords}}" class="table">
-                                          <view class="tr bg-w">
-                                                <view class="th">日期</view>
-                                                <view class="th">项目</view>
-                                                <view class="th ">里程</view>
-                                          </view>
-                                          <block wx:for="{{userRecords}}" wx:key="unique">
-                                                <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-                                                      <view class="td">{{item.date}}</view>
-                                                      <view class="td">{{item.product_name}}</view>
-                                                      <view class="td">{{item.milage}}</view>
-                                                </view>
-                                                <view class="tr" wx:else>
-                                                      <view class="td">{{item.date}}</view>
-                                                      <view class="td">{{item.product_name}}</view>
-                                                      <view class="td">{{item.milage}}</view>
-                                                </view>
-                                          </block>
-                                    </scroll-view>
-                              </view>
-                              <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-                                    <form bindsubmit="createUserInfo">
-                                          <input class = 'login-input' name = 'user_name' placeholder = "姓名"/>
-                                          <input class = 'login-input' name = 'phone' placeholder = "联系方式"/>
-                                          <input class = 'login-input' name = 'make' placeholder = "车型"/>
-                                          <input class = 'login-input' name = 'plate' placeholder = "车牌号"/>
-                                          <button class = 'login-submit' form-type = "submit">创建</button>
-                                    </form>
-                              </view>
-                              <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
-                        </view>
-                  </view>
-            </view>
+  <view class = "form-mask" hidden="{{isModalHidden}}">
+    <form class = 'create-form' bindsubmit="createUserRecord">
+      <text>新建记录</text>
+      <input type='text' name="record_num" value = "{{userInfo.record_num}}" disabled/>
+      <input type='text' name="product_name" placeholder="产品名称" auto-focus/>
+      <input type='text' name="milage" placeholder="表示里程"/>
+      <input type='text' name="gift" placeholder="赠品情况"/>
+      <input type='text' name="detail" placeholder="备注"/>
+      <input type='text' name="operator" placeholder="操作人"/>
+      <view class="button-group">
+        <button class = 'login-submit' form-type = "submit"> 创建</button>
+        <button class = 'login-submit' bindtap = "showCreateRecordModal"> 取消</button>
       </view>
+    </form>
+  </view>
+  <text>欢迎，{{adminData.location}}</text>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-tab">
+        <view class="weui-navbar">
+          <block wx:for="{{tabs}}" wx:key="*this">
+            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+              <view class="weui-navbar__title">{{item}}</view>
+            </view>
+          </block>
+          <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+        </view>
+        <view class="weui-tab__panel">
+          <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+            使用{{findMethods[methodIndex]}}查询
+            <picker bindchange="bindPickerChange" value="{{methodIndex}}" range="{{findMethods}}">
+              <button class="weui-btn mini-btn" type="primary" size="mini">更改查询方式</button>
+            </picker>
+
+            <form bindsubmit="findUserRecords">
+              <input class = 'login-input' name = 'input' placeholder = "请输入{{findMethods[methodIndex]}}"/>
+              <button class = 'login-submit' form-type = "submit">查询</button>
+            </form>
+
+            
+            <view wx:if = "{{userInfo}}">
+              <view>{{userInfo.user_name}}</view>
+              <view>换油证号：{{userInfo.record_num}}</view>
+              <view>联系电话：{{userInfo.phone}}</view>
+              <view>车牌号：{{userInfo.plate}}</view>
+              <view>车型：{{userInfo.make}}</view>
+              <view>
+                <button class="weui-btn mini-btn" bindtap="showCreateRecordModal" type="primary" size="mini">新建记录</button>
+              </view>
+            </view>
+
+              <scroll-view wx:if="{{userRecords}}" class="table">
+                <view class="tr bg-w">
+                  <view class="th">日期</view>
+                  <view class="th">项目</view>
+                  <view class="th ">里程</view>
+                </view>
+                <block wx:for="{{userRecords}}" wx:key="unique">
+                  <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+                    <view class="td">{{item.date}}</view>
+                    <view class="td">{{item.product_name}}</view>
+                    <view class="td">{{item.milage}}</view>
+                  </view>
+                  <view class="tr" wx:else>
+                    <view class="td">{{item.date}}</view>
+                    <view class="td">{{item.product_name}}</view>
+                    <view class="td">{{item.milage}}</view>
+                  </view>
+                </block>
+            </scroll-view>
+          </view>
+          <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+            <form bindsubmit="createUserInfo">
+              <input class = 'login-input' name = 'user_name' placeholder = "姓名"/>
+              <input class = 'login-input' name = 'phone' placeholder = "联系方式"/>
+              <input class = 'login-input' name = 'make' placeholder = "车型"/>
+              <input class = 'login-input' name = 'plate' placeholder = "车牌号"/>
+              <button class = 'login-submit' form-type = "submit">创建</button>
+            </form>
+          </view>
+          <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
+        </view>
+      </view>
+    </view>
+  </view>
 </scroll-view>

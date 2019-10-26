@@ -14,3 +14,41 @@ text-align: center;
 .weui-navbar_title{
       font-size: 10px;
 }
+.form-mask{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.473);
+  z-index: 501;
+  display: flex;
+  justify-content: center;
+}
+.create-form{
+  width: 100vw;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  height: fit-content;
+  background-color: #f8d148;
+  padding: 10px;
+  text-align: center;
+}
+.create-form input{
+  width: 190px;
+  background-color: grey;
+  color: white;
+  margin: 10px;
+  height: 40px
+}
+.button-group{
+  width: 190px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 10px;
+}
+.create-form button{
+  margin: 10px;
+}

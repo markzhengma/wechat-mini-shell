@@ -7,5 +7,5 @@ const db = cloud.database()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-      return await db.collection('user_records').where({record_num: event.record_num}).get();
+  return await db.collection('user_records').where({ record_num: event.record_num }).orderBy('date', 'desc').get();
 }

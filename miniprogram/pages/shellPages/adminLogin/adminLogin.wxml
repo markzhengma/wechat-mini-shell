@@ -15,7 +15,7 @@
   </view> -->
 
       <view class = 'logo'></view>
-      <text>呼伦贝尔市壳牌汽车养护中心</text>
+      <!-- <text>呼伦贝尔市壳牌汽车养护中心</text> -->
       <text>管理员登录</text>
 
       <form bindsubmit="adminLogin">
