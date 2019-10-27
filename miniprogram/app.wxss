@@ -218,7 +218,7 @@ page {
 }
 
 .bg-w {
-      background: snow;
+      background: rgb(255, 227, 151);
 }
 
 .bg-g {

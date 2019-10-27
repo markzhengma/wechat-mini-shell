@@ -15,13 +15,16 @@ Page({
     findMethods: ['换油证号', '手机号', '车牌号'],
     methodIndex: 0,
     userRecords: '',
-    isModalHidden: true
+    isModalHidden: true,
+    selectedRecord: '',
+    detailHidden: true
   },
 
   /**
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
+    this.resetRecordData();
     console.log(app.globalData.adminData);
     app.globalData.userData = {};
     this.setData({
@@ -43,6 +46,12 @@ Page({
       }
     });
   },
+
+  resetRecordData: function(){
+    this.setData({
+      userRecords: ''
+    })
+  },
   tabClick: function (e) {
     this.setData({
       sliderOffset: e.currentTarget.offsetLeft,
@@ -57,7 +66,34 @@ Page({
     })
   },
 
+  detailChange: function(){
+    this.setData({
+      detailHidden: true,
+      selectedRecord: ''
+    })
+  },
+
+  showRecordDetail: function (event) {
+		console.log(event);
+		var index = parseInt(event.currentTarget.id);
+		this.setData({
+			selectedRecord: {
+				date: this.data.userRecords[index].date || '无记录',
+				product_name: this.data.userRecords[index].product_name || '无记录',
+				milage: this.data.userRecords[index].milage || '无记录',
+				gift: this.data.userRecords[index].gift || '无记录',
+				operator: this.data.userRecords[index].operator || '无记录',
+				detail: this.data.userRecords[index].detail || '无记录'
+      },
+      detailHidden: false
+		})
+	},
+
   findUserRecords: function (event) {
+    this.resetRecordData();
+    wx.showLoading({
+      title: '加载中...',
+    })
     this.setData({
       userInfo: '',
       userRecords: ''
@@ -80,6 +116,7 @@ Page({
                   record_num: res.result.data[0].record_num
                 },
                 success: (data) => {
+                  wx.hideLoading();
                   this.setData({
                     userRecords: data.result.data
                   })
@@ -106,6 +143,7 @@ Page({
                   record_num: res.result.data[0].record_num
                 },
                 success: (data) => {
+                  wx.hideLoading();
                   this.setData({
                     userRecords: data.result.data
                   })
@@ -132,6 +170,7 @@ Page({
                   record_num: res.result.data[0].record_num
                 },
                 success: (data) => {
+                  wx.hideLoading();
                   this.setData({
                     userRecords: data.result.data
                   })
@@ -149,6 +188,10 @@ Page({
   },
 
   findUserRecordsByNum: function (record_num){
+    this.resetRecordData();
+    wx.showLoading({
+      title: '加载中...',
+    })
     wx.cloud.callFunction({
       name: 'getUserInfoByNum',
       data: {
@@ -164,6 +207,7 @@ Page({
             record_num: res.result.data[0].record_num
           },
           success: (data) => {
+            wx.hideLoading();
             this.setData({
               userRecords: data.result.data
             })
@@ -176,6 +220,10 @@ Page({
   },
 
   createUserInfo: function (event) {
+    this.resetRecordData();
+    wx.showLoading({
+      title: '加载中...',
+    })
     wx.cloud.callFunction({
       name: 'getNewRecordNum',
       data: {
@@ -191,6 +239,7 @@ Page({
             record_num: newRecordNum
           },
           success: (data) => {
+            wx.hideLoading();
             this.setData({
               activeIndex: 0,
               methodIndex: 0
@@ -205,6 +254,10 @@ Page({
   },
 
   createUserRecord: function (event) {
+    this.resetRecordData();
+    wx.showLoading({
+      title: '加载中...',
+    })
     var date = new Date();
     var mm = date.getMonth() + 1;
     var dd = date.getDate();
@@ -218,14 +271,12 @@ Page({
         date: dateString
       },
       success: (res) => {
-        console.log('success')
-        console.log(res)
-        this.findUserRecordsByNum(event.detail.value.record_num)
+        wx.hideLoading();
+        this.findUserRecordsByNum(event.detail.value.record_num);
+        this.showCreateRecordModal();
       },
       fail: console.err
     })
-    console.log('event')
-    console.log(event)
   },
 
   showCreateRecordModal: function(event){
