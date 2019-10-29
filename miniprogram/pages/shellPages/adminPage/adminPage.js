@@ -308,15 +308,21 @@ Page({
     wx.showLoading({
       title: '加载中...',
     });
+    let update_data = event.detail.value.input;
+    let update_field = this.data.selectEdit;
+    let update_id = this.data.selectedId;
     wx.cloud.callFunction({
       name: 'updateUserRecord',
       data: {
-        update_data: event.detail.value.input,
-        update_field: this.data.selectEdit,
-        update_id: this.data.selectedId
+        update_data: update_data,
+        update_field: update_field,
+        update_id: update_id
       },
       success: (res) => {
         wx.hideLoading();
+        this.setData({
+          [`selectedRecord.${update_field}`]: update_data
+        })
         this.findUserRecordsByNum(this.data.userInfo.record_num);
       },
       fail: (err) => {
@@ -325,7 +331,7 @@ Page({
       }
     })
     this.resetEditing();
-    this.detailChange();
+    // this.detailChange();
   },
 
       /**
