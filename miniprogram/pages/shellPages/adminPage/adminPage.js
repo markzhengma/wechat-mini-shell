@@ -17,7 +17,10 @@ Page({
     userRecords: '',
     isModalHidden: true,
     selectedRecord: '',
-    detailHidden: true
+    selectedIndex: '',
+    detailHidden: true,
+    selectEdit: '',
+    selectedId: ''
   },
 
   /**
@@ -69,12 +72,13 @@ Page({
   detailChange: function(){
     this.setData({
       detailHidden: true,
-      selectedRecord: ''
+      selectedRecord: '',
+      selectedId: '',
+      selectedIndex: ''
     })
   },
 
   showRecordDetail: function (event) {
-		console.log(event);
 		var index = parseInt(event.currentTarget.id);
 		this.setData({
 			selectedRecord: {
@@ -85,9 +89,11 @@ Page({
 				operator: this.data.userRecords[index].operator || '无记录',
 				detail: this.data.userRecords[index].detail || '无记录'
       },
-      detailHidden: false
+      detailHidden: false,
+      selectedId: this.data.userRecords[index]._id,
+      selectedIndex: index
 		})
-	},
+  },
 
   findUserRecords: function (event) {
     this.resetRecordData();
@@ -120,6 +126,7 @@ Page({
                   this.setData({
                     userRecords: data.result.data
                   })
+                  console.log(this.data.userRecords)
                 },
                 fail: console.error
               })
@@ -283,6 +290,42 @@ Page({
     this.setData({
       isModalHidden: !this.data.isModalHidden
     })
+  },
+
+  startEditing: function(event){
+    this.setData({
+      selectEdit: event.currentTarget.id,
+    })
+  },
+
+  resetEditing: function(){
+    this.setData({
+      selectEdit: ''
+    })
+  },
+
+  updateUserRecord: function(event){
+    wx.showLoading({
+      title: '加载中...',
+    });
+    wx.cloud.callFunction({
+      name: 'updateUserRecord',
+      data: {
+        update_data: event.detail.value.input,
+        update_field: this.data.selectEdit,
+        update_id: this.data.selectedId
+      },
+      success: (res) => {
+        wx.hideLoading();
+        this.findUserRecordsByNum(this.data.userInfo.record_num);
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.log(err);
+      }
+    })
+    this.resetEditing();
+    this.detailChange();
   },
 
       /**

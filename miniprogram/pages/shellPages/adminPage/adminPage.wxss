@@ -52,3 +52,27 @@ text-align: center;
 .create-form button{
   margin: 10px;
 }
+
+.update-form{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.edit-input{
+  background-color: white;
+  width: 180px;
+  height: 30px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.edit-submit {
+  height: 30px;
+  line-height: 2;
+  background: grey;
+  color: white;
+  display: inline-block
+}
