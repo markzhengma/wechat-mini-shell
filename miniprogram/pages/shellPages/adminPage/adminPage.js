@@ -20,7 +20,9 @@ Page({
     selectedIndex: '',
     detailHidden: true,
     selectEdit: '',
-    selectedId: ''
+    selectedId: '',
+    isInfoModalHidden: true,
+    editUserInfo: ''
   },
 
   /**
@@ -48,6 +50,63 @@ Page({
         // }
       }
     });
+  },
+
+  showEditInfoModal: function(){
+    var user_name = this.data.userInfo.user_name;
+    var phone = this.data.userInfo.phone;
+    var plate = this.data.userInfo.plate;
+    var make = this.data.userInfo.make;
+    this.setData({
+      isInfoModalHidden: false,
+      editUserInfo: {
+        user_name: user_name,
+        phone: phone,
+        plate: plate,
+        make: make,
+      }
+    })
+  },
+
+  confirmUpdateUserInfo: function(){
+    wx.showLoading({
+      title: '加载中...',
+    })
+    this.setData({
+      isInfoModalHidden: true,
+    })
+    wx.cloud.callFunction({
+      name: 'updateUserInfo',
+      data: {
+        userInfo: this.data.editUserInfo,
+        record_num: this.data.userInfo.record_num
+      },
+      success: () => {
+        wx.hideLoading();
+        this.findUserRecordsByNum(this.data.userInfo.record_num)
+      },
+      fail: () => {
+        console.err;
+        wx.hideLoading();
+      }
+    })
+  },
+  cancelUpdateUserInfo: function(){
+    this.setData({
+      isInfoModalHidden: true,
+      editUserInfo: {
+        user_name: '',
+        phone: '',
+        plate: '',
+        make: '',
+      }
+    })
+  },
+
+  onSettingTextInput: function(event){
+    this.setData({
+      [`editUserInfo.${event.currentTarget.id}`]: event.detail.value
+    })
   },
 
   resetRecordData: function(){
@@ -191,6 +250,18 @@ Page({
         default:
           break;
       }
+    }else{
+      wx.hideLoading();
+      wx.showModal({
+        title: '错误',
+        content: '请输入要查询的信息',
+        showCancel: false,
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          }
+        }
+      })
     }
   },
 

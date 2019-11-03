@@ -12,34 +12,48 @@ Page({
   },
 
   userLogin: function (event) {
-    if (!app.globalData.isLoading) {
-      app.globalData.isLoading = true;
-      wx.showLoading({
-        title: '加载中...',
-      })
-      wx.cloud.callFunction({
-        name: 'userLogin',
-        data: {
-          phone: parseInt(event.detail.value.phone, 10),
-          plate: event.detail.value.plate
-        },
-        success: (res) => {
-          if (res.result.data.length > 0) {
-            app.globalData.userData = res.result.data[0];
+    if(event.detail.value.phone !== '' && event.detail.value.plate !== ''){
+      if (!app.globalData.isLoading) {
+        app.globalData.isLoading = true;
+        wx.showLoading({
+          title: '加载中...',
+        })
+        wx.cloud.callFunction({
+          name: 'userLogin',
+          data: {
+            phone: parseInt(event.detail.value.phone, 10),
+            plate: event.detail.value.plate
+          },
+          success: (res) => {
+            if (res.result.data.length > 0) {
+              app.globalData.userData = res.result.data[0];
+              wx.hideLoading();
+              wx.navigateTo({
+                url: '/pages/shellPages/userRecords/userRecords',
+              })
+            } else {
+              wx.hideLoading();
+              wx.showModal({
+                title: '出错了！',
+                content: '请检查您的手机号或车牌号是否正确',
+              })
+            }
+          },
+          fail: () => {
             wx.hideLoading();
-            wx.navigateTo({
-              url: '/pages/shellPages/userRecords/userRecords',
-            })
-          } else {
-            wx.hideLoading();
-            wx.showModal({
-              title: '出错了！',
-              content: '请检查您的手机号或车牌号是否正确',
-            })
+            console.error
           }
-        },
-        fail: () => {
-          console.error
+        })
+      }
+    } else {
+      wx.showModal({
+        title: '错误',
+        content: '请输入您的手机号码和车牌号，谢谢！',
+        showCancel: false,
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          }
         }
       })
     }

@@ -137,3 +137,11 @@ page {
   line-height: 36rpx;
   word-break: break-all;
 } */
+.container{
+  height: 100vh;
+}
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

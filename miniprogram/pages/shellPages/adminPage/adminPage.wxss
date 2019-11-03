@@ -4,6 +4,13 @@ page,
 .page__bd{
 height: 100%;
 }
+.admin-h{
+  font-size: 20px;
+  color: grey;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+}
 .page__bd{
 padding-bottom: 0;
 }
@@ -11,8 +18,16 @@ padding-bottom: 0;
 padding-top: 60px;
 text-align: center;
 }
+.weui-navbar{
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
 .weui-navbar_title{
-      font-size: 10px;
+  font-size: 10px;
+}
+.weui-tab__panel{
+  padding: 0 0 40px 0;
 }
 .form-mask{
   position: absolute;
@@ -75,4 +90,27 @@ text-align: center;
   background: grey;
   color: white;
   display: inline-block
+}
+
+.admin-button{
+  height: 35px;
+  background: grey;
+  color: white;
+  line-height: 2;
+  width: fit-content;
+}
+
+.user-table{
+  min-width: 280px;
+  width: fit-content;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.user-table-head{
+  width: 100%;
+}
+
+.search-box{
+  margin: 10px 0;
 }
