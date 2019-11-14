@@ -33,6 +33,11 @@ Page({
 			detailHidden: false
 		})
 	},
+	toContact: function () {
+    wx.navigateTo({
+      url: '/pages/shellPages/contact/contact'
+    })
+  },
 
 	/**
 	 * Lifecycle function--Called when page load

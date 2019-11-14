@@ -25,6 +25,7 @@ Page({
             plate: event.detail.value.plate
           },
           success: (res) => {
+            app.globalData.isLoading = false;
             if (res.result.data.length > 0) {
               app.globalData.userData = res.result.data[0];
               wx.hideLoading();
@@ -47,7 +48,7 @@ Page({
       }
     } else {
       wx.showModal({
-        title: '错误',
+        title: '出错了！',
         content: '请输入您的手机号码和车牌号，谢谢！',
         showCancel: false,
         success (res) {
@@ -62,6 +63,11 @@ Page({
   toAdminPage: function () {
     wx.navigateTo({
       url: '/pages/shellPages/adminLogin/adminLogin'
+    })
+  },
+  toContact: function () {
+    wx.navigateTo({
+      url: '/pages/shellPages/contact/contact'
     })
   },
 

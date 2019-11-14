@@ -9,13 +9,13 @@ height: 100%;
   color: grey;
   width: 100%;
   text-align: center;
-  padding: 20px 0;
+  padding: 4px 0;
 }
 .page__bd{
 padding-bottom: 0;
 }
 .weui-tab__content{
-padding-top: 60px;
+padding-top: 10px;
 text-align: center;
 }
 .weui-navbar{
@@ -84,12 +84,27 @@ text-align: center;
   text-align: center;
 }
 
+.edit-picker{
+  background-color: white;
+  width: 180px;
+  height: 30px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
+}
+
 .edit-submit {
   height: 30px;
   line-height: 2;
   background: grey;
   color: white;
   display: inline-block
+}
+
+.admin-button-group{
+  display: flex;
+  flex-direction: row;
 }
 
 .admin-button{

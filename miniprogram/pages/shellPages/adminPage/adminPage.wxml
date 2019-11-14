@@ -1,21 +1,24 @@
-<!--miniprogram/pages/shellPages/adminPage/adminPage.wxml-->
+<!-- miniprogram/pages/shellPages/adminPage/adminPage.wxml -->
+<view class="container">
+  <view class = 'logo'></view>
+</view>
 <scroll-view wx:if="{{adminData}}">
-  <view class = "form-mask" hidden="{{isModalHidden}}">
-    <form class = 'create-form' bindsubmit="createUserRecord">
+  <view class="form-mask" hidden="{{isModalHidden}}">
+    <form class='create-form' bindsubmit="createUserRecord">
       <text>新建记录</text>
-      <input type='text' name="record_num" value = "{{userInfo.record_num}}" disabled/>
-      <input type='text' name="product_name" placeholder="产品名称" auto-focus/>
-      <input type='text' name="milage" placeholder="表示里程"/>
-      <input type='text' name="gift" placeholder="赠品情况"/>
-      <input type='text' name="detail" placeholder="备注"/>
-      <input type='text' name="operator" placeholder="操作人"/>
+      <input type='text' name="record_num" value="{{userInfo.record_num}}" disabled />
+      <input type='text' name="product_name" placeholder="产品名称" auto-focus />
+      <input type='text' name="milage" placeholder="表示里程" />
+      <input type='text' name="gift" placeholder="赠品情况" />
+      <input type='text' name="detail" placeholder="备注" />
+      <input type='text' name="operator" placeholder="操作人" />
       <view class="button-group">
-        <button class = 'admin-button' form-type = "submit"> 创建</button>
-        <button class = 'admin-button' bindtap = "showCreateRecordModal"> 取消</button>
+        <button class='admin-button' form-type="submit">创建</button>
+        <button class='admin-button' bindtap="showCreateRecordModal">取消</button>
       </view>
     </form>
   </view>
-  <view class = "admin-h">
+  <view class="admin-h">
     <text>{{adminData.location}}</text>
   </view>
   <view class="page">
@@ -31,21 +34,18 @@
         </view>
         <view class="weui-tab__panel">
           <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-          <view class = "admin-h">
-            <text>使用{{findMethods[methodIndex]}}查询用户</text>
-          </view>
+            <view class="admin-h">
+              <text>使用{{findMethods[methodIndex]}}查询用户</text>
+            </view>
             <picker bindchange="bindPickerChange" value="{{methodIndex}}" range="{{findMethods}}">
               <button class="admin-button">更改查询方式</button>
             </picker>
-
-            <form class = "search-box" bindsubmit="findUserRecords">
-              <input class = 'login-input' name = 'input' placeholder = "请输入{{findMethods[methodIndex]}}"/>
-              <button class = 'admin-button' form-type = "submit">查询</button>
+            <form class="search-box" bindsubmit="findUserRecords">
+              <input class='login-input' name='input' placeholder="请输入{{findMethods[methodIndex]}}" />
+              <button class='admin-button' form-type="submit">查询</button>
             </form>
-
-            
-            <view wx:if = "{{userInfo}}">
-              <view  class="table user-table">
+            <view wx:if="{{userInfo}}">
+              <view class="table user-table">
                 <view class="th user-table-head">客户信息</view>
                 <view class="tr bg-w">车主姓名：{{userInfo.user_name}}</view>
                 <view class="tr bg-g">换油证号：{{userInfo.record_num}}</view>
@@ -53,106 +53,112 @@
                 <view class="tr bg-g">车牌号：{{userInfo.plate}}</view>
                 <view class="tr bg-w">车型：{{userInfo.make}}</view>
               </view>
-              <view>
+              <view class="admin-button-group">
                 <button class="admin-button" bindtap="showEditInfoModal">编辑信息</button>
                 <button class="admin-button" bindtap="showCreateRecordModal">新建记录</button>
               </view>
-               <modal title="编辑信息" hidden="{{isInfoModalHidden}}" bindconfirm="confirmUpdateUserInfo" bindcancel="cancelUpdateUserInfo">
-                <input class = "edit-input" id = "user_name" value = "{{editUserInfo.user_name}}" bindinput="onSettingTextInput"/>
-                <input class = "edit-input" id = "phone" value = "{{editUserInfo.phone}}" bindinput="onSettingTextInput"/>
-                <input class = "edit-input" id = "plate" value = "{{editUserInfo.plate}}" bindinput="onSettingTextInput"/>
-                <input class = "edit-input" id = "make" value = "{{editUserInfo.make}}" bindinput="onSettingTextInput"/>
-               </modal>
+              <modal title="编辑信息" hidden="{{isInfoModalHidden}}" bindconfirm="confirmUpdateUserInfo" bindcancel="cancelUpdateUserInfo">
+                <input class="edit-input" id="user_name" value="{{editUserInfo.user_name}}" bindinput="onSettingTextInput" />
+                <input class="edit-input" id="phone" value="{{editUserInfo.phone}}" bindinput="onSettingTextInput" />
+                <input class="edit-input" id="plate" value="{{editUserInfo.plate}}" bindinput="onSettingTextInput" />
+                <input class="edit-input" id="make" value="{{editUserInfo.make}}" bindinput="onSettingTextInput" />
+              </modal>
             </view>
-
             <scroll-view wx:if="{{userRecords}}" class="table">
-              <modal title="记录详情" no-cancel="true" hidden="{{detailHidden}}" bindconfirm="detailChange">
-                <view class="tr bg-w" id = "date" wx:if="{{selectEdit !== 'date'}}" bindtap="startEditing">日期：{{selectedRecord.date}}</view>
-                <view class="tr bg-w" id = "date" wx:if="{{selectEdit === 'date'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.date}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+              <modal title="记录详情" confirm-text="删除" hidden="{{detailHidden}}" bindconfirm="changeDeleteModal" bindcancel="detailChange">
+                <view class="tr bg-w" id="date" wx:if="{{selectEdit !== 'date'}}" bindtap="startEditing">
+                  日期：{{selectedRecord.date}}
+                </view>
+                <view class="tr bg-w" id="date" wx:if="{{selectEdit === 'date'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <!-- <input class="edit-input" name='input' value="{{selectedRecord.date}}" auto-focus="{{true}}" /> -->
+                    <picker class = "edit-picker" mode="date" bindchange="bindDateChange">
+                      <input name='input' value="{{selectedRecord.date}}" disabled="{{true}}">{{selectedRecord.date}}</input>
+                    </picker>
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-
-                <view class="tr bg-g" id = "product_name" wx:if="{{selectEdit !== 'product_name'}}" bindtap="startEditing">产品名称：{{selectedRecord.product_name}}</view>
-                <view class="tr bg-g" id = "product_name" wx:if="{{selectEdit === 'product_name'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.product_name}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+                <view class="tr bg-g" id="product_name" wx:if="{{selectEdit !== 'product_name'}}" bindtap="startEditing">
+                  产品名称：{{selectedRecord.product_name}}
+                </view>
+                <view class="tr bg-g" id="product_name" wx:if="{{selectEdit === 'product_name'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <input class="edit-input" name='input' value="{{selectedRecord.product_name}}" auto-focus="{{true}}" />
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-
-                <view class="tr bg-w" id = "milage" wx:if="{{selectEdit !== 'milage'}}" bindtap="startEditing">表示里程：{{selectedRecord.milage}}</view>
-                <view class="tr bg-w" id = "milage" wx:if="{{selectEdit === 'milage'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.milage}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+                <view class="tr bg-w" id="milage" wx:if="{{selectEdit !== 'milage'}}" bindtap="startEditing">
+                  表示里程：{{selectedRecord.milage}}
+                </view>
+                <view class="tr bg-w" id="milage" wx:if="{{selectEdit === 'milage'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <input class="edit-input" name='input' value="{{selectedRecord.milage}}" auto-focus="{{true}}" />
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-
-                <view class="tr bg-g" id = "gift" wx:if="{{selectEdit !== 'gift'}}" bindtap="startEditing">赠品情况：{{selectedRecord.gift}}</view>
-                <view class="tr bg-g" id = "gift" wx:if="{{selectEdit === 'gift'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.gift}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+                <view class="tr bg-g" id="gift" wx:if="{{selectEdit !== 'gift'}}" bindtap="startEditing">
+                  赠品情况：{{selectedRecord.gift}}
+                </view>
+                <view class="tr bg-g" id="gift" wx:if="{{selectEdit === 'gift'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <!-- <input class="edit-input" name='input' value="{{selectedRecord.gift}}" auto-focus="{{true}}" /> -->
+                    <picker class = "edit-picker" bindchange="bindGiftChange" value="{{giftIndex}}" range="{{gifts}}">
+                      <input name='input' value="{{selectedRecord.gift}}" disabled="{{true}}">{{selectedRecord.gift}}</input>
+                    </picker>
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-
-                <view class="tr bg-w" id = "operator" wx:if="{{selectEdit !== 'operator'}}" bindtap="startEditing">操作人：{{selectedRecord.operator}}</view>
-                <view class="tr bg-w" id = "operator" wx:if="{{selectEdit === 'operator'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.operator}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+                <view class="tr bg-w" id="operator" wx:if="{{selectEdit !== 'operator'}}" bindtap="startEditing">
+                  操作人：{{selectedRecord.operator}}
+                </view>
+                <view class="tr bg-w" id="operator" wx:if="{{selectEdit === 'operator'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <!-- <input class="edit-input" name='input' value="{{selectedRecord.operator}}" auto-focus="{{true}}" /> -->
+                    <picker class = "edit-picker" bindchange="bindOperatorChange" value="{{opIndex}}" range="{{operators}}">
+                      <input name='input' value="{{selectedRecord.operator}}" disabled="{{true}}">{{selectedRecord.operator}}</input>
+                    </picker>
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                
-                <view class="tr bg-g" id = "detail" wx:if="{{selectEdit !== 'detail'}}" bindtap="startEditing">备注：{{selectedRecord.detail}}</view>
-                <view class="tr bg-g" id = "detail" wx:if="{{selectEdit === 'detail'}}">
-                  <form class = "update-form" bindsubmit="updateUserRecord">
-                    <input class = "edit-input" name = 'input' value = "{{selectedRecord.detail}}" auto-focus="{{true}}"/>
-                    <button class = "edit-submit" form-type="submit">
-                      提交
-                    </button>
+                <view class="tr bg-g" id="detail" wx:if="{{selectEdit !== 'detail'}}" bindtap="startEditing">
+                  备注：{{selectedRecord.detail}}
+                </view>
+                <view class="tr bg-g" id="detail" wx:if="{{selectEdit === 'detail'}}">
+                  <form class="update-form" bindsubmit="updateUserRecord">
+                    <input class="edit-input" name='input' value="{{selectedRecord.detail}}" auto-focus="{{true}}" />
+                    <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
               </modal>
-                <view class="tr bg-w">
-                  <view class="th">日期</view>
-                  <view class="th">产品名称</view>
-                  <view class="th ">表示里程</view>
+              <modal title="确认删除" hidden="{{isDeleteModalHidden}}" bindconfirm="confirmDeleteUserRecord" bindcancel="changeDeleteModal">
+                <text>确定要删除这条记录？</text>
+              </modal>
+              <view class="tr bg-w">
+                <view class="th">日期</view>
+                <view class="th">产品名称</view>
+                <view class="th ">表示里程</view>
+              </view>
+              <block wx:for="{{userRecords}}" wx:key="unique">
+                <view bindtap="showRecordDetail" id="{{index}}" class="tr bg-w" wx:if="{{index % 2 == 0}}">
+                  <view wx:if="{{item.date}}" class="td">{{item.date}}</view>
+                  <view wx:if="{{item.product_name}}" class="td">{{item.product_name}}</view>
+                  <view wx:if="{{item.milage}}" class="td">{{item.milage}}</view>
                 </view>
-                <block wx:for="{{userRecords}}" wx:key="unique">
-                  <view bindtap="showRecordDetail" id="{{index}}" class="tr bg-w" wx:if="{{index % 2 == 0}}">
-                    <view wx:if="{{item.date}}" class="td">{{item.date}}</view>
-                    <view wx:if="{{item.product_name}}" class="td">{{item.product_name}}</view>
-                    <view wx:if="{{item.milage}}" class="td">{{item.milage}}</view>
-                  </view>
-                  <view bindtap="showRecordDetail" id="{{index}}" class="tr bg-g" wx:else>
-                    <view wx:if="{{item.date}}" class="td">{{item.date}}</view>
-                    <view wx:if="{{item.product_name}}" class="td">{{item.product_name}}</view>
-                    <view wx:if="{{item.milage}}" class="td">{{item.milage}}</view>
-                  </view>
-                </block>
+                <view bindtap="showRecordDetail" id="{{index}}" class="tr bg-g" wx:else>
+                  <view wx:if="{{item.date}}" class="td">{{item.date}}</view>
+                  <view wx:if="{{item.product_name}}" class="td">{{item.product_name}}</view>
+                  <view wx:if="{{item.milage}}" class="td">{{item.milage}}</view>
+                </view>
+              </block>
             </scroll-view>
           </view>
           <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
             <form bindsubmit="createUserInfo">
-              <input class = 'login-input' name = 'user_name' placeholder = "姓名"/>
-              <input class = 'login-input' name = 'phone' placeholder = "联系方式"/>
-              <input class = 'login-input' name = 'make' placeholder = "车型"/>
-              <input class = 'login-input' name = 'plate' placeholder = "车牌号"/>
-              <button class = 'admin-button' form-type = "submit">创建</button>
+              <input class='login-input' name='user_name' placeholder="姓名" />
+              <input class='login-input' name='phone' placeholder="联系方式" />
+              <input class='login-input' name='make' placeholder="车型" />
+              <input class='login-input' name='plate' placeholder="车牌号" />
+              <button class='admin-button' form-type="submit">创建</button>
             </form>
           </view>
           <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>

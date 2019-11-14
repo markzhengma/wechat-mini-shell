@@ -19,8 +19,8 @@
       <text>管理员登录</text>
 
       <form bindsubmit="adminLogin">
-            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'admin_name' placeholder = "管理员账号" value = 'shellhd'/>
-            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'pass' type="password" placeholder = "管理员密码" value = 'hedong'/>
+            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'admin_name' placeholder = "管理员账号"/>
+            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'pass' type="password" placeholder = "管理员密码"/>
             <button class = 'login-submit' form-type = "submit">登录</button>
       </form>
 

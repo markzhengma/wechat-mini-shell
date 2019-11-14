@@ -1,0 +1,21 @@
+/* miniprogram/pages/shellPages/contact/contact.wxss */
+.store-box{
+  width: 80vw;
+  border: 1px solid grey;
+  margin: 20px 0;
+}
+.store-title{
+  height: 3rem;
+  background-color: grey;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.store-phone{
+  height: 3rem;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

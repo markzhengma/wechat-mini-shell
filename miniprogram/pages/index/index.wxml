@@ -15,17 +15,17 @@
   </view> -->
 
   <view class = 'logo'></view>
-  <!-- <text>呼伦贝尔市壳牌汽车养护中心</text> -->
-  <text>保养查询系统</text>
+  <text class = "home-title">呼伦贝尔市壳牌汽车养护中心</text>
+  <text class = "home-text">保养查询系统</text>
 
 <form bindsubmit="userLogin">
-      <input class = 'login-input' name = 'phone' placeholder = "请输入手机号码" value = "13604706836"/>
-      <input class = 'login-input' name = 'plate' placeholder = "请输入车牌号" value = "蒙EC9657"/>
+      <input class = 'login-input' name = 'phone' placeholder = "请输入手机号码"/>
+      <input class = 'login-input' name = 'plate' placeholder = "请输入车牌号"/>
       <button class = 'login-submit' form-type = "submit">查询</button>
 </form>
 
 <view class="weui-footer weui-footer_fixed-bottom footer">
-      <button class = 'footer-btn'>联系我们</button>
+      <button class = 'footer-btn' bindtap="toContact">联系我们</button>
       <button class = 'footer-btn' bindtap="toAdminPage">管理登录</button>
 </view>
 

@@ -145,3 +145,10 @@ page {
   bottom: 0;
   width: 100%;
 }
+.home-title{
+  color: grey;
+  font-size: large;
+}
+.home-text{
+  font-size: large;
+}

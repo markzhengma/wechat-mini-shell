@@ -8,7 +8,7 @@ Page({
    * Page initial data
    */
   data: {
-    tabs: ["查找客户", "创建客户", "近期记录"],
+    tabs: ["查找客户", "创建客户"],
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
@@ -22,7 +22,12 @@ Page({
     selectEdit: '',
     selectedId: '',
     isInfoModalHidden: true,
-    editUserInfo: ''
+    editUserInfo: '',
+    isDeleteModalHidden: true,
+    gifts: '',
+    giftIndex: 0,
+    operators: '',
+    opeIndex: 0
   },
 
   /**
@@ -30,7 +35,6 @@ Page({
    */
   onLoad: function (options) {
     this.resetRecordData();
-    console.log(app.globalData.adminData);
     app.globalData.userData = {};
     this.setData({
       adminData: app.globalData.adminData
@@ -48,6 +52,35 @@ Page({
         //             tabs: this.tabs.push("下载")
         //       })
         // }
+      }
+    });
+
+    wx.cloud.callFunction({
+      name: 'getAllGifts',
+      success: (res) => {
+        let prettyData = res.result.data.map(data => {
+          return data.gift_name
+        })
+        this.setData({
+          gifts: prettyData
+        })
+      },
+      fail: err => {
+        console.log(err)
+      }
+    });
+    wx.cloud.callFunction({
+      name: 'getAllOperators',
+      success: (res) => {
+        let prettyData = res.result.data.map(data => {
+          return data.op_name
+        })
+        this.setData({
+          operators: prettyData
+        })
+      },
+      fail: err => {
+        console.log(err)
       }
     });
   },
@@ -122,9 +155,23 @@ Page({
   },
 
   bindPickerChange: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       methodIndex: parseInt(e.detail.value, 10)
+    })
+  },
+  bindGiftChange: function (e) {
+    this.setData({
+      [`selectedRecord.gift`]: this.data.gifts[parseInt(e.detail.value, 10)]
+    })
+  },
+  bindOperatorChange: function (e) {
+    this.setData({
+      [`selectedRecord.operator`]: this.data.operators[parseInt(e.detail.value, 10)]
+    })
+  },
+  bindDateChange: function (e) {
+    this.setData({
+      [`selectedRecord.date`]: e.detail.value
     })
   },
 
@@ -185,7 +232,6 @@ Page({
                   this.setData({
                     userRecords: data.result.data
                   })
-                  console.log(this.data.userRecords)
                 },
                 fail: console.error
               })
@@ -253,7 +299,7 @@ Page({
     }else{
       wx.hideLoading();
       wx.showModal({
-        title: '错误',
+        title: '出错了！',
         content: '请输入要查询的信息',
         showCancel: false,
         success (res) {
@@ -324,10 +370,16 @@ Page({
             });
             this.findUserRecordsByNum(newRecordNum)
           },
-          fail: console.error
+          fail: () => {
+            wx.hideLoading();
+            console.error
+          }
         })
       },
-      fail: console.error
+      fail: () => {
+        wx.hideLoading();
+        console.error;
+      }
     })
   },
 
@@ -404,6 +456,37 @@ Page({
     this.resetEditing();
     // this.detailChange();
   },
+
+  changeDeleteModal: function(){
+    this.setData({
+      isDeleteModalHidden: !this.data.isDeleteModalHidden
+    })
+  },
+
+  confirmDeleteUserRecord: function(){
+    wx.showLoading({
+      title: '加载中...',
+    });
+    wx.cloud.callFunction({
+      name: 'deleteUserRecord',
+      data: {
+        id: this.data.selectedId
+      },
+      success: (res) => {
+        this.changeDeleteModal();
+        this.detailChange();
+        this.findUserRecordsByNum(this.data.userInfo.record_num);
+        wx.hideLoading()
+      },
+      fail: () => {
+        console.err;
+        wx.hideLoading()
+      }
+    })
+  },
+
+
+
 
       /**
        * Lifecycle function--Called when page is initially rendered
