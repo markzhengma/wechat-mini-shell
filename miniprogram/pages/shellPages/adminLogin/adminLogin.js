@@ -29,6 +29,7 @@ Page({
 						url: '/pages/shellPages/adminPage/adminPage',
 					})
 				} else {
+					wx.hideLoading();
 					wx.showModal({
 						title: '出错了！',
 						content: '请检查您的管理员登录权限',
@@ -36,6 +37,7 @@ Page({
 				}
 			},
 			fail: () => {
+				wx.hideLoading();
 				console.error
 			}
 		})

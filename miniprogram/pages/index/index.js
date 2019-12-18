@@ -8,11 +8,15 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
-    isLoading: false
+    isLoading: false,
+    loginInput: {
+      phone: '',
+      plate: '',
+    },
   },
 
   userLogin: function (event) {
-    if(event.detail.value.phone !== '' && event.detail.value.plate !== ''){
+    if(this.data.loginInput.phone !== '' && this.data.loginInput.plate !== ''){
       if (!app.globalData.isLoading) {
         app.globalData.isLoading = true;
         wx.showLoading({
@@ -21,12 +25,20 @@ Page({
         wx.cloud.callFunction({
           name: 'userLogin',
           data: {
-            phone: parseInt(event.detail.value.phone, 10),
-            plate: event.detail.value.plate
+            phone: parseInt(this.data.loginInput.phone, 10),
+            plate: this.data.loginInput.plate
           },
           success: (res) => {
             app.globalData.isLoading = false;
             if (res.result.data.length > 0) {
+              wx.setStorage({
+                key: "phone",
+                data: this.data.loginInput.phone
+              });
+              wx.setStorage({
+                key: "plate",
+                data: this.data.loginInput.plate
+              });
               app.globalData.userData = res.result.data[0];
               wx.hideLoading();
               wx.navigateTo({
@@ -60,6 +72,12 @@ Page({
     }
   },
 
+  onLoginInput: function(event){
+    this.setData({
+      [`loginInput.${event.currentTarget.id}`]: event.detail.value
+    })
+  },
+
   toAdminPage: function () {
     wx.navigateTo({
       url: '/pages/shellPages/adminLogin/adminLogin'
@@ -71,10 +89,34 @@ Page({
     })
   },
 
+  onShow(){
+    let self = this;
+    wx.getStorage({
+      key: 'phone',
+      success(phone) {
+        wx.getStorage({
+          key: 'plate',
+          success(plate) {
+            self.setData({
+              loginInput: {
+                phone: phone.data,
+                plate: plate.data,
+              },
+            })
+            console.log(phone.data)
+            console.log(plate.data)
+          }
+        })
+      }
+    })
+  },
+
   onLoad: function () {
     this.setData({
       isLoading: false
     })
+    console.log(this.data.loginInput)
+    
     if (!wx.cloud) {
       wx.redirectTo({
         url: '../chooseLib/chooseLib',
