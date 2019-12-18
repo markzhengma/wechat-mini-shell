@@ -121,7 +121,7 @@
                   </form>
                 </view>
                 <view class="tr bg-g" id="detail" wx:if="{{selectEdit !== 'detail'}}" bindtap="startEditing">
-                  备注：{{selectedRecord.detail}}
+                  积分备注：{{selectedRecord.detail}}
                 </view>
                 <view class="tr bg-g" id="detail" wx:if="{{selectEdit === 'detail'}}">
                   <form class="update-form" bindsubmit="updateUserRecord">

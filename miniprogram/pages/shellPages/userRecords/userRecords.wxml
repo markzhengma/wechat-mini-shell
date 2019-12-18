@@ -33,7 +33,7 @@
 				<view class="user-th">表示里程</view>
 				<view class="user-th">操作人</view>
 				<view class="user-th">赠品情况</view>
-				<view class="user-th">备注</view>
+				<view class="user-th">积分备注</view>
 			</view>
 			<block wx:for="{{userRecords}}" wx:key="unique">
 				<view bindtap="showRecordDetail" id="{{index}}" class="user-tr bg-w" wx:if="{{index % 2 == 0}}">
