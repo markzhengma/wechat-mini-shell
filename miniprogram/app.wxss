@@ -158,10 +158,13 @@ page {
 .login-input {
       background: grey;
       color: white;
+      height: 44px;
       margin: 10px;
       padding: 4px;
       /* border: 2px solid white; */
       border-radius: 2px;
+      text-align: center;
+      font-size: 20px;
 }
 
 .input-placeholder {

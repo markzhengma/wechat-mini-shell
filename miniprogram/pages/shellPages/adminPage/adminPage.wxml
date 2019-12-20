@@ -52,16 +52,18 @@
                 <view class="tr bg-w">联系电话：{{userInfo.phone}}</view>
                 <view class="tr bg-g">车牌号：{{userInfo.plate}}</view>
                 <view class="tr bg-w">车型：{{userInfo.make}}</view>
+                <view class="tr bg-g">备注：{{userInfo.detail || "（无）"}}</view>
               </view>
               <view class="admin-button-group">
                 <button class="admin-button" bindtap="showEditInfoModal">编辑信息</button>
                 <button class="admin-button" bindtap="showCreateRecordModal">新建记录</button>
               </view>
               <modal title="编辑信息" hidden="{{isInfoModalHidden}}" bindconfirm="confirmUpdateUserInfo" bindcancel="cancelUpdateUserInfo">
-                <input class="edit-input" id="user_name" value="{{editUserInfo.user_name}}" bindinput="onSettingTextInput" />
-                <input class="edit-input" id="phone" value="{{editUserInfo.phone}}" bindinput="onSettingTextInput" />
-                <input class="edit-input" id="plate" value="{{editUserInfo.plate}}" bindinput="onSettingTextInput" />
-                <input class="edit-input" id="make" value="{{editUserInfo.make}}" bindinput="onSettingTextInput" />
+                <view>车主姓名：<input class="edit-input" id="user_name" value="{{editUserInfo.user_name}}" bindinput="onSettingTextInput" /></view>
+                <view>联系电话：<input class="edit-input" id="phone" value="{{editUserInfo.phone}}" bindinput="onSettingTextInput" /></view>
+                <view>车牌号：<input class="edit-input" id="plate" value="{{editUserInfo.plate}}" bindinput="onSettingTextInput" /></view>
+                <view>车型：<input class="edit-input" id="make" value="{{editUserInfo.make}}" bindinput="onSettingTextInput" /></view>
+                <view>备注：<input class="edit-input" id="detail" value="{{editUserInfo.detail}}" bindinput="onSettingTextInput" /></view>
               </modal>
             </view>
             <scroll-view wx:if="{{userRecords}}" class="table">

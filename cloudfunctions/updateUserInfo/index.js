@@ -17,6 +17,7 @@ exports.main = async (event, context) => {
         phone: event.userInfo.phone,
         plate: event.userInfo.plate,
         make: event.userInfo.make,
+        detail: event.userInfo.detail
       }
     })
   } catch (e) {

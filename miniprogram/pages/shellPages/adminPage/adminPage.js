@@ -90,6 +90,7 @@ Page({
     var phone = this.data.userInfo.phone;
     var plate = this.data.userInfo.plate;
     var make = this.data.userInfo.make;
+    var detail = this.data.userInfo.detail;
     this.setData({
       isInfoModalHidden: false,
       editUserInfo: {
@@ -97,6 +98,7 @@ Page({
         phone: phone,
         plate: plate,
         make: make,
+        detail: detail
       }
     })
   },
@@ -108,6 +110,7 @@ Page({
     this.setData({
       isInfoModalHidden: true,
     })
+    console.log(this.data.editUserInfo)
     wx.cloud.callFunction({
       name: 'updateUserInfo',
       data: {
@@ -132,6 +135,7 @@ Page({
         phone: '',
         plate: '',
         make: '',
+        detail: ''
       }
     })
   },
