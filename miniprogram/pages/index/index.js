@@ -16,6 +16,7 @@ Page({
   },
 
   userLogin: function (event) {
+
     if(this.data.loginInput.phone !== '' && this.data.loginInput.plate !== ''){
       if (!app.globalData.isLoading) {
         app.globalData.isLoading = true;

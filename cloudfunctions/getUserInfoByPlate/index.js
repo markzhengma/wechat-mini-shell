@@ -7,5 +7,10 @@ const db = cloud.database()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-      return await db.collection('users').where({ plate: event.plate }).get();
+      return await db.collection('users').where({ 
+            plate: db.RegExp({
+                  regexp: event.plate,
+                  options: 'i'
+            }) 
+      }).get();
 }

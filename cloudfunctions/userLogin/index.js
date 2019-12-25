@@ -9,6 +9,9 @@ const db = cloud.database();
 exports.main = async (event, context) => {
       return await db.collection('users').where({
             phone: event.phone,
-            plate: event.plate
+            plate: db.RegExp({
+                  regexp: event.plate,
+                  options: 'i'
+            })
       }).get()
 }
