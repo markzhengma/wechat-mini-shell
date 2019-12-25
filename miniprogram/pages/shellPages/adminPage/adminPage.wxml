@@ -9,9 +9,15 @@
       <input type='text' name="record_num" value="{{userInfo.record_num}}" disabled />
       <input type='text' name="product_name" placeholder="产品名称" auto-focus />
       <input type='text' name="milage" placeholder="表示里程" />
-      <input type='text' name="gift" placeholder="赠品情况" />
+      <!-- <input type='text' name="gift" placeholder="赠品情况" /> -->
+      <picker bindchange="bindGiftChange" value="{{giftIndex}}" range="{{gifts}}">
+        <input name='input' value="{{selectedRecord.gift}}" placeholder="赠品情况" disabled="{{true}}">{{selectedRecord.gift}}</input>
+      </picker>
       <input type='text' name="detail" placeholder="备注" />
-      <input type='text' name="operator" placeholder="操作人" />
+      <!-- <input type='text' name="operator" placeholder="操作人" /> -->
+      <picker bindchange="bindOperatorChange" value="{{opIndex}}" range="{{operators}}">
+        <input name='input' value="{{selectedRecord.operator}}" placeholder="操作人" disabled="{{true}}">{{selectedRecord.operator}}</input>
+      </picker>
       <view class="button-group">
         <button class='admin-button' form-type="submit">创建</button>
         <button class='admin-button' bindtap="showCreateRecordModal">取消</button>

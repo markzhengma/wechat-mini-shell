@@ -12,12 +12,12 @@ exports.main = async (event, context) => {
       // data 字段表示需新增的 JSON 数据
       data: {
         date: event.date,
-        gift: event.record.gift,
-        milage: parseInt(event.record.milage),
-        operator: event.record.operator,
-        product_name: event.record.product_name,
-        detail: event.record.detail,
-        record_num: event.record.record_num
+        gift: event.gift,
+        milage: parseInt(event.milage),
+        operator: event.operator,
+        product_name: event.product_name,
+        detail: event.detail,
+        record_num: event.record_num
       }
     })
   } catch (e) {

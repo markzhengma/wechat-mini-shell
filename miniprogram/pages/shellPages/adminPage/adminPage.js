@@ -27,7 +27,7 @@ Page({
     gifts: '',
     giftIndex: 0,
     operators: '',
-    opeIndex: 0
+    opeIndex: 0,
   },
 
   /**
@@ -401,15 +401,21 @@ Page({
     wx.cloud.callFunction({
       name: 'createUserRecord',
       data: {
-        record: event.detail.value,
-        date: dateString
+        date: dateString,
+        gift: this.data.selectedRecord.gift,
+        milage: event.detail.value.milage,
+        operator: this.data.selectedRecord.operator,
+        product_name: event.detail.value.product_name,
+        detail: event.detail.value.detail,
+        record_num: event.detail.value.record_num,
       },
       success: (res) => {
         wx.hideLoading();
         this.findUserRecordsByNum(event.detail.value.record_num);
         this.showCreateRecordModal();
+        this.detailChange();
       },
-      fail: console.err
+      fail: this.detailChange()
     })
   },
 
