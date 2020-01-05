@@ -7,7 +7,10 @@
     <form class='create-form' bindsubmit="createUserRecord">
       <text>新建记录</text>
       <input type='text' name="record_num" value="{{userInfo.record_num}}" disabled />
-      <input type='text' name="product_name" placeholder="产品名称" auto-focus />
+      <!-- <input type='text' name="product_name" placeholder="产品名称" auto-focus /> -->
+      <picker bindchange="bindProductChange" value="{{prodIndex}}" range="{{products}}">
+        <input name='input' value="{{selectedRecord.product}}" placeholder="项目名称" disabled="{{true}}">{{selectedRecord.product}}</input>
+      </picker>
       <input type='text' name="milage" placeholder="表示里程" />
       <!-- <input type='text' name="gift" placeholder="赠品情况" /> -->
       <picker bindchange="bindGiftChange" value="{{giftIndex}}" range="{{gifts}}">

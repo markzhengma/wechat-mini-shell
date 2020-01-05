@@ -27,8 +27,9 @@ Page({
     gifts: '',
     giftIndex: 0,
     operators: '',
+    opIndex: 0,
     products: '',
-    opeIndex: 0,
+    prodIndex: 0,
   },
 
   /**
@@ -86,7 +87,7 @@ Page({
           return product.product_name
         })
         this.setData({
-          product: productArr
+          products: productArr
         })
       },
       fail: err => {
@@ -209,6 +210,11 @@ Page({
   bindOperatorChange: function (e) {
     this.setData({
       [`selectedRecord.operator`]: this.data.operators[parseInt(e.detail.value, 10)]
+    })
+  },
+  bindProductChange: function (e) {
+    this.setData({
+      [`selectedRecord.product`]: this.data.products[parseInt(e.detail.value, 10)]
     })
   },
   bindDateChange: function (e) {
@@ -411,7 +417,7 @@ Page({
         gift: this.data.selectedRecord.gift,
         milage: event.detail.value.milage,
         operator: this.data.selectedRecord.operator,
-        product_name: event.detail.value.product_name,
+        product_name: this.data.selectedRecord.product,
         detail: event.detail.value.detail,
         reminder: event.detail.value.reminder
       },
