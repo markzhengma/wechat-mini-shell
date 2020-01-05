@@ -27,6 +27,7 @@ Page({
     gifts: '',
     giftIndex: 0,
     operators: '',
+    products: '',
     opeIndex: 0,
   },
 
@@ -47,42 +48,80 @@ Page({
           sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
           sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
         });
-        // if (app.globalData.adminData.location === "总管理员" && app.globalData.is_super === true) {
-        //       that.setData({
-        //             tabs: this.tabs.push("下载")
-        //       })
-        // }
       }
     });
 
-    wx.cloud.callFunction({
-      name: 'getAllGifts',
-      success: (res) => {
-        let prettyData = res.result.data.map(data => {
-          return data.gift_name
+    wx.request({
+      url: 'https://api.hailarshell.cn/api/gift/all',
+      success: res => {
+        const giftArr = res.data.map(gift => {
+          return gift.gift_name
         })
         this.setData({
-          gifts: prettyData
+          gifts: giftArr
         })
       },
       fail: err => {
-        console.log(err)
+        console.log(err);
       }
     });
-    wx.cloud.callFunction({
-      name: 'getAllOperators',
+    wx.request({
+      url: 'https://api.hailarshell.cn/api/operator/all',
       success: (res) => {
-        let prettyData = res.result.data.map(data => {
-          return data.op_name
+        const opArr = res.data.map(op => {
+          return op.op_name
         })
         this.setData({
-          operators: prettyData
+          operators: opArr
         })
       },
       fail: err => {
-        console.log(err)
+        console.log(err);
       }
     });
+    wx.request({
+      url: 'https://api.hailarshell.cn/api/product/all',
+      success: (res) => {
+        const productArr = res.data.map(product => {
+          return product.product_name
+        })
+        this.setData({
+          product: productArr
+        })
+      },
+      fail: err => {
+        console.log(err);
+      }
+    });
+
+    // wx.cloud.callFunction({
+    //   name: 'getAllGifts',
+    //   success: (res) => {
+    //     let prettyData = res.result.data.map(data => {
+    //       return data.gift_name
+    //     })
+    //     this.setData({
+    //       gifts: prettyData
+    //     })
+    //   },
+    //   fail: err => {
+    //     console.log(err)
+    //   }
+    // });
+    // wx.cloud.callFunction({
+    //   name: 'getAllOperators',
+    //   success: (res) => {
+    //     let prettyData = res.result.data.map(data => {
+    //       return data.op_name
+    //     })
+    //     this.setData({
+    //       operators: prettyData
+    //     })
+    //   },
+    //   fail: err => {
+    //     console.log(err)
+    //   }
+    // });
   },
 
   showEditInfoModal: function(){
@@ -110,7 +149,6 @@ Page({
     this.setData({
       isInfoModalHidden: true,
     })
-    console.log(this.data.editUserInfo)
     wx.cloud.callFunction({
       name: 'updateUserInfo',
       data: {
@@ -197,7 +235,8 @@ Page({
 				milage: this.data.userRecords[index].milage || '无记录',
 				gift: this.data.userRecords[index].gift || '无记录',
 				operator: this.data.userRecords[index].operator || '无记录',
-				detail: this.data.userRecords[index].detail || '无记录'
+				detail: this.data.userRecords[index].detail || '无记录',
+				reminder: this.data.userRecords[index].reminder || '无记录'
       },
       detailHidden: false,
       selectedId: this.data.userRecords[index]._id,
@@ -217,24 +256,20 @@ Page({
     if (event.detail.value.input !== '') {
       switch (this.data.methodIndex) {
         case 0:
-          wx.cloud.callFunction({
-            name: 'getUserInfoByNum',
-            data: {
-              record_num: event.detail.value.input
-            },
+          wx.request({
+            url: `https://api.hailarshell.cn/api/user/single?filter=record_num&value=${event.detail.value.input}`,
             success: (res) => {
+              console.log(res.data.data);
               this.setData({
-                userInfo: res.result.data[0]
+                userInfo: res.data.data
               });
-              wx.cloud.callFunction({
-                name: 'getUserRecordsByNum',
-                data: {
-                  record_num: res.result.data[0].record_num
-                },
+              wx.request({
+                url: `https://api.hailarshell.cn/api/record/user/${event.detail.value.input}`,
                 success: (data) => {
+                  console.log(data.data.data);
                   wx.hideLoading();
                   this.setData({
-                    userRecords: data.result.data
+                    userRecords: data.data.data
                   })
                 },
                 fail: console.error
@@ -244,24 +279,20 @@ Page({
           })
           break;
         case 1:
-          wx.cloud.callFunction({
-            name: 'getUserInfoByPhone',
-            data: {
-              phone: parseInt(event.detail.value.input, 10)
-            },
+          wx.request({
+            url: `https://api.hailarshell.cn/api/user/single?filter=phone&value=${event.detail.value.input}`,
             success: (res) => {
+              console.log(res.data.data);
               this.setData({
-                userInfo: res.result.data[0]
+                userInfo: res.data.data
               });
-              wx.cloud.callFunction({
-                name: 'getUserRecordsByNum',
-                data: {
-                  record_num: res.result.data[0].record_num
-                },
+              wx.request({
+                url: `https://api.hailarshell.cn/api/record/user/${res.data.data.record_num}`,
                 success: (data) => {
+                  console.log(data.data.data);
                   wx.hideLoading();
                   this.setData({
-                    userRecords: data.result.data
+                    userRecords: data.data.data
                   })
                 },
                 fail: console.error
@@ -271,24 +302,20 @@ Page({
           })
           break;
         case 2:
-          wx.cloud.callFunction({
-            name: 'getUserInfoByPlate',
-            data: {
-              plate: event.detail.value.input
-            },
+          wx.request({
+            url: `https://api.hailarshell.cn/api/user/single?filter=plate&value=${event.detail.value.input}`,
             success: (res) => {
+              console.log(res.data.data);
               this.setData({
-                userInfo: res.result.data[0]
+                userInfo: res.data.data
               });
-              wx.cloud.callFunction({
-                name: 'getUserRecordsByNum',
-                data: {
-                  record_num: res.result.data[0].record_num
-                },
+              wx.request({
+                url: `https://api.hailarshell.cn/api/record/user/${res.data.data.record_num}`,
                 success: (data) => {
+                  console.log(data.data.data);
                   wx.hideLoading();
                   this.setData({
-                    userRecords: data.result.data
+                    userRecords: data.data.data
                   })
                 },
                 fail: console.error
@@ -319,25 +346,19 @@ Page({
     this.resetRecordData();
     wx.showLoading({
       title: '加载中...',
-    })
-    wx.cloud.callFunction({
-      name: 'getUserInfoByNum',
-      data: {
-        record_num: record_num
-      },
+    });
+    wx.request({
+      url: `https://api.hailarshell.cn/api/user/single?filter=record_num&value=${record_num}`,
       success: (res) => {
         this.setData({
-          userInfo: res.result.data[0]
+          userInfo: res.data.data
         });
-        wx.cloud.callFunction({
-          name: 'getUserRecordsByNum',
-          data: {
-            record_num: res.result.data[0].record_num
-          },
+        wx.request({
+          url: `https://api.hailarshell.cn/api/record/user/${record_num}`,
           success: (data) => {
             wx.hideLoading();
             this.setData({
-              userRecords: data.result.data
+              userRecords: data.data.data
             })
           },
           fail: console.error
@@ -352,37 +373,21 @@ Page({
     wx.showLoading({
       title: '加载中...',
     })
-    wx.cloud.callFunction({
-      name: 'getNewRecordNum',
-      data: {
-        location_char: this.data.adminData.location_char
-      },
+    wx.request({
+      url: `https://api.hailarshell.cn/api/user/single/${this.data.adminData.location_char}`,
+      method: 'POST',
+      data: event.detail.value,
       success: (data) => {
-        let newRecordNum = this.data.adminData.location_char + (parseInt(data.result.data[0].record_num.match(/\d+/g), 10) + 1);
-        console.log('new number: ' + newRecordNum);
-        wx.cloud.callFunction({
-          name: 'createUserInfo',
-          data: {
-            user_info: event.detail.value,
-            record_num: newRecordNum
-          },
-          success: (data) => {
-            wx.hideLoading();
-            this.setData({
-              activeIndex: 0,
-              methodIndex: 0
-            });
-            this.findUserRecordsByNum(newRecordNum)
-          },
-          fail: () => {
-            wx.hideLoading();
-            console.error
-          }
-        })
+        wx.hideLoading();
+        this.setData({
+          activeIndex: 0,
+          methodIndex: 0
+        });
+        this.findUserRecordsByNum(data.data.data.record_num);
       },
       fail: () => {
         wx.hideLoading();
-        console.error;
+        console.error
       }
     })
   },
@@ -398,8 +403,9 @@ Page({
 
     var dateString = date.getFullYear() + '-' + (mm > 9 ? '' : '0') + mm + '-' + (dd > 9 ? '' : '0') + dd;
 
-    wx.cloud.callFunction({
-      name: 'createUserRecord',
+    wx.request({
+      url: `https://api.hailarshell.cn/api/record/user/${event.detail.value.record_num}`,
+      method: 'POST',
       data: {
         date: dateString,
         gift: this.data.selectedRecord.gift,
@@ -407,7 +413,7 @@ Page({
         operator: this.data.selectedRecord.operator,
         product_name: event.detail.value.product_name,
         detail: event.detail.value.detail,
-        record_num: event.detail.value.record_num,
+        reminder: event.detail.value.reminder
       },
       success: (res) => {
         wx.hideLoading();
@@ -437,35 +443,35 @@ Page({
     })
   },
 
-  updateUserRecord: function(event){
-    wx.showLoading({
-      title: '加载中...',
-    });
-    let update_data = event.detail.value.input;
-    let update_field = this.data.selectEdit;
-    let update_id = this.data.selectedId;
-    wx.cloud.callFunction({
-      name: 'updateUserRecord',
-      data: {
-        update_data: update_data,
-        update_field: update_field,
-        update_id: update_id
-      },
-      success: (res) => {
-        wx.hideLoading();
-        this.setData({
-          [`selectedRecord.${update_field}`]: update_data
-        })
-        this.findUserRecordsByNum(this.data.userInfo.record_num);
-      },
-      fail: (err) => {
-        wx.hideLoading();
-        console.log(err);
-      }
-    })
-    this.resetEditing();
-    // this.detailChange();
-  },
+  // updateUserRecord: function(event){
+  //   wx.showLoading({
+  //     title: '加载中...',
+  //   });
+  //   let update_data = event.detail.value.input;
+  //   let update_field = this.data.selectEdit;
+  //   let update_id = this.data.selectedId;
+  //   wx.cloud.callFunction({
+  //     name: 'updateUserRecord',
+  //     data: {
+  //       update_data: update_data,
+  //       update_field: update_field,
+  //       update_id: update_id
+  //     },
+  //     success: (res) => {
+  //       wx.hideLoading();
+  //       this.setData({
+  //         [`selectedRecord.${update_field}`]: update_data
+  //       })
+  //       this.findUserRecordsByNum(this.data.userInfo.record_num);
+  //     },
+  //     fail: (err) => {
+  //       wx.hideLoading();
+  //       console.log(err);
+  //     }
+  //   })
+  //   this.resetEditing();
+  //   // this.detailChange();
+  // },
 
   changeDeleteModal: function(){
     this.setData({
@@ -477,11 +483,9 @@ Page({
     wx.showLoading({
       title: '加载中...',
     });
-    wx.cloud.callFunction({
-      name: 'deleteUserRecord',
-      data: {
-        id: this.data.selectedId
-      },
+    wx.request({
+      url: `https://api.hailarshell.cn/api/record/single/${this.data.selectedId}`,
+      method: 'DELETE',
       success: (res) => {
         this.changeDeleteModal();
         this.detailChange();

@@ -1,0 +1,5 @@
+<view class="container">
+  <view class = 'logo'></view>
+  <text class = "home-title">亲，小程序管理页面现在升级中哟~！</text>
+  <text class = "home-title">管理员请访问 www.hailarshell.cn 管理保养记录</text>
+</view>

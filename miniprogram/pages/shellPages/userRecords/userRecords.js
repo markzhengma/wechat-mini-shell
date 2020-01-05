@@ -50,19 +50,32 @@ Page({
 		this.setData({
 			userData: app.globalData.userData
 		});
-		wx.cloud.callFunction({
-			name: 'getUserRecordsByNum',
-			data: {
-				record_num: app.globalData.userData.record_num
-			},
-			success: (res) => {
+		wx.request({
+			url: `https://api.hailarshell.cn/api/record/user/${app.globalData.userData.record_num}`,
+			success:res => {
 				wx.hideLoading();
 				this.setData({
-					userRecords: res.result.data
+					userRecords: res.data.data
 				})
 			},
-			fail: console.error
+			fail: err => {
+				wx.hideLoading();
+				console.log(err);
+			}
 		})
+		// wx.cloud.callFunction({
+		// 	name: 'getUserRecordsByNum',
+		// 	data: {
+		// 		record_num: app.globalData.userData.record_num
+		// 	},
+		// 	success: (res) => {
+		// 		wx.hideLoading();
+		// 		this.setData({
+		// 			userRecords: res.result.data
+		// 		})
+		// 	},
+		// 	fail: console.error
+		// })
 	},
 
 	/**

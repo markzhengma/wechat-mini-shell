@@ -23,15 +23,18 @@ Page({
         wx.showLoading({
           title: '加载中...',
         })
-        wx.cloud.callFunction({
-          name: 'userLogin',
+        wx.request({
+          url: 'https://api.hailarshell.cn/api/user/single',
           data: {
-            phone: parseInt(this.data.loginInput.phone, 10),
-            plate: this.data.loginInput.plate
+            filter: 'plate',
+            value: this.data.loginInput.plate
           },
           success: (res) => {
+            wx.hideLoading();
             app.globalData.isLoading = false;
-            if (res.result.data.length > 0) {
+
+            const phoneRes = res.data.data.phone;
+            if(phoneRes === this.data.loginInput.phone){
               wx.setStorage({
                 key: "phone",
                 data: this.data.loginInput.phone
@@ -40,13 +43,11 @@ Page({
                 key: "plate",
                 data: this.data.loginInput.plate
               });
-              app.globalData.userData = res.result.data[0];
-              wx.hideLoading();
+              app.globalData.userData = res.data.data;
               wx.navigateTo({
                 url: '/pages/shellPages/userRecords/userRecords',
               })
             } else {
-              wx.hideLoading();
               wx.showModal({
                 title: '出错了！',
                 content: '请检查您的手机号或车牌号是否正确',
@@ -58,6 +59,41 @@ Page({
             console.error
           }
         })
+        // wx.cloud.callFunction({
+        //   name: 'userLogin',
+        //   data: {
+        //     phone: parseInt(this.data.loginInput.phone, 10),
+        //     plate: this.data.loginInput.plate
+        //   },
+        //   success: (res) => {
+        //     app.globalData.isLoading = false;
+        //     if (res.result.data.length > 0) {
+        //       wx.setStorage({
+        //         key: "phone",
+        //         data: this.data.loginInput.phone
+        //       });
+        //       wx.setStorage({
+        //         key: "plate",
+        //         data: this.data.loginInput.plate
+        //       });
+        //       app.globalData.userData = res.result.data[0];
+        //       wx.hideLoading();
+        //       wx.navigateTo({
+        //         url: '/pages/shellPages/userRecords/userRecords',
+        //       })
+        //     } else {
+        //       wx.hideLoading();
+        //       wx.showModal({
+        //         title: '出错了！',
+        //         content: '请检查您的手机号或车牌号是否正确',
+        //       })
+        //     }
+        //   },
+        //   fail: () => {
+        //     wx.hideLoading();
+        //     console.error
+        //   }
+        // })
       }
     } else {
       wx.showModal({
@@ -82,6 +118,7 @@ Page({
   toAdminPage: function () {
     wx.navigateTo({
       url: '/pages/shellPages/adminLogin/adminLogin'
+      // url: '/pages/shellPages/msgPage/msgPage'
     })
   },
   toContact: function () {

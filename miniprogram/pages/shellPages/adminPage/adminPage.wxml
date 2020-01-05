@@ -13,7 +13,8 @@
       <picker bindchange="bindGiftChange" value="{{giftIndex}}" range="{{gifts}}">
         <input name='input' value="{{selectedRecord.gift}}" placeholder="赠品情况" disabled="{{true}}">{{selectedRecord.gift}}</input>
       </picker>
-      <input type='text' name="detail" placeholder="备注" />
+      <input type='text' name="detail" placeholder="积分/备注" />
+      <input type='text' name="reminder" placeholder="保养提醒" />
       <!-- <input type='text' name="operator" placeholder="操作人" /> -->
       <picker bindchange="bindOperatorChange" value="{{opIndex}}" range="{{operators}}">
         <input name='input' value="{{selectedRecord.operator}}" placeholder="操作人" disabled="{{true}}">{{selectedRecord.operator}}</input>
@@ -61,7 +62,7 @@
                 <view class="tr bg-g">备注：{{userInfo.detail || "（无）"}}</view>
               </view>
               <view class="admin-button-group">
-                <button class="admin-button" bindtap="showEditInfoModal">编辑信息</button>
+                <button class="admin-button" bindtap="showEditInfoModal" disabled>编辑信息</button>
                 <button class="admin-button" bindtap="showCreateRecordModal">新建记录</button>
               </view>
               <modal title="编辑信息" hidden="{{isInfoModalHidden}}" bindconfirm="confirmUpdateUserInfo" bindcancel="cancelUpdateUserInfo">
@@ -74,7 +75,8 @@
             </view>
             <scroll-view wx:if="{{userRecords}}" class="table">
               <modal title="记录详情" confirm-text="删除" hidden="{{detailHidden}}" bindconfirm="changeDeleteModal" bindcancel="detailChange">
-                <view class="tr bg-w" id="date" wx:if="{{selectEdit !== 'date'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-w" id="date" wx:if="{{selectEdit !== 'date'}}" bindtap="startEditing"> -->
+                <view class="tr bg-w" id="date" wx:if="{{selectEdit !== 'date'}}">
                   日期：{{selectedRecord.date}}
                 </view>
                 <view class="tr bg-w" id="date" wx:if="{{selectEdit === 'date'}}">
@@ -86,7 +88,8 @@
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                <view class="tr bg-g" id="product_name" wx:if="{{selectEdit !== 'product_name'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-g" id="product_name" wx:if="{{selectEdit !== 'product_name'}}" bindtap="startEditing"> -->
+                <view class="tr bg-g" id="product_name" wx:if="{{selectEdit !== 'product_name'}}">
                   产品名称：{{selectedRecord.product_name}}
                 </view>
                 <view class="tr bg-g" id="product_name" wx:if="{{selectEdit === 'product_name'}}">
@@ -95,7 +98,8 @@
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                <view class="tr bg-w" id="milage" wx:if="{{selectEdit !== 'milage'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-w" id="milage" wx:if="{{selectEdit !== 'milage'}}" bindtap="startEditing"> -->
+                <view class="tr bg-w" id="milage" wx:if="{{selectEdit !== 'milage'}}">
                   表示里程：{{selectedRecord.milage}}
                 </view>
                 <view class="tr bg-w" id="milage" wx:if="{{selectEdit === 'milage'}}">
@@ -104,7 +108,8 @@
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                <view class="tr bg-g" id="gift" wx:if="{{selectEdit !== 'gift'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-g" id="gift" wx:if="{{selectEdit !== 'gift'}}" bindtap="startEditing"> -->
+                <view class="tr bg-g" id="gift" wx:if="{{selectEdit !== 'gift'}}">
                   赠品情况：{{selectedRecord.gift}}
                 </view>
                 <view class="tr bg-g" id="gift" wx:if="{{selectEdit === 'gift'}}">
@@ -116,7 +121,8 @@
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                <view class="tr bg-w" id="operator" wx:if="{{selectEdit !== 'operator'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-w" id="operator" wx:if="{{selectEdit !== 'operator'}}" bindtap="startEditing"> -->
+                <view class="tr bg-w" id="operator" wx:if="{{selectEdit !== 'operator'}}">
                   操作人：{{selectedRecord.operator}}
                 </view>
                 <view class="tr bg-w" id="operator" wx:if="{{selectEdit === 'operator'}}">
@@ -128,7 +134,8 @@
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
                 </view>
-                <view class="tr bg-g" id="detail" wx:if="{{selectEdit !== 'detail'}}" bindtap="startEditing">
+                <!-- <view class="tr bg-g" id="detail" wx:if="{{selectEdit !== 'detail'}}" bindtap="startEditing"> -->
+                <view class="tr bg-g" id="detail" wx:if="{{selectEdit !== 'detail'}}">
                   积分备注：{{selectedRecord.detail}}
                 </view>
                 <view class="tr bg-g" id="detail" wx:if="{{selectEdit === 'detail'}}">
@@ -136,6 +143,9 @@
                     <input class="edit-input" name='input' value="{{selectedRecord.detail}}" auto-focus="{{true}}" />
                     <button class="edit-submit" form-type="submit">提交</button>
                   </form>
+                </view>
+                <view class="tr bg-w" id="reminder" wx:if="{{selectEdit !== 'reminder'}}">
+                  保养提醒：{{selectedRecord.reminder}}
                 </view>
               </modal>
               <modal title="确认删除" hidden="{{isDeleteModalHidden}}" bindconfirm="confirmDeleteUserRecord" bindcancel="changeDeleteModal">

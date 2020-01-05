@@ -202,7 +202,7 @@ page {
 }
 
 .table {
-      margin: 10px 0;
+      margin: 10px 0 100px 0;
       border: 0px solid darkgray;
 }
 

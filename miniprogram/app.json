@@ -16,7 +16,8 @@
     "pages/shellPages/userRecords/userRecords",
     "pages/shellPages/adminLogin/adminLogin",
     "pages/shellPages/adminPage/adminPage",
-    "pages/shellPages/contact/contact"
+    "pages/shellPages/contact/contact",
+    "pages/shellPages/msgPage/msgPage"
   ],
   "window": {
     "backgroundColor": "#808080",

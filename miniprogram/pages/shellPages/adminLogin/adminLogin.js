@@ -14,17 +14,13 @@ Page({
 	adminLogin: function (event) {
 		wx.showLoading({
       title: '加载中...',
-    })
-		wx.cloud.callFunction({
-			name: 'adminLogin',
-			data: {
-				admin_name: event.detail.value.admin_name,
-				pass: event.detail.value.pass
-			},
+		})
+		wx.request({
+			url: `https://api.hailarshell.cn/api/admin/login?admin=${event.detail.value.admin_name}&pass=${event.detail.value.pass}`,
 			success: (res) => {
 				wx.hideLoading();
-				if (res.result) {
-					app.globalData.adminData = res.result;
+				if (res.data) {
+					app.globalData.adminData = res.data.data;
 					wx.navigateTo({
 						url: '/pages/shellPages/adminPage/adminPage',
 					})
@@ -38,9 +34,35 @@ Page({
 			},
 			fail: () => {
 				wx.hideLoading();
-				console.error
+				console.error;
 			}
 		})
+		// wx.cloud.callFunction({
+		// 	name: 'adminLogin',
+		// 	data: {
+		// 		admin_name: event.detail.value.admin_name,
+		// 		pass: event.detail.value.pass
+		// 	},
+		// 	success: (res) => {
+		// 		wx.hideLoading();
+		// 		if (res.result) {
+		// 			app.globalData.adminData = res.result;
+		// 			wx.navigateTo({
+		// 				url: '/pages/shellPages/adminPage/adminPage',
+		// 			})
+		// 		} else {
+		// 			wx.hideLoading();
+		// 			wx.showModal({
+		// 				title: '出错了！',
+		// 				content: '请检查您的管理员登录权限',
+		// 			})
+		// 		}
+		// 	},
+		// 	fail: () => {
+		// 		wx.hideLoading();
+		// 		console.error
+		// 	}
+		// })
 	},
 
 	/**
