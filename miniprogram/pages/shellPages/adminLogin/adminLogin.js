@@ -16,10 +16,10 @@ Page({
       title: '加载中...',
 		})
 		wx.request({
-			url: `https://api.hailarshell.cn/api/admin/login?admin=${event.detail.value.admin_name}&pass=${event.detail.value.pass}`,
+			url: `https://api.hulunbuirshell.com/api/admin/login?admin=${event.detail.value.admin_name}&pass=${event.detail.value.pass}`,
 			success: (res) => {
 				wx.hideLoading();
-				if (res.data) {
+				if (res.data.code === 200) {
 					app.globalData.adminData = res.data.data;
 					wx.navigateTo({
 						url: '/pages/shellPages/adminPage/adminPage',

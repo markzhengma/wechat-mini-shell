@@ -24,7 +24,7 @@ Page({
           title: '加载中...',
         })
         wx.request({
-          url: 'https://api.hailarshell.cn/api/user/single',
+          url: 'https://api.hulunbuirshell.com/api/user/single',
           data: {
             filter: 'plate',
             value: this.data.loginInput.plate

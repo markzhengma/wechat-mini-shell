@@ -51,7 +51,7 @@ Page({
 			userData: app.globalData.userData
 		});
 		wx.request({
-			url: `https://api.hailarshell.cn/api/record/user/${app.globalData.userData.record_num}`,
+			url: `https://api.hulunbuirshell.com/api/record/user/${app.globalData.userData.record_num}`,
 			success:res => {
 				wx.hideLoading();
 				this.setData({
