@@ -19,5 +19,10 @@ App({
           userData: {},
           adminData: {}
     }
-  }
+  },
+
+  setAppData: function(field, value) {
+    console.log('set global data ' + field)
+    this.globalData[field] = value;
+  },
 })

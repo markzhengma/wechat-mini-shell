@@ -48,10 +48,11 @@ Page({
 			title: '加载中...',
 		})
 		this.setData({
-			userData: app.globalData.userData
+			userData: app.globalData.userData,
+			openIdData: app.globalData.openIdData
 		});
 		wx.request({
-			url: `https://api.hulunbuirshell.com/api/record/user/${app.globalData.userData.record_num}`,
+			url: `http://localhost:7001/api/record/user/${app.globalData.userData.record_num}`,
 			success:res => {
 				wx.hideLoading();
 				this.setData({

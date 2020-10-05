@@ -15,6 +15,36 @@ Page({
     },
   },
 
+  getOpenIdData: function() {
+    wx.login({
+      success(res) {
+        if(!res.code){
+          console.log("login failed! Error: " + res.errMsg);
+        } else {
+          console.log("got user js code: " + res.code);
+
+          wx.request({
+            url: 'http://localhost:7001/api/user/wxlogin',
+            data: {
+              code: res.code
+            },
+            success(data) {
+              console.log(data)
+              if(data.statusCode !== 200 || data.data.status !== 200) {
+                console.log('get user openid failed, message see below: ');
+                console.log(data);
+              } else {
+                console.log("got user openid data: " + data.data.data);
+
+                app.setAppData('openIdData', data.data.data);
+              }
+            }
+          })
+        }
+      }
+    });
+  },
+
   userLogin: function (event) {
 
     if(this.data.loginInput.phone !== '' && this.data.loginInput.plate !== ''){
@@ -24,7 +54,7 @@ Page({
           title: '加载中...',
         })
         wx.request({
-          url: 'https://api.hulunbuirshell.com/api/user/single',
+          url: 'http://localhost:7001/api/user/single',
           data: {
             filter: 'plate',
             value: this.data.loginInput.plate
@@ -44,9 +74,11 @@ Page({
                 data: this.data.loginInput.plate
               });
               app.globalData.userData = res.data.data;
+
               wx.navigateTo({
                 url: '/pages/shellPages/userRecords/userRecords',
-              })
+              });
+
             } else {
               wx.showModal({
                 title: '出错了！',
@@ -150,6 +182,8 @@ Page({
   },
 
   onLoad: function () {
+    this.getOpenIdData();
+
     this.setData({
       isLoading: false
     })
