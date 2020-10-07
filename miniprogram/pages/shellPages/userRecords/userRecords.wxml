@@ -1,16 +1,65 @@
 <!-- miniprogram/pages/shellPages/userRecords/userRecords.wxml -->
 <view class = "container">
-	<view class = 'logo'></view>
-</view>
-<view class="user-title">
-	<text>
-		欢迎，{{userData.user_name}}
-	</text>
+	<view class = "user-header">
+		<view class = 'logo' id="userpage-logo"></view>
+		<view class="user-title">
+			<view>
+				{{userData.user_name}}
+				<text 
+					wx:if="{{wxData.userInfo.nickName}}"
+				>({{wxData.userInfo.nickName}})</text>
+			</view>
+			<!-- <view 
+				class="avatar"
+			/> -->
+			<view 
+				wx:if="{{wxData.userInfo.avatarUrl}}"
+				class="avatar"
+				style="background-image: url({{wxData.userInfo.avatarUrl}})"
+			/>
+			<view 
+				wx:else
+				class="avatar"
+				id="icon-profile"
+			/>
+		</view>
+	</view>
+	<button
+		wx:if="{{!wxData || !userData.union_id || userData.union_id === ''}}"
+		class="wx-btn"
+		open-type="getUserInfo" 
+		bindgetuserinfo="onGetUserInfo"
+	>
+		绑定微信 一键登录
+	</button>
 	<view class = "user-info">
-		<view class="tr">换油证号：{{userData.record_num}}</view>
-		<view class="tr">联系电话：{{userData.phone}}</view>
-		<view class="tr">车牌号：{{userData.plate}}</view>
-		<view class="tr">车型：{{userData.make}}</view>
+		<view class="user-info-text">
+			<view class="user-info-label" id="icon-card"/>
+			<view class="user-info-value">
+				{{userData.record_num}}
+			</view>
+		</view>
+
+		<view class="user-info-text">
+			<view class="user-info-label" id="icon-phone"/>
+			<view class="user-info-value">
+				{{userData.phone}}
+			</view>
+		</view>
+
+		<view class="user-info-text">
+			<view class="user-info-label" id="icon-plate"/>
+			<view class="user-info-value">
+				{{userData.plate}}
+			</view>
+		</view>
+
+		<view class="user-info-text">
+			<view class="user-info-label" id="icon-car"/>
+			<view class="user-info-value">
+				{{userData.make}}
+			</view>
+		</view>
 	</view>
 </view>
 

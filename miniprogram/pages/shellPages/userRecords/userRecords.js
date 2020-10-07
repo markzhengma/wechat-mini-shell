@@ -1,5 +1,6 @@
 // miniprogram/pages/shellPages/userRecords/userRecords.js
 const app = getApp();
+// const watcher = require('../../../utils/watcher');
 
 Page({
 
@@ -9,6 +10,9 @@ Page({
 	data: {
 		detailHidden: true,
 		selectedRecord: '',
+		wxData: null,
+		loginJSCode: null
+		// showAvatar: false
 	},
 
 	modalChange: function(){
@@ -37,22 +41,188 @@ Page({
     wx.navigateTo({
       url: '/pages/shellPages/contact/contact'
     })
-  },
+	},
+	
+	onGetUserInfo: function (e) {
+    console.log('manually get user info');
+		console.log(e)
+		
+    if (!this.data.logged && e.detail && e.detail.errMsg === "getUserInfo:ok") {
+      // this.setData({
+      //   logged: true,
+      //   avatarUrl: e.detail.userInfo.avatarUrl,
+      //   userInfo: e.detail.userInfo
+			// })
+			this.setData({
+				wxData: e.detail
+			});
+			app.setAppData('wxData', e.detail);
+
+			this.bindUnionId();
+
+    } else {
+      console.log('get user info failed:');
+      console.log(e);
+    }
+	},
+
+	bindUnionId: function(){
+		wx.showLoading({
+      title: '加载中...',
+		});
+		
+		if(!app.globalData.fakeUnionId || app.globalData.fakeUnionId === '') {
+			wx.request({
+				url: `http://192.168.3.13:7001/api/user/auth/unionid`,
+				method: 'POST',
+				data: {
+					loginJSCode: this.data.loginJSCode,
+					encryptedData: this.data.wxData.encryptedData,
+					iv: this.data.wxData.iv,
+				},
+				success: res => {
+					console.log('got decrypted user info:');
+					console.log(res);
+	
+					if(res.data && res.data.openId) {
+						const openId = res.data.openId;
+						this.setData({
+							fakeUnionId: openId
+						});
+						app.setAppData('fakeUnionId', openId);
+	
+						wx.request({
+							url: `http://192.168.3.13:7001/api/user/single/${this.data.userData.record_num}`,
+							method: 'PUT',
+							data: {
+								...this.data.userData,
+								union_id: app.globalData.fakeUnionId
+							},
+							success: res => {
+								wx.hideLoading();
+								if(res.data.code !== 200) {
+									console.log('error binding record num with union id');
+									console.log(res);
+								} else {
+									console.log('successfully bind record num with union id');
+									console.log(res);
+
+									// this.setData({
+									// 	userData: res.data.data
+									// });
+									// app.setAppData('userData', res.data.data);
+
+									wx.request({
+										url: 'http://192.168.3.13:7001/api/user/all',
+										data: {
+											filter: 'union_id',
+											value: app.globalData.fakeUnionId
+										},
+										success: (res) => {
+											wx.hideLoading();
+											app.globalData.isLoading = false;
+				
+											if(res.data.code !== 200) {
+												console.log('failed to get user data with union id:');
+												console.log(res);
+											} else {
+												console.log('received user data with union id')
+												console.log(res);
+
+												this.setData({
+													userData: res.data.data[0],
+													sameUserList: res.data.data
+												});
+					
+												app.setAppData('userData', res.data.data[0]);
+												app.setAppData('sameUserList', res.data.data);
+											}
+				
+										},
+										fail: err => {
+											wx.hideLoading();
+											console.log('failed to get user data with union id:');
+											console.log(err);
+										}
+									})
+								}
+							},
+							fail: err => {
+								wx.hideLoading();
+								console.log('error binding record num with union id');
+								console.log(err);
+							}
+						})
+					}
+				},
+				fail: err => {
+					wx.hideLoading();
+					console.log('error getting decrypted user info:');
+					console.log(err);
+				}
+			})
+		} else {
+			wx.request({
+				url: `http://192.168.3.13:7001/api/user/single/${this.data.userData.record_num}`,
+				method: 'PUT',
+				data: {
+					...this.data.userData,
+					union_id: app.globalData.fakeUnionId
+				},
+				success: res => {
+					wx.hideLoading();
+					if(res.data.code !== 200) {
+						console.log('error binding record num with union id');
+						console.log(res);
+					} else {
+						console.log('successfully bind record num with union id');
+						console.log(res);
+
+						this.setData({
+							userData: res.data.data
+						});
+						app.setAppData('userData', res.data.data);
+					}
+				},
+				fail: err => {
+					wx.hideLoading();
+					console.log('error binding record num with union id');
+					console.log(err);
+				}
+			})
+		}
+
+	},
+
+	// watch: {
+	// 	wxData: function(newVal) {
+	// 		if(newVal.avatarUrl) {
+	// 			this.setData({
+	// 				showAvatar: true
+	// 			})
+	// 		}
+	// 	}
+	// },
 
 	/**
 	 * Lifecycle function--Called when page load
 	 */
 	onLoad: function (options) {
+		// watcher.setWatcher(this);
+
 		app.globalData.isLoading = false;
 		wx.showLoading({
 			title: '加载中...',
 		})
 		this.setData({
 			userData: app.globalData.userData,
-			openIdData: app.globalData.openIdData
+			fakeUnionId: app.globalData.fakeUnionId,
+			wxData: app.globalData.wxData,
+			loginJSCode: app.globalData.loginJSCode,
+			sameUserList: app.globalData.sameUserList
 		});
 		wx.request({
-			url: `http://localhost:7001/api/record/user/${app.globalData.userData.record_num}`,
+			url: `http://192.168.3.13:7001/api/record/user/${app.globalData.userData.record_num}`,
 			success:res => {
 				wx.hideLoading();
 				this.setData({

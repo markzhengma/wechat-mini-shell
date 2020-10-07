@@ -14,19 +14,27 @@
     </view>
   </view> -->
 
-  <view class = 'logo'></view>
-  <text class = "home-title">呼伦贝尔市壳牌汽车养护中心</text>
-  <text class = "home-text">保养查询系统</text>
+  <view class = "home-wrapper">   
+    <view class = 'logo'></view>
+    <text class = "home-title">呼伦贝尔市壳牌汽车养护中心</text>
+    <text class = "home-text">保养查询系统</text>
 
-<form bindsubmit="userLogin">
-      <input class = 'login-input' name = 'phone' id = "phone" placeholder = "请输入手机号码" value = "{{loginInput.phone}}" bindinput="onLoginInput"/>
-      <input class = 'login-input' name = 'plate' id = "plate" placeholder = "请输入车牌号" value = "{{loginInput.plate}}" bindinput="onLoginInput"/>
-      <button class = 'login-submit' form-type = "submit">查询</button>
-</form>
+    <form bindsubmit="userLogin">
+          <input class = 'login-input' name = 'phone' id = "phone" placeholder = "请输入手机号码" value = "{{loginInput.phone}}" bindinput="onLoginInput"/>
+          <input class = 'login-input' name = 'plate' id = "plate" placeholder = "请输入车牌号" value = "{{loginInput.plate}}" bindinput="onLoginInput"/>
+          <button 
+            class = 'login-submit'
+            form-type = "submit"
+          >
+            查询
+          </button>
+    </form>
+  </view>
+    
 
-<view class="weui-footer weui-footer_fixed-bottom footer">
-      <button class = 'footer-btn' bindtap="toContact">联系我们</button>
-      <button class = 'footer-btn' bindtap="toAdminPage">管理登录</button>
-</view>
+  <view class="weui-footer weui-footer_fixed-bottom footer">
+        <button class = 'footer-btn' bindtap="toContact">联系我们</button>
+        <button class = 'footer-btn' bindtap="toAdminPage">管理登录</button>
+  </view>
 
 </view>

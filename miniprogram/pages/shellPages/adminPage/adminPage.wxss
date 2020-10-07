@@ -52,8 +52,8 @@ text-align: center;
 }
 .create-form input{
   width: 190px;
-  background-color: grey;
-  color: white;
+  background-color: rgb(229, 230, 225);
+  color: grey;
   margin: 10px;
   height: 40px
 }

@@ -16,8 +16,11 @@ App({
     }
 
     this.globalData = {
-          userData: {},
-          adminData: {}
+      userData: null,
+      adminData: null,
+      wxData: null,
+      fakeUnionId: null,
+      sameUserList: null
     }
   },
 

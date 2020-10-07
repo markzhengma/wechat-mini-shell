@@ -53,7 +53,7 @@ Page({
     });
 
     wx.request({
-      url: 'http://localhost:7001/api/gift/all',
+      url: 'http://192.168.3.13:7001/api/gift/all',
       success: res => {
         const giftArr = res.data.map(gift => {
           return gift.gift_name
@@ -67,7 +67,7 @@ Page({
       }
     });
     wx.request({
-      url: 'http://localhost:7001/api/operator/all',
+      url: 'http://192.168.3.13:7001/api/operator/all',
       success: (res) => {
         const opArr = res.data.map(op => {
           return op.op_name
@@ -81,7 +81,7 @@ Page({
       }
     });
     wx.request({
-      url: 'http://localhost:7001/api/product/all',
+      url: 'http://192.168.3.13:7001/api/product/all',
       success: (res) => {
         const productArr = res.data.map(product => {
           return product.product_name
@@ -263,14 +263,14 @@ Page({
       switch (this.data.methodIndex) {
         case 0:
           wx.request({
-            url: `http://localhost:7001/api/user/single?filter=record_num&value=${event.detail.value.input}`,
+            url: `http://192.168.3.13:7001/api/user/single?filter=record_num&value=${event.detail.value.input}`,
             success: (res) => {
               console.log(res.data.data);
               this.setData({
                 userInfo: res.data.data
               });
               wx.request({
-                url: `http://localhost:7001/api/record/user/${event.detail.value.input}`,
+                url: `http://192.168.3.13:7001/api/record/user/${event.detail.value.input}`,
                 success: (data) => {
                   console.log(data.data.data);
                   wx.hideLoading();
@@ -286,14 +286,14 @@ Page({
           break;
         case 1:
           wx.request({
-            url: `http://localhost:7001/api/user/single?filter=phone&value=${event.detail.value.input}`,
+            url: `http://192.168.3.13:7001/api/user/single?filter=phone&value=${event.detail.value.input}`,
             success: (res) => {
               console.log(res.data.data);
               this.setData({
                 userInfo: res.data.data
               });
               wx.request({
-                url: `http://localhost:7001/api/record/user/${res.data.data.record_num}`,
+                url: `http://192.168.3.13:7001/api/record/user/${res.data.data.record_num}`,
                 success: (data) => {
                   console.log(data.data.data);
                   wx.hideLoading();
@@ -309,14 +309,14 @@ Page({
           break;
         case 2:
           wx.request({
-            url: `http://localhost:7001/api/user/single?filter=plate&value=${event.detail.value.input}`,
+            url: `http://192.168.3.13:7001/api/user/single?filter=plate&value=${event.detail.value.input}`,
             success: (res) => {
               console.log(res.data.data);
               this.setData({
                 userInfo: res.data.data
               });
               wx.request({
-                url: `http://localhost:7001/api/record/user/${res.data.data.record_num}`,
+                url: `http://192.168.3.13:7001/api/record/user/${res.data.data.record_num}`,
                 success: (data) => {
                   console.log(data.data.data);
                   wx.hideLoading();
@@ -354,13 +354,13 @@ Page({
       title: '加载中...',
     });
     wx.request({
-      url: `http://localhost:7001/api/user/single?filter=record_num&value=${record_num}`,
+      url: `http://192.168.3.13:7001/api/user/single?filter=record_num&value=${record_num}`,
       success: (res) => {
         this.setData({
           userInfo: res.data.data
         });
         wx.request({
-          url: `http://localhost:7001/api/record/user/${record_num}`,
+          url: `http://192.168.3.13:7001/api/record/user/${record_num}`,
           success: (data) => {
             wx.hideLoading();
             this.setData({
@@ -380,7 +380,7 @@ Page({
       title: '加载中...',
     })
     wx.request({
-      url: `http://localhost:7001/api/user/single/${this.data.adminData.location_char}`,
+      url: `http://192.168.3.13:7001/api/user/single/${this.data.adminData.location_char}`,
       method: 'POST',
       data: event.detail.value,
       success: (data) => {
@@ -399,6 +399,7 @@ Page({
   },
 
   createUserRecord: function (event) {
+    console.log(event)
     this.resetRecordData();
     wx.showLoading({
       title: '加载中...',
@@ -410,7 +411,7 @@ Page({
     var dateString = date.getFullYear() + '-' + (mm > 9 ? '' : '0') + mm + '-' + (dd > 9 ? '' : '0') + dd;
 
     wx.request({
-      url: `http://localhost:7001/api/record/user/${event.detail.value.record_num}`,
+      url: `http://192.168.3.13:7001/api/record/user/${event.detail.value.record_num}`,
       method: 'POST',
       data: {
         date: dateString,
@@ -490,7 +491,7 @@ Page({
       title: '加载中...',
     });
     wx.request({
-      url: `http://localhost:7001/api/record/single/${this.data.selectedId}`,
+      url: `http://192.168.3.13:7001/api/record/single/${this.data.selectedId}`,
       method: 'DELETE',
       success: (res) => {
         this.changeDeleteModal();

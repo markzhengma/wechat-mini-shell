@@ -15,34 +15,54 @@ Page({
     },
   },
 
-  getOpenIdData: function() {
+  // getOpenIdData: function() {
+  //   wx.login({
+  //     success(res) {
+  //       if(!res.code){
+  //         console.log("login failed! Error: " + res.errMsg);
+  //       } else {
+  //         console.log("login res:");
+  //         console.log(res);
+
+  //         wx.request({
+  //           url: 'http://192.168.3.13:7001/api/user/auth/wxlogin',
+  //           data: {
+  //             code: res.code
+  //           },
+  //           success(data) {
+  //             console.log(data)
+  //             if(data.statusCode !== 200 || data.data.status !== 200) {
+  //               console.log('get user openid failed, message see below: ');
+  //               console.log(data);
+  //             } else {
+  //               console.log("got user openid data: " + data.data.data);
+
+  //               app.setAppData('openIdData', data.data.data);
+  //             }
+  //           }
+  //         })
+  //       }
+  //     },
+  //     failed(err){
+  //       console.log('login failed, message see below');
+  //       console.log(err)
+  //     }
+  //   });
+  // },
+
+  getJSCode: function(){
     wx.login({
       success(res) {
         if(!res.code){
           console.log("login failed! Error: " + res.errMsg);
         } else {
-          console.log("got user js code: " + res.code);
+          console.log("login res:");
+          console.log(res);
 
-          wx.request({
-            url: 'http://localhost:7001/api/user/wxlogin',
-            data: {
-              code: res.code
-            },
-            success(data) {
-              console.log(data)
-              if(data.statusCode !== 200 || data.data.status !== 200) {
-                console.log('get user openid failed, message see below: ');
-                console.log(data);
-              } else {
-                console.log("got user openid data: " + data.data.data);
-
-                app.setAppData('openIdData', data.data.data);
-              }
-            }
-          })
+          app.setAppData('loginJSCode', res.code);
         }
       }
-    });
+    })
   },
 
   userLogin: function (event) {
@@ -54,7 +74,7 @@ Page({
           title: '加载中...',
         })
         wx.request({
-          url: 'http://localhost:7001/api/user/single',
+          url: 'http://192.168.3.13:7001/api/user/single',
           data: {
             filter: 'plate',
             value: this.data.loginInput.plate
@@ -73,7 +93,7 @@ Page({
                 key: "plate",
                 data: this.data.loginInput.plate
               });
-              app.globalData.userData = res.data.data;
+              app.setAppData('userData', res.data.data);
 
               wx.navigateTo({
                 url: '/pages/shellPages/userRecords/userRecords',
@@ -159,6 +179,75 @@ Page({
     })
   },
 
+  getUnionId: function(){
+		console.log('loginJSCode:');
+		console.log(app.globalData.loginJSCode);
+		console.log('encryptedData:');
+		console.log(app.globalData.wxData.encryptedData);
+		console.log('iv:');
+		console.log(app.globalData.wxData.iv);
+
+		wx.showLoading({
+      title: '加载中...',
+    })
+
+		wx.request({
+			url: `http://192.168.3.13:7001/api/user/auth/unionid`,
+			method: 'POST',
+      data: {
+				loginJSCode: app.globalData.loginJSCode,
+				encryptedData: app.globalData.wxData.encryptedData,
+				iv: app.globalData.wxData.iv,
+			},
+			success:res => {
+				wx.hideLoading();
+				console.log(res);
+
+				if(res.data && res.data.openId) {
+					const openId = res.data.openId;
+          app.setAppData('fakeUnionId', openId);
+          
+          wx.request({
+            url: 'http://192.168.3.13:7001/api/user/all',
+            data: {
+              filter: 'union_id',
+              value: app.globalData.fakeUnionId
+            },
+            success: (res) => {
+              wx.hideLoading();
+              app.globalData.isLoading = false;
+
+              if(res.data.code !== 200) {
+                console.log('failed to get user data with union id:');
+                console.log(res);
+              } else {
+                console.log('received user data with union id')
+                console.log(res);
+  
+                app.setAppData('userData', res.data.data[0]);
+                app.setAppData('sameUserList', res.data.data);
+  
+                wx.navigateTo({
+                  url: '/pages/shellPages/userRecords/userRecords',
+                });
+              }
+
+            },
+            fail: err => {
+              wx.hideLoading();
+              console.log('failed to get user data with union id:');
+              console.log(err);
+            }
+          })
+				}
+			},
+			fail: err => {
+				wx.hideLoading();
+				console.log(err);
+			}
+		})
+	},
+
   onShow(){
     let self = this;
     wx.getStorage({
@@ -182,45 +271,52 @@ Page({
   },
 
   onLoad: function () {
-    this.getOpenIdData();
+    this.getJSCode();
 
     this.setData({
       isLoading: false
     })
-    console.log(this.data.loginInput)
     
-    if (!wx.cloud) {
-      wx.redirectTo({
-        url: '../chooseLib/chooseLib',
-      })
-      return
-    }
-
     // 获取用户信息
     wx.getSetting({
       success: res => {
+        console.log('get setting::');
+        console.log(res)
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
+              console.log('get user info::')
+              console.log(res);
+              app.setAppData('wxData', res);
+
+              this.getUnionId();
+              // this.setData({
+              //   avatarUrl: res.userInfo.avatarUrl,
+              //   userInfo: res.userInfo
+              // })
             }
           })
+        } else {
+          console.log('not authorized yet');
         }
       }
     })
   },
 
   onGetUserInfo: function (e) {
+    console.log('manually get user info');
+    console.log(e)
     if (!this.data.logged && e.detail.userInfo) {
-      this.setData({
-        logged: true,
-        avatarUrl: e.detail.userInfo.avatarUrl,
-        userInfo: e.detail.userInfo
-      })
+      // this.setData({
+      //   logged: true,
+      //   avatarUrl: e.detail.userInfo.avatarUrl,
+      //   userInfo: e.detail.userInfo
+      // })
+
+    } else {
+      console.log('get user info failed:');
+      console.log(e);
     }
   },
 
@@ -246,53 +342,53 @@ Page({
   },
 
   // 上传图片
-  doUpload: function () {
-    // 选择图片
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
+  // doUpload: function () {
+  //   // 选择图片
+  //   wx.chooseImage({
+  //     count: 1,
+  //     sizeType: ['compressed'],
+  //     sourceType: ['album', 'camera'],
+  //     success: function (res) {
 
-        wx.showLoading({
-          title: '上传中',
-        })
+  //       wx.showLoading({
+  //         title: '上传中',
+  //       })
 
-        const filePath = res.tempFilePaths[0]
+  //       const filePath = res.tempFilePaths[0]
 
-        // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-        wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: res => {
-            console.log('[上传文件] 成功：', res)
+  //       // 上传图片
+  //       const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+  //       wx.cloud.uploadFile({
+  //         cloudPath,
+  //         filePath,
+  //         success: res => {
+  //           console.log('[上传文件] 成功：', res)
 
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
+  //           app.globalData.fileID = res.fileID
+  //           app.globalData.cloudPath = cloudPath
+  //           app.globalData.imagePath = filePath
 
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
-          },
-          fail: e => {
-            console.error('[上传文件] 失败：', e)
-            wx.showToast({
-              icon: 'none',
-              title: '上传失败',
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
-          }
-        })
+  //           wx.navigateTo({
+  //             url: '../storageConsole/storageConsole'
+  //           })
+  //         },
+  //         fail: e => {
+  //           console.error('[上传文件] 失败：', e)
+  //           wx.showToast({
+  //             icon: 'none',
+  //             title: '上传失败',
+  //           })
+  //         },
+  //         complete: () => {
+  //           wx.hideLoading()
+  //         }
+  //       })
 
-      },
-      fail: e => {
-        console.error(e)
-      }
-    })
-  },
+  //     },
+  //     fail: e => {
+  //       console.error(e)
+  //     }
+  //   })
+  // },
 
 })
