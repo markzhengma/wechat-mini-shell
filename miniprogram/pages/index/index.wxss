@@ -163,3 +163,10 @@ page {
   color: rgb(155, 155, 155);
   font-weight: 400;
 }
+.admin-redirect-btn{
+  position: absolute;
+  bottom: 54px; 
+  right: 8px;
+  color: rgb(185, 185, 185);
+  border-bottom: rgb(185, 185, 185) solid 2px;
+}

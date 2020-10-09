@@ -16,7 +16,7 @@ Page({
       title: '加载中...',
 		})
 		wx.request({
-			url: `http://192.168.3.13:7001/api/admin/login?admin=${event.detail.value.admin_name}&pass=${event.detail.value.pass}`,
+			url: `https://api.hulunbuirshell.com/api/admin/login?admin=${event.detail.value.admin_name}&pass=${event.detail.value.pass}`,
 			success: (res) => {
 				wx.hideLoading();
 				if (res.data.code === 200) {

@@ -1,6 +1,19 @@
 <!-- miniprogram/pages/shellPages/adminPage/adminPage.wxml -->
 <view class="container">
-  <view class = 'logo'></view>
+  <view class = "admin-header">
+		<view class = 'logo' id="adminpage-logo"></view>
+		<view class="admin-title">
+			<view>
+				{{adminData.location}}
+			</view>
+			<!-- <view 
+				class="avatar"
+			/> -->
+			<view 
+				class="avatar icon-profileok"
+			/>
+		</view>
+	</view>
 </view>
 <scroll-view wx:if="{{adminData}}">
   <view class="form-mask" hidden="{{isModalHidden}}">
@@ -28,9 +41,9 @@
       </view>
     </form>
   </view>
-  <view class="admin-h">
+  <!-- <view class="admin-h">
     <text>{{adminData.location}}</text>
-  </view>
+  </view> -->
   <view class="page">
     <view class="page__bd">
       <view class="weui-tab">

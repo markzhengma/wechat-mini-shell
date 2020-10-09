@@ -62,17 +62,6 @@
   font-size: large;
   color: grey;
 }
-.avatar {
-  height: 40px;
-  width: 40px;
-  border-radius: 4px;
-  background-color: rgb(216, 216, 216);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  margin-left: 10px;
-  margin-right: 10px;
-}
 
 .user-info{
   margin: 10px 0;
@@ -100,7 +89,7 @@
 }
 .user-contact-btn{
   width: 100%;
-  background-color: rgb(229, 230, 225);
+  background-color: rgb(255, 254, 223);
   color: grey;
   border-radius: 0;
 }

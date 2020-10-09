@@ -13,15 +13,18 @@
       <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
     </view>
   </view> -->
+  <view class = "adminlogin-wrapper">   
+    <view class = 'logo'></view>
+    <!-- <text>呼伦贝尔市壳牌汽车养护中心</text> -->
+    
+    <text class = "adminlogin-title">呼伦贝尔市壳牌汽车养护中心</text>
+    <text class = "adminlogin-text">保养记录管理系统</text>
 
-      <view class = 'logo'></view>
-      <!-- <text>呼伦贝尔市壳牌汽车养护中心</text> -->
-      <text>管理员登录</text>
-
-      <form bindsubmit="adminLogin">
-            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'admin_name' placeholder = "管理员账号"/>
-            <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'pass' type="password" placeholder = "管理员密码"/>
-            <button class = 'login-submit' form-type = "submit">登录</button>
-      </form>
+    <form bindsubmit="adminLogin">
+          <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'admin_name' placeholder = "管理员账号"/>
+          <input placeholder-class = 'input-placeholder' class = 'login-input' name = 'pass' type="password" placeholder = "管理员密码"/>
+          <button class = 'login-submit' form-type = "submit">登录</button>
+    </form>
+  </view>
 
 </view>

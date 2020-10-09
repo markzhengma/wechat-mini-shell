@@ -1,29 +1,50 @@
 <!-- miniprogram/pages/shellPages/contact/contact.wxml -->
 <view class="container">
-  <view class = 'logo'></view>
-	<text>联系我们</text>
+  <view class = 'logo' id="contactpage-logo"></view>
+	<text class="contact-title">联系我们</text>
+	<text class="location-title">海拉尔</text>
 	<view class="store-box" bindtap='dail' id = "0470-8223779">
 		<view class = "store-title">海拉尔河东门店</view>
-		<view class = "store-phone">0470-8223779</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			0470-8223779
+		</view>
 	</view>
 	<view class="store-box" bindtap='dail' id = "0470-8307711">
 		<view class = "store-title">海拉尔河西门店</view>
-		<view class = "store-phone">0470-8307711</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			0470-8307711
+		</view>
 	</view>
+	<text class="location-title">满洲里</text>
 	<view class="store-box" bindtap='dail' id = "0470-2205900">
 		<view class = "store-title">满洲里四道街店</view>
-		<view class = "store-phone">0470-2205900</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			0470-2205900
+		</view>
 	</view>
 	<view class="store-box" bindtap='dail' id = "0470-6221541">
 		<view class = "store-title">满洲里粮库综合楼店</view>
-		<view class = "store-phone">0470-6221541</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			0470-6221541
+		</view>
 	</view>
+	<text class="location-title">牙克石</text>
 	<view class="store-box" bindtap='dail' id = "0470-7379457">
 		<view class = "store-title">牙克石光明南路店</view>
-		<view class = "store-phone">0470-7379457</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			0470-7379457
+		</view>
 	</view>
 	<view class="store-box" bindtap='dail' id = "13088520439">
 		<view class = "store-title">牙克石一道街店</view>
-		<view class = "store-phone">13088520439</view>
+		<view class = "store-phone">
+			<view class="store-icon icon-phone"/>
+			13088520439
+		</view>
 	</view>
 </view>

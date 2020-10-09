@@ -129,3 +129,28 @@ text-align: center;
 .search-box{
   margin: 10px 0;
 }
+
+.admin-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 96%;
+  height: 50px;
+  margin-bottom: 20px;
+  border-bottom: grey 1px solid;
+}
+#adminpage-logo {
+  height: 40px;
+  width: 40px;
+  margin-left: 10px;
+}
+.admin-title{
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  color: grey;
+}

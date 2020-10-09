@@ -44,8 +44,8 @@ Page({
 	},
 	
 	onGetUserInfo: function (e) {
-    console.log('manually get user info');
-		console.log(e)
+    // console.log('manually get user info');
+		// console.log(e)
 		
     if (!this.data.logged && e.detail && e.detail.errMsg === "getUserInfo:ok") {
       // this.setData({
@@ -71,9 +71,9 @@ Page({
       title: '加载中...',
 		});
 		
-		if(!app.globalData.fakeUnionId || app.globalData.fakeUnionId === '') {
+		if(!app.globalData.unionId || app.globalData.unionId === '') {
 			wx.request({
-				url: `http://192.168.3.13:7001/api/user/auth/unionid`,
+				url: `https://api.hulunbuirshell.com/api/user/auth/unionid`,
 				method: 'POST',
 				data: {
 					loginJSCode: this.data.loginJSCode,
@@ -81,22 +81,22 @@ Page({
 					iv: this.data.wxData.iv,
 				},
 				success: res => {
-					console.log('got decrypted user info:');
-					console.log(res);
+					// console.log('got decrypted user info:');
+					// console.log(res);
 	
-					if(res.data && res.data.openId) {
-						const openId = res.data.openId;
+					if(res.data && res.data.unionId) {
+						const unionId = res.data.unionId;
 						this.setData({
-							fakeUnionId: openId
+							unionId: unionId
 						});
-						app.setAppData('fakeUnionId', openId);
+						app.setAppData('unionId', unionId);
 	
 						wx.request({
-							url: `http://192.168.3.13:7001/api/user/single/${this.data.userData.record_num}`,
+							url: `https://api.hulunbuirshell.com/api/user/single/${this.data.userData.record_num}`,
 							method: 'PUT',
 							data: {
 								...this.data.userData,
-								union_id: app.globalData.fakeUnionId
+								union_id: app.globalData.unionId
 							},
 							success: res => {
 								wx.hideLoading();
@@ -104,8 +104,8 @@ Page({
 									console.log('error binding record num with union id');
 									console.log(res);
 								} else {
-									console.log('successfully bind record num with union id');
-									console.log(res);
+									// console.log('successfully bind record num with union id');
+									// console.log(res);
 
 									// this.setData({
 									// 	userData: res.data.data
@@ -113,10 +113,10 @@ Page({
 									// app.setAppData('userData', res.data.data);
 
 									wx.request({
-										url: 'http://192.168.3.13:7001/api/user/all',
+										url: 'https://api.hulunbuirshell.com/api/user/all',
 										data: {
 											filter: 'union_id',
-											value: app.globalData.fakeUnionId
+											value: app.globalData.unionId
 										},
 										success: (res) => {
 											wx.hideLoading();
@@ -126,8 +126,8 @@ Page({
 												console.log('failed to get user data with union id:');
 												console.log(res);
 											} else {
-												console.log('received user data with union id')
-												console.log(res);
+												// console.log('received user data with union id')
+												// console.log(res);
 
 												this.setData({
 													userData: res.data.data[0],
@@ -163,11 +163,11 @@ Page({
 			})
 		} else {
 			wx.request({
-				url: `http://192.168.3.13:7001/api/user/single/${this.data.userData.record_num}`,
+				url: `https://api.hulunbuirshell.com/api/user/single/${this.data.userData.record_num}`,
 				method: 'PUT',
 				data: {
 					...this.data.userData,
-					union_id: app.globalData.fakeUnionId
+					union_id: app.globalData.unionId
 				},
 				success: res => {
 					wx.hideLoading();
@@ -175,8 +175,8 @@ Page({
 						console.log('error binding record num with union id');
 						console.log(res);
 					} else {
-						console.log('successfully bind record num with union id');
-						console.log(res);
+						// console.log('successfully bind record num with union id');
+						// console.log(res);
 
 						this.setData({
 							userData: res.data.data
@@ -216,13 +216,13 @@ Page({
 		})
 		this.setData({
 			userData: app.globalData.userData,
-			fakeUnionId: app.globalData.fakeUnionId,
+			unionId: app.globalData.unionId,
 			wxData: app.globalData.wxData,
 			loginJSCode: app.globalData.loginJSCode,
 			sameUserList: app.globalData.sameUserList
 		});
 		wx.request({
-			url: `http://192.168.3.13:7001/api/record/user/${app.globalData.userData.record_num}`,
+			url: `https://api.hulunbuirshell.com/api/record/user/${app.globalData.userData.record_num}`,
 			success:res => {
 				wx.hideLoading();
 				this.setData({
@@ -253,7 +253,7 @@ Page({
 	 * Lifecycle function--Called when page is initially rendered
 	 */
 	onReady: function () {
-		console.log(this.data)
+		// console.log(this.data)
 	},
 
 	/**

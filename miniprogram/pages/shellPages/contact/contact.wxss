@@ -1,11 +1,23 @@
 /* miniprogram/pages/shellPages/contact/contact.wxss */
+#contactpage-logo{
+  margin: 20px;
+}
+.contact-title{
+  color: grey;
+  font-size: 20px;
+  font-weight: 600;
+}
+.location-title{
+  color: grey;
+  font-size: 16px;
+  font-weight: 600;
+}
 .store-box{
   width: 80vw;
-  border: 1px solid grey;
-  margin: 20px 0;
+  margin: 8px 0;
 }
 .store-title{
-  height: 3rem;
+  height: 2rem;
   background-color: grey;
   color: white;
   display: flex;
@@ -13,9 +25,18 @@
   align-items: center;
 }
 .store-phone{
-  height: 3rem;
+  height: 2rem;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: grey;
+}
+.store-icon{
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }

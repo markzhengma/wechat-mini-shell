@@ -19,13 +19,13 @@ App({
       userData: null,
       adminData: null,
       wxData: null,
-      fakeUnionId: null,
+      unionId: null,
       sameUserList: null
     }
   },
 
   setAppData: function(field, value) {
-    console.log('set global data ' + field)
+    // console.log('set global data ' + field)
     this.globalData[field] = value;
   },
 })

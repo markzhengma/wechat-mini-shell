@@ -198,7 +198,7 @@ page {
 }
 
 .footer-btn {
-  width: 49.5%;
+  width: 100%;
   height: 46px;
   background-color: rgb(255, 254, 223);
   color: grey;
@@ -250,20 +250,35 @@ form {
   width: 190px;
 }
 
-#icon-card{
+.avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  background-color: rgb(216, 216, 216);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.icon-card{
   background-image: url("https://static.markzhengma.com/icon/card.png");
 }
-#icon-car{
+.icon-car{
   background-image: url("https://static.markzhengma.com/icon/car.png");
 }
-#icon-phone{
+.icon-phone{
   background-image: url("https://static.markzhengma.com/icon/phone.png");
 }
-#icon-plate{
+.icon-plate{
   background-image: url("https://static.markzhengma.com/icon/plate.png");
 }
-#icon-profile{
-  background-image: url("https://static.markzhengma.com/profile.png");
+.icon-profile{
+  background-image: url("https://static.markzhengma.com/icon/profile.png");
+}
+.icon-profileok{
+  background-image: url("https://static.markzhengma.com/icon/profileok.png");
 }
 
 @import "style/weui.wxss";

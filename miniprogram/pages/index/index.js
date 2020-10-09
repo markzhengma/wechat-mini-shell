@@ -25,7 +25,7 @@ Page({
   //         console.log(res);
 
   //         wx.request({
-  //           url: 'http://192.168.3.13:7001/api/user/auth/wxlogin',
+  //           url: 'https://api.hulunbuirshell.com/api/user/auth/wxlogin',
   //           data: {
   //             code: res.code
   //           },
@@ -56,8 +56,8 @@ Page({
         if(!res.code){
           console.log("login failed! Error: " + res.errMsg);
         } else {
-          console.log("login res:");
-          console.log(res);
+          // console.log("login res:");
+          // console.log(res);
 
           app.setAppData('loginJSCode', res.code);
         }
@@ -74,7 +74,7 @@ Page({
           title: '加载中...',
         })
         wx.request({
-          url: 'http://192.168.3.13:7001/api/user/single',
+          url: 'https://api.hulunbuirshell.com/api/user/single',
           data: {
             filter: 'plate',
             value: this.data.loginInput.plate
@@ -180,19 +180,19 @@ Page({
   },
 
   getUnionId: function(){
-		console.log('loginJSCode:');
-		console.log(app.globalData.loginJSCode);
-		console.log('encryptedData:');
-		console.log(app.globalData.wxData.encryptedData);
-		console.log('iv:');
-		console.log(app.globalData.wxData.iv);
+		// console.log('loginJSCode:');
+		// console.log(app.globalData.loginJSCode);
+		// console.log('encryptedData:');
+		// console.log(app.globalData.wxData.encryptedData);
+		// console.log('iv:');
+		// console.log(app.globalData.wxData.iv);
 
 		wx.showLoading({
       title: '加载中...',
     })
 
 		wx.request({
-			url: `http://192.168.3.13:7001/api/user/auth/unionid`,
+			url: `https://api.hulunbuirshell.com/api/user/auth/unionid`,
 			method: 'POST',
       data: {
 				loginJSCode: app.globalData.loginJSCode,
@@ -201,17 +201,17 @@ Page({
 			},
 			success:res => {
 				wx.hideLoading();
-				console.log(res);
+				// console.log(res);
 
-				if(res.data && res.data.openId) {
-					const openId = res.data.openId;
-          app.setAppData('fakeUnionId', openId);
+				if(res.data && res.data.unionId) {
+					const unionId = res.data.unionId;
+          app.setAppData('unionId', unionId);
           
           wx.request({
-            url: 'http://192.168.3.13:7001/api/user/all',
+            url: 'https://api.hulunbuirshell.com/api/user/all',
             data: {
               filter: 'union_id',
-              value: app.globalData.fakeUnionId
+              value: app.globalData.unionId
             },
             success: (res) => {
               wx.hideLoading();
@@ -221,8 +221,8 @@ Page({
                 console.log('failed to get user data with union id:');
                 console.log(res);
               } else {
-                console.log('received user data with union id')
-                console.log(res);
+                // console.log('received user data with union id')
+                // console.log(res);
   
                 app.setAppData('userData', res.data.data[0]);
                 app.setAppData('sameUserList', res.data.data);
@@ -262,8 +262,8 @@ Page({
                 plate: plate.data,
               },
             })
-            console.log(phone.data)
-            console.log(plate.data)
+            // console.log(phone.data)
+            // console.log(plate.data)
           }
         })
       }
@@ -280,14 +280,14 @@ Page({
     // 获取用户信息
     wx.getSetting({
       success: res => {
-        console.log('get setting::');
-        console.log(res)
+        // console.log('get setting::');
+        // console.log(res)
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
-              console.log('get user info::')
-              console.log(res);
+              // console.log('get user info::')
+              // console.log(res);
               app.setAppData('wxData', res);
 
               this.getUnionId();
@@ -305,8 +305,8 @@ Page({
   },
 
   onGetUserInfo: function (e) {
-    console.log('manually get user info');
-    console.log(e)
+    // console.log('manually get user info');
+    // console.log(e)
     if (!this.data.logged && e.detail.userInfo) {
       // this.setData({
       //   logged: true,
@@ -320,26 +320,26 @@ Page({
     }
   },
 
-  onGetOpenid: function () {
-    // 调用云函数
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {},
-      success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
-        app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '../userConsole/userConsole',
-        })
-      },
-      fail: err => {
-        console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
-      }
-    })
-  },
+  // onGetOpenid: function () {
+  //   // 调用云函数
+  //   wx.cloud.callFunction({
+  //     name: 'login',
+  //     data: {},
+  //     success: res => {
+  //       console.log('[云函数] [login] user openid: ', res.result.openid)
+  //       app.globalData.openid = res.result.openid
+  //       wx.navigateTo({
+  //         url: '../userConsole/userConsole',
+  //       })
+  //     },
+  //     fail: err => {
+  //       console.error('[云函数] [login] 调用失败', err)
+  //       wx.navigateTo({
+  //         url: '../deployFunctions/deployFunctions',
+  //       })
+  //     }
+  //   })
+  // },
 
   // 上传图片
   // doUpload: function () {

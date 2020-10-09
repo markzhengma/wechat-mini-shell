@@ -1,1 +1,23 @@
 /* miniprogram/pages/adminLogin/adminLogin.wxss */
+.container{
+  height: 100vh;
+}
+.adminlogin-wrapper {
+  height: calc(100vh - 46px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.adminlogin-title{
+  color: grey;
+  font-size: 20px;
+  font-weight: 600;
+  border-bottom: 2px grey solid;
+}
+.adminlogin-text{
+  font-size: large;
+  color: rgb(155, 155, 155);
+  font-weight: 400;
+}
+
