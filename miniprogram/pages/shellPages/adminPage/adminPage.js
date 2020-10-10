@@ -158,7 +158,7 @@ Page({
       },
       success: () => {
         wx.hideLoading();
-        this.findUserRecordsByNum(this.data.userInfo.record_num)
+        this.refreshUserRecordsByNum(this.data.userInfo.record_num)
       },
       fail: () => {
         console.err;
@@ -250,6 +250,96 @@ Page({
 		})
   },
 
+  findAndSetUserRecordsByNum: function(value) {
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single?filter=record_num&value=${value}`,
+      success: (res) => {
+        console.log(res.data.data);
+        this.setData({
+          userInfo: res.data.data
+        });
+        wx.request({
+          url: `https://api.hulunbuirshell.com/api/record/user/${value}`,
+          success: (data) => {
+            console.log(data.data.data);
+            wx.hideLoading();
+            this.setData({
+              userRecords: data.data.data
+            })
+          },
+          fail: err => {
+            wx.hideLoading();
+            console.log(err);
+          }
+        })
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+      }
+    })
+  },
+
+  findAndSetUserRecordsByPhone: function(value){
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single?filter=phone&value=${value}`,
+      success: (res) => {
+        console.log(res.data.data);
+        this.setData({
+          userInfo: res.data.data
+        });
+        wx.request({
+          url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
+          success: (data) => {
+            console.log(data.data.data);
+            wx.hideLoading();
+            this.setData({
+              userRecords: data.data.data
+            })
+          },
+          fail: err => {
+            wx.hideLoading();
+            console.log(err);
+          }
+        })
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+      }
+    })
+  },
+
+  findAndSetUserRecordsByPlate: function(value) {
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single?filter=plate&value=${value}`,
+      success: (res) => {
+        console.log(res.data.data);
+        this.setData({
+          userInfo: res.data.data
+        });
+        wx.request({
+          url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
+          success: (data) => {
+            console.log(data.data.data);
+            wx.hideLoading();
+            this.setData({
+              userRecords: data.data.data
+            })
+          },
+          fail: err => {
+            wx.hideLoading();
+            console.log(err);
+          }
+        })
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+      }
+    })
+  },
+
   findUserRecords: function (event) {
     this.resetRecordData();
     wx.showLoading({
@@ -260,95 +350,46 @@ Page({
       userRecords: ''
     });
     if (event.detail.value.input !== '') {
-      switch (this.data.methodIndex) {
-        case 0:
-          wx.request({
-            url: `https://api.hulunbuirshell.com/api/user/single?filter=record_num&value=${event.detail.value.input}`,
-            success: (res) => {
-              console.log(res.data.data);
-              this.setData({
-                userInfo: res.data.data
-              });
-              wx.request({
-                url: `https://api.hulunbuirshell.com/api/record/user/${event.detail.value.input}`,
-                success: (data) => {
-                  console.log(data.data.data);
-                  wx.hideLoading();
-                  this.setData({
-                    userRecords: data.data.data
-                  })
-                },
-                fail: console.error
-              })
-            },
-            fail: console.error
-          })
-          break;
-        case 1:
-          wx.request({
-            url: `https://api.hulunbuirshell.com/api/user/single?filter=phone&value=${event.detail.value.input}`,
-            success: (res) => {
-              console.log(res.data.data);
-              this.setData({
-                userInfo: res.data.data
-              });
-              wx.request({
-                url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
-                success: (data) => {
-                  console.log(data.data.data);
-                  wx.hideLoading();
-                  this.setData({
-                    userRecords: data.data.data
-                  })
-                },
-                fail: console.error
-              })
-            },
-            fail: console.error
-          })
-          break;
-        case 2:
-          wx.request({
-            url: `https://api.hulunbuirshell.com/api/user/single?filter=plate&value=${event.detail.value.input}`,
-            success: (res) => {
-              console.log(res.data.data);
-              this.setData({
-                userInfo: res.data.data
-              });
-              wx.request({
-                url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
-                success: (data) => {
-                  console.log(data.data.data);
-                  wx.hideLoading();
-                  this.setData({
-                    userRecords: data.data.data
-                  })
-                },
-                fail: console.error
-              })
-            },
-            fail: console.error
-          })
-          break;
-        default:
-          break;
+      // switch (this.data.methodIndex) {
+      //   case 0:
+      //     this.findAndSetUserRecordsByNum(event.detail.value.input);
+      //     break;
+      //   case 1:
+      //     this.findAndSetUserRecordsByPhone(event.detail.value.input);
+      //     break;
+      //   case 2:
+      //     this.findAndSetUserRecordsByPlate(event.detail.value.input);
+      //     break;
+      //   default:
+      //     break;
+      // }
+
+      const inputStr = event.detail.value.input;
+      const REGEX_CHINESE = /^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+      if(inputStr.match(REGEX_CHINESE) && inputStr.length === 7) {
+        this.findAndSetUserRecordsByPlate(inputStr);
+      } else if(inputStr.match(/^[A-Z]/) && inputStr.length === 7) {
+        this.findAndSetUserRecordsByNum(inputStr);
+      } else if(inputStr.match(/^[0-9]/) && inputStr.length >= 7) {
+        this.findAndSetUserRecordsByPhone(inputStr);
+      } else {
+        wx.hideLoading();
+        wx.showModal({
+          title: '出错了！',
+          content: '请重新检查输入内容'
+        })
       }
+
     }else{
       wx.hideLoading();
       wx.showModal({
         title: '出错了！',
-        content: '请输入要查询的信息',
-        showCancel: false,
-        success (res) {
-          if (res.confirm) {
-            console.log('用户点击确定')
-          }
-        }
+        content: '请输入要查询的信息'
       })
     }
   },
 
-  findUserRecordsByNum: function (record_num){
+  refreshUserRecordsByNum: function (record_num){
     this.resetRecordData();
     wx.showLoading({
       title: '加载中...',
@@ -389,7 +430,7 @@ Page({
           activeIndex: 0,
           methodIndex: 0
         });
-        this.findUserRecordsByNum(data.data.data.record_num);
+        this.refreshUserRecordsByNum(data.data.data.record_num);
       },
       fail: () => {
         wx.hideLoading();
@@ -424,7 +465,7 @@ Page({
       },
       success: (res) => {
         wx.hideLoading();
-        this.findUserRecordsByNum(event.detail.value.record_num);
+        this.refreshUserRecordsByNum(event.detail.value.record_num);
         this.showCreateRecordModal();
         this.detailChange();
       },
@@ -469,7 +510,7 @@ Page({
   //       this.setData({
   //         [`selectedRecord.${update_field}`]: update_data
   //       })
-  //       this.findUserRecordsByNum(this.data.userInfo.record_num);
+  //       this.refreshUserRecordsByNum(this.data.userInfo.record_num);
   //     },
   //     fail: (err) => {
   //       wx.hideLoading();
@@ -496,7 +537,7 @@ Page({
       success: (res) => {
         this.changeDeleteModal();
         this.detailChange();
-        this.findUserRecordsByNum(this.data.userInfo.record_num);
+        this.refreshUserRecordsByNum(this.data.userInfo.record_num);
         wx.hideLoading()
       },
       fail: () => {
