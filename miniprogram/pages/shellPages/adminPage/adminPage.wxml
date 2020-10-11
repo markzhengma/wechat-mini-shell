@@ -56,22 +56,22 @@
           </view>
           <view class="weui-tab__panel">
             <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-              <view class="admin-h">
-                <!-- <text>使用{{findMethods[methodIndex]}}查询用户</text> -->
+              <!-- <text>使用{{findMethods[methodIndex]}}查询用户</text> -->
+              <!-- <view class="admin-h">
                 输入
               </view>
               <view class="admin-t">
                 手机号 / 换油证号 / 车牌号
-              </view>
+              </view> -->
               <view class="admin-h">
-                查询用户
+                请输入
               </view>
               <!-- <picker bindchange="bindPickerChange" value="{{methodIndex}}" range="{{findMethods}}">
                 <button class="admin-button">更改查询方式</button>
               </picker> -->
               <form class="search-box" bindsubmit="findUserRecords">
                 <!-- <input class='login-input' name='input' placeholder="请输入{{findMethods[methodIndex]}}" /> -->
-                <input class='login-input' name='input' placeholder="请输入查询内容" />
+                <input class='admin-input' name='input' placeholder="手机号/换油证号/车牌号" />
                 <button class='admin-button' form-type="submit">查询</button>
               </form>
               <view wx:if="{{userInfo}}">
@@ -194,6 +194,9 @@
               </scroll-view>
             </view>
             <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+              <view class="admin-h">
+                请输入
+              </view>
               <form bindsubmit="createUserInfo">
                 <input class='login-input' name='user_name' placeholder="姓名" />
                 <input class='login-input' name='phone' placeholder="联系方式" />

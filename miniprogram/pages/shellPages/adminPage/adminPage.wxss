@@ -121,6 +121,7 @@ text-align: center;
   color: white;
   line-height: 2;
   width: fit-content;
+  margin-top: 20px;
 }
 
 .user-table{
@@ -136,6 +137,7 @@ text-align: center;
 
 .search-box{
   margin: 10px 0;
+  width: fit-content;
 }
 
 .admin-header {
@@ -162,4 +164,16 @@ text-align: center;
   align-items: center;
   font-size: large;
   color: grey;
+}
+.admin-input {
+  background-color: rgb(255, 254, 223);
+  color: grey;
+  height: 30px;
+  width: 200px;
+  margin: 10px;
+  padding: 4px;
+  /* border: 2px solid white; */
+  border-radius: 2px;
+  text-align: center;
+  font-size: 16px;
 }

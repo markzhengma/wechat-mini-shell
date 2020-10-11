@@ -417,26 +417,58 @@ Page({
 
   createUserInfo: function (event) {
     this.resetRecordData();
-    wx.showLoading({
-      title: '加载中...',
-    })
-    wx.request({
-      url: `https://api.hulunbuirshell.com/api/user/single/${this.data.adminData.location_char}`,
-      method: 'POST',
-      data: event.detail.value,
-      success: (data) => {
-        wx.hideLoading();
-        this.setData({
-          activeIndex: 0,
-          methodIndex: 0
-        });
-        this.refreshUserRecordsByNum(data.data.data.record_num);
-      },
-      fail: () => {
-        wx.hideLoading();
-        console.error
-      }
-    })
+
+    const { user_name, phone, make, plate } = event.detail.value;
+    const REGEX_CHINESE = /^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+
+    if(!user_name.match(REGEX_CHINESE)) {
+      wx.showModal({
+        title: '出错了！',
+        content: '请重新检查输入的姓名'
+      });
+    } else if((phone.length !== 7 && phone.length !== 11) || !phone.match(/^\d+$/)) {
+      wx.showModal({
+        title: '出错了！',
+        content: '请重新检查输入的联系方式'
+      });
+    } else if(!make.match(REGEX_CHINESE)) {
+      wx.showModal({
+        title: '出错了！',
+        content: '请重新检查输入的车型'
+      });
+    } else if(plate.length !== 7 || !plate.match(REGEX_CHINESE)) {
+      wx.showModal({
+        title: '出错了！',
+        content: '请重新检查输入的车牌号'
+      });
+    } else {
+      wx.showLoading({
+        title: '创建中...',
+      })
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/user/single/${this.data.adminData.location_char}`,
+        method: 'POST',
+        data: {
+          user_name: user_name.length === 1 ? user_name + '先生/女士' : user_name,
+          phone,
+          make,
+          plate
+        },
+        success: (data) => {
+          wx.hideLoading();
+          this.setData({
+            activeIndex: 0,
+            methodIndex: 0
+          });
+          this.refreshUserRecordsByNum(data.data.data.record_num);
+        },
+        fail: () => {
+          wx.hideLoading();
+          console.error
+        }
+      })
+    }
+
   },
 
   createUserRecord: function (event) {
