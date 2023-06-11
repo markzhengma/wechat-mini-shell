@@ -28,7 +28,8 @@
     "userConfirmedUseCompilerModuleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "condition": false
   },
   "appid": "wx1e21359edb78fd06",
   "projectname": "hailarshell",
@@ -36,26 +37,24 @@
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "plugin": {
-      "list": []
-    },
-    "game": {
-      "list": []
-    },
     "miniprogram": {
       "list": [
         {
-          "id": -1,
           "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
+          "pathName": "pages/databaseGuide/databaseGuide",
+          "query": ""
         }
       ]
     }
+  },
+  "compileType": "miniprogram",
+  "srcMiniprogramRoot": "miniprogram/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }

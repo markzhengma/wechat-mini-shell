@@ -10,7 +10,6 @@
     "pages/openapi/openapi",
     "pages/openapi/serverapi/serverapi",
     "pages/openapi/callback/callback",
-    "pages/openapi/cloudid/cloudid",
     "pages/im/im",
     "pages/im/room/room",
     "pages/shellPages/userRecords/userRecords",
