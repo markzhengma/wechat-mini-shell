@@ -56,10 +56,30 @@ Page({
         if(!res.code){
           console.log("login failed! Error: " + res.errMsg);
         } else {
-          // console.log("login res:");
-          // console.log(res);
-
           app.setAppData('loginJSCode', res.code);
+        }
+      }
+    })
+  },
+
+  checkManagerRoleByUid: function(unionid) {
+    // console.log('authorizing manager: ' + unionid);
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/admin/auth/unionid',
+      data: { unionid },
+      success: res => {
+        // console.log(res);
+        if(res.data.code === 200) {
+          const adminInfo = {
+            admin_name: res.data.data.admin_name,
+            location: res.data.data.location,
+            location_char: res.data.data.location_char,
+            super_admin: res.data.data.super_admin
+          }
+          app.setAppData('adminData', adminInfo);
+          app.setAppData('isAdmin', true);
+
+          // console.log(app.globalData.adminData);
         }
       }
     })
@@ -168,10 +188,16 @@ Page({
   },
 
   toAdminPage: function () {
-    wx.navigateTo({
-      url: '/pages/shellPages/adminLogin/adminLogin'
-      // url: '/pages/shellPages/msgPage/msgPage'
-    })
+    if(!app.globalData.isAdmin) {
+      wx.navigateTo({
+        url: '/pages/shellPages/adminLogin/adminLogin'
+        // url: '/pages/shellPages/msgPage/msgPage'
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/shellPages/adminPage/adminPage'
+      })
+    }
   },
   toContact: function () {
     wx.navigateTo({
@@ -206,6 +232,8 @@ Page({
 				if(res.data && res.data.unionId) {
 					const unionId = res.data.unionId;
           app.setAppData('unionId', unionId);
+
+          this.checkManagerRoleByUid(app.globalData.unionId);
           
           wx.request({
             url: 'https://api.hulunbuirshell.com/api/user/all',
@@ -280,8 +308,6 @@ Page({
     // 获取用户信息
     wx.getSetting({
       success: res => {
-        // console.log('get setting::');
-        // console.log(res)
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
@@ -297,8 +323,6 @@ Page({
               // })
             }
           })
-        } else {
-          console.log('not authorized yet');
         }
       }
     })
