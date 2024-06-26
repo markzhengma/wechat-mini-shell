@@ -1,17 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi",
-    "pages/openapi/serverapi/serverapi",
-    "pages/openapi/callback/callback",
-    "pages/im/im",
-    "pages/im/room/room",
     "pages/shellPages/userRecords/userRecords",
     "pages/shellPages/adminLogin/adminLogin",
     "pages/shellPages/adminPage/adminPage",
