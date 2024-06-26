@@ -8,7 +8,7 @@ Page({
    * Page initial data
    */
   data: {
-    tabs: ["查找客户", "创建客户"],
+    tabs: ["查询客户", "创建客户"],
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
@@ -30,6 +30,21 @@ Page({
     opIndex: 0,
     products: '',
     prodIndex: 0,
+    locationList: [
+      '海拉尔河东',
+      '海拉尔河西',
+      '满洲里',
+      '满洲里二店',
+      '牙克石'
+    ],
+    locationCharList: [
+      'HD',
+      'HX',
+      'MA',
+      'MB',
+      'YA'
+    ],
+    locationIndex: 0
   },
 
   /**
@@ -39,7 +54,8 @@ Page({
     this.resetRecordData();
     app.globalData.userData = {};
     this.setData({
-      adminData: app.globalData.adminData
+      adminData: app.globalData.adminData,
+      locationIndex: this.data.locationCharList.indexOf(app.globalData.adminData.location_char)
     });
 
     var that = this;
@@ -94,35 +110,6 @@ Page({
         console.log(err);
       }
     });
-
-    // wx.cloud.callFunction({
-    //   name: 'getAllGifts',
-    //   success: (res) => {
-    //     let prettyData = res.result.data.map(data => {
-    //       return data.gift_name
-    //     })
-    //     this.setData({
-    //       gifts: prettyData
-    //     })
-    //   },
-    //   fail: err => {
-    //     console.log(err)
-    //   }
-    // });
-    // wx.cloud.callFunction({
-    //   name: 'getAllOperators',
-    //   success: (res) => {
-    //     let prettyData = res.result.data.map(data => {
-    //       return data.op_name
-    //     })
-    //     this.setData({
-    //       operators: prettyData
-    //     })
-    //   },
-    //   fail: err => {
-    //     console.log(err)
-    //   }
-    // });
   },
 
   showEditInfoModal: function(){
@@ -202,6 +189,11 @@ Page({
       methodIndex: parseInt(e.detail.value, 10)
     })
   },
+  bindLocationChange: function (e) {
+    this.setData({
+      locationIndex: parseInt(e.detail.value, 10)
+    })
+  },
   bindGiftChange: function (e) {
     this.setData({
       [`selectedRecord.gift`]: this.data.gifts[parseInt(e.detail.value, 10)]
@@ -254,14 +246,12 @@ Page({
     wx.request({
       url: `https://api.hulunbuirshell.com/api/user/single?filter=record_num&value=${value}`,
       success: (res) => {
-        console.log(res.data.data);
         this.setData({
           userInfo: res.data.data
         });
         wx.request({
           url: `https://api.hulunbuirshell.com/api/record/user/${value}`,
           success: (data) => {
-            console.log(data.data.data);
             wx.hideLoading();
             this.setData({
               userRecords: data.data.data
@@ -284,14 +274,12 @@ Page({
     wx.request({
       url: `https://api.hulunbuirshell.com/api/user/single?filter=phone&value=${value}`,
       success: (res) => {
-        console.log(res.data.data);
         this.setData({
           userInfo: res.data.data
         });
         wx.request({
           url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
           success: (data) => {
-            console.log(data.data.data);
             wx.hideLoading();
             this.setData({
               userRecords: data.data.data
@@ -314,14 +302,12 @@ Page({
     wx.request({
       url: `https://api.hulunbuirshell.com/api/user/single?filter=plate&value=${value}`,
       success: (res) => {
-        console.log(res.data.data);
         this.setData({
           userInfo: res.data.data
         });
         wx.request({
           url: `https://api.hulunbuirshell.com/api/record/user/${res.data.data.record_num}`,
           success: (data) => {
-            console.log(data.data.data);
             wx.hideLoading();
             this.setData({
               userRecords: data.data.data
@@ -446,7 +432,7 @@ Page({
         title: '创建中...',
       })
       wx.request({
-        url: `https://api.hulunbuirshell.com/api/user/single/${this.data.adminData.location_char}`,
+        url: `https://api.hulunbuirshell.com/api/user/single/${this.data.locationCharList[this.data.locationIndex]}`,
         method: 'POST',
         data: {
           user_name: user_name.length === 1 ? user_name + '先生/女士' : user_name,
@@ -458,7 +444,8 @@ Page({
           wx.hideLoading();
           this.setData({
             activeIndex: 0,
-            methodIndex: 0
+            methodIndex: 0,
+            locationIndex: this.data.locationCharList.indexOf(this.data.adminData.location_char)
           });
           this.refreshUserRecordsByNum(data.data.data.record_num);
         },
@@ -472,7 +459,6 @@ Page({
   },
 
   createUserRecord: function (event) {
-    console.log(event)
     this.resetRecordData();
     wx.showLoading({
       title: '加载中...',
@@ -493,7 +479,7 @@ Page({
         operator: this.data.selectedRecord.operator,
         product_name: this.data.selectedRecord.product,
         detail: event.detail.value.detail,
-        reminder: event.detail.value.reminder
+        reminder: event.detail.value.reminder !== '' ? event.detail.value.reminder : 'reminder'
       },
       success: (res) => {
         wx.hideLoading();
