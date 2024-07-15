@@ -1,0 +1,4 @@
+<view >
+  记录列表
+  <van-button type="primary">按钮</van-button>
+</view>

@@ -1,11 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/shellPages/userRecords/userRecords",
-    "pages/shellPages/adminLogin/adminLogin",
-    "pages/shellPages/adminPage/adminPage",
-    "pages/shellPages/contact/contact",
-    "pages/shellPages/msgPage/msgPage"
+    "pages/UserRecord/UserRecord",
+    "pages/Admin/Admin",
+    "pages/User/User",
+    "pages/Contact/Contact"
   ],
   "window": {
     "backgroundColor": "#808080",
@@ -14,5 +13,42 @@
     "navigationBarTitleText": "乘驾无忧",
     "navigationBarTextStyle": "white"
   },
-  "sitemapLocation": "sitemap.json"
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "icons/home-1.png",
+        "selectedIconPath": "icons/home-2.png",
+        "iconSize": 48
+      },
+      {
+        "pagePath": "pages/UserRecord/UserRecord",
+        "iconPath": "icons/list-1.png",
+        "selectedIconPath": "icons/list-2.png",
+        "iconSize": 48,
+        "text": "记录"
+      },
+      {
+        "pagePath": "pages/User/User",
+        "text": "我的信息",
+        "iconPath": "icons/user-1.png",
+        "selectedIconPath": "icons/user-2.png",
+        "iconSize": 48
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "oldPages": [
+    "pages/prevIndex/prevIndex",
+    "pages/shellPages/userRecords/userRecords",
+    "pages/shellPages/adminLogin/adminLogin",
+    "pages/shellPages/adminPage/adminPage",
+    "pages/shellPages/contact/contact",
+    "pages/shellPages/msgPage/msgPage"
+  ],
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index"
+    
+  }
 }

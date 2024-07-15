@@ -1,44 +1,33 @@
 <!--index.wxml-->
-<view class="container">
-
-  <!-- 用户 openid -->
-  <!-- <view class="userinfo">
-    <button 
-      open-type="getUserInfo" 
-      bindgetuserinfo="onGetUserInfo"
-      class="userinfo-avatar"
-      style="background-image: url({{avatarUrl}})"
-    ></button>
-    <view>
-      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
-    </view>
-  </view> -->
-
-  <view class = "home-wrapper">   
-    <view class = 'logo'></view>
-    <text class = "home-title">呼伦贝尔市壳牌汽车养护中心</text>
-    <text class = "home-text">保养查询系统</text>
-
-    <form bindsubmit="userLogin">
-      <input class = 'login-input' name = 'phone' id = "phone" placeholder = "请输入手机号码" value = "{{loginInput.phone}}" bindinput="onLoginInput"/>
-      <input class = 'login-input' name = 'plate' id = "plate" placeholder = "请输入车牌号" value = "{{loginInput.plate}}" bindinput="onLoginInput"/>
-      <button 
-        class = 'login-submit'
-        form-type = "submit"
-      >
-        查询
-      </button>
-    </form>
-    <view class = 'admin-redirect-btn' bindtap="toAdminPage">管理登录</view>
+<view>
+  <text >
+    首页
+  </text>
+  <text >
+    公众号文章链接
+  </text>
+  <view wx:if="{{isLoggedIn}}" >
+    <text >
+      用户名：{{userData.user_name ? userData.user_name : "无"}}
+    </text>
+    <text >
+      最近的一条养护提醒
+    </text>
   </view>
-    
-
-  <!-- <view class="weui-footer weui-footer_fixed-bottom footer">
-        <button class = 'footer-btn' bindtap="toContact">联系我们</button>
-        <button class = 'footer-btn' bindtap="toAdminPage">管理登录</button>
-  </view> -->
-  <view class="weui-footer weui-footer_fixed-bottom footer">
-    <button class="footer-btn" bindtap="toContact">联系我们</button>
+  <view wx:elif="{{retryCountdown > 0}}">
+    <van-button 
+      type="primary" 
+      disabled
+    >
+      用户登录{{retryCountdown}}
+    </van-button>
   </view>
-
+  <view wx:else>
+    <van-button 
+      type="primary" 
+      bind:click="setUserData"
+    >
+      用户登录
+    </van-button>
+  </view>
 </view>

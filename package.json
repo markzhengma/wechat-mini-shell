@@ -1,0 +1,22 @@
+{
+  "name": "wechat-mini-shell",
+  "version": "1.0.0",
+  "description": "这是云开发的快速启动指引，其中演示了如何上手使用云开发的三大基础能力：",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markzhengma/wechat-mini-shell.git"
+  },
+  "author": "markzhengma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/markzhengma/wechat-mini-shell/issues"
+  },
+  "homepage": "https://github.com/markzhengma/wechat-mini-shell#readme",
+  "dependencies": {
+    "@vant/weapp": "^1.11.6"
+  }
+}
