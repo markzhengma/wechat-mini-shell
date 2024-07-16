@@ -1,4 +1,6 @@
 // pages/User/User.js
+const app = getApp()
+
 Page({
 
   /**
@@ -6,6 +8,20 @@ Page({
    */
   data: {
 
+  },
+
+  initData: function() {
+    this.setData({
+      unionId: app.globalData.unionId,
+      userData: app.globalData.userData,
+      isLoggedIn: app.globalData.isLoggedIn
+    });
+  },
+
+  switchPage: function(event) {
+    wx.switchTab({
+      url: event.currentTarget.dataset.path
+    });
   },
 
   /**
@@ -26,7 +42,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.initData();
   },
 
   /**

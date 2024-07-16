@@ -1,4 +1,30 @@
 <view >
-  记录列表
-  <van-button type="primary">按钮</van-button>
+  <text>
+    记录列表
+  </text>
+  <view wx:if="{{!isLoggedIn}}" >
+    <van-button 
+      type="primary"
+      data-path="/pages/index/index"
+      bind:click="switchPage"
+    >
+      回首页登录
+    </van-button>
+  </view>
+  <view wx:else>
+    <text >
+      用户名： {{userData.user_name}}
+      证号：{{userData.record_num}}
+    </text>
+    <view wx:if="{{userRecords.length === 0}}">
+      无记录
+    </view>
+    <view wx:else>
+      <block wx:for="{{userRecords}}" wx:key="unique">
+        <view>
+          {{item.date}} - {{item.product_name}} - {{item.milage}} - {{item.operator}}
+        </view>
+      </block>
+    </view>
+  </view>
 </view>

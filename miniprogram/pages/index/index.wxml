@@ -13,13 +13,20 @@
     <text >
       最近的一条养护提醒
     </text>
+    <van-button 
+      type="primary" 
+      data-path="/pages/UserRecord/UserRecord"
+      bind:click="switchPage"
+    >
+      查看养护记录
+    </van-button>
   </view>
   <view wx:elif="{{retryCountdown > 0}}">
     <van-button 
       type="primary" 
       disabled
     >
-      用户登录{{retryCountdown}}
+      重试登录（{{retryCountdown}}秒后）
     </van-button>
   </view>
   <view wx:else>

@@ -41,13 +41,8 @@ Page({
         } else {
           app.setAppData('userData', res.data.data[0]);
           app.setAppData('sameUserList', res.data.data);
+          app.setAppData("isLoggedIn", true);
 
-          // TODO uncomment this part
-          // wx.navigateTo({
-          //   url: '/pages/shellPages/userRecords/userRecords',
-          // });
-
-          console.log(app.globalData);
           this.setData({
             userData: app.globalData.userData,
             isLoggedIn: true
@@ -77,7 +72,6 @@ Page({
 				iv: app.globalData.wxData.iv,
 			},
 			success:res => {
-        console.log(res);
 				wx.hideLoading();
 
 				if(res.data && res.data.unionId) {
@@ -130,52 +124,24 @@ Page({
 
   startRetryCountDown: function() {
     (async () => {
-      console.log('count down')
       this.setData({ 
-        retryCountdown: '10'
+        retryCountdown: 10
       });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '9'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '8'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '7'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '6'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '5'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '4'
-      });
-      await this.timeout(1000);
-      this.setData({ 
-        retryCountdown: '3'
-      });
-      await this.timeout(1000);
-      this.setData({
-        retryCountdown: '2'
-      });
-      await this.timeout(1000);
-      this.setData({
-        retryCountdown: '1'
-      });
-      await this.timeout(1000);
-      this.setData({
-        retryCountdown: '0'
-      });
-      await this.timeout(1000);
+      while(this.data.retryCountdown > 0) {
+        let count = this.data.retryCountdown;
+        
+        this.setData({ 
+          retryCountdown: count - 1
+        });
+        await this.timeout(1000);
+      }
     })();
+  },
+
+  switchPage: function(event) {
+    wx.switchTab({
+      url: event.currentTarget.dataset.path
+    })
   },
 
   /**

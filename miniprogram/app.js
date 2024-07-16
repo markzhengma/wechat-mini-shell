@@ -20,7 +20,8 @@ App({
       adminData: null,
       wxData: null,
       unionId: null,
-      sameUserList: null
+      sameUserList: null,
+      isLoggedIn: false
     }
   },
 

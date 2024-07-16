@@ -1,3 +1,24 @@
 <view >
-  用户信息
+  <text>
+    用户信息
+  </text>
+  <view wx:if="{{!isLoggedIn}}" >
+    <van-button 
+      type="primary"
+      data-path="/pages/index/index"
+      bind:click="switchPage"
+    >
+      回首页登录
+    </van-button>
+  </view>
+  <view wx:else>
+    <text >
+      用户名（可修改）： {{userData.user_name}}
+      手机号：{{userData.phone}}
+      换油证号：{{userData.record_num}}
+      车牌号：{{userData.plate}}
+      车型：{{userData.make}}
+      积分？
+    </text>
+  </view>
 </view>
