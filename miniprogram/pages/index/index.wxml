@@ -46,15 +46,13 @@
     <van-button 
       icon="medal-o" 
       type="info"
-      bind:click="showFindUserForm"
-    >
+      bind:click="showFindUserForm">
       查询客户
     </van-button>
     <van-button 
       icon="add-o" 
       type="warning"
-      bind:click="showFindUserForm"
-    >
+      bind:click="showFindUserForm">
       创建客户
     </van-button>
     <van-divider />
@@ -63,8 +61,7 @@
       round
       closeable
       custom-style="padding: 10px"
-      bind:close="hideFindUserForm"
-    >
+      bind:close="hideFindUserForm">
       <text>查询客户</text>
       <view>
         <view >
@@ -119,7 +116,7 @@
       <van-field
         value="{{ findUserInput }}"
         id="find-user-input"
-        placeholder="请输入"
+        placeholder="请输入{{findUserInputPlaceholder}}"
         bind:change="onChange"
       />
       <van-button 

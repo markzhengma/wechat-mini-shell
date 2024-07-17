@@ -16,7 +16,8 @@ Page({
     findUserFormIsShow: false,
     createUserFormIsShow: false,
     findUserFilter: "plate",
-    findUserInput: ""
+    findUserInput: "",
+    findUserInputPlaceholder: "车牌号"
   },
 
   getJSCode: function() {
@@ -208,7 +209,6 @@ Page({
         this.setData({
           findUserInput: e.detail
         });
-        break;
       default:
         break;
     }
@@ -218,7 +218,26 @@ Page({
     this.setData({
       findUserFilter: e.currentTarget.dataset.filter,
       findUserInput: ""
-    })
+    });
+    switch(e.currentTarget.dataset.filter) {
+      case("plate"):
+        this.setData({
+          findUserInputPlaceholder: "车牌号"
+        });
+        break;
+      case("phone"):
+        this.setData({
+          findUserInputPlaceholder: "手机号"
+        });
+        break;
+      case("record_num"):
+        this.setData({
+          findUserInputPlaceholder: "换油证号"
+        });
+        break;
+      default:
+        break;
+    }
   },
 
   findUserWithFilterAndValue: function() {
@@ -234,20 +253,17 @@ Page({
             title: "未找到用户",
             message: "【错误信息】" + JSON.stringify(res.data)
           })
-          .then(() => {
-            console.log("closed");
-          })
         } else {
           let findUserRes = res.data.data;
           Dialog.alert({
-            title: "找到用户",
+            title: "查询成功",
             message: `用户名：${findUserRes.user_name}\n车牌号：${findUserRes.plate}`
           })
           .then(() => {
             wx.navigateTo({
               url: "/pages/Admin/Admin",
               success: res => {
-                res.eventChannel.emit('acceptDataFromOpenerPage', { data: findUserRes })
+                res.eventChannel.emit('adminFindUserInfo', { data: findUserRes })
               }
             })
           })
@@ -259,9 +275,6 @@ Page({
         Dialog.alert({
           title: "未找到用户",
           message: "【错误信息】" + JSON.stringify(err)
-        })
-        .then(() => {
-          console.log("closed");
         })
       }
     })

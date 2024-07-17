@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/Admin/Admin",
     "pages/index/index",
     "pages/UserRecord/UserRecord",
-    "pages/Admin/Admin",
     "pages/User/User",
     "pages/Contact/Contact"
   ],
@@ -49,6 +49,12 @@
     "van-popup": "@vant/weapp/popup/index",
     "van-divider": "@vant/weapp/divider/index",
     "van-field": "@vant/weapp/field/index",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-card": "@vant/weapp/card/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index",
+    "van-toast": "@vant/weapp/toast/index"
   }
 }

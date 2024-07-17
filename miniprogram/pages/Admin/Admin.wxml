@@ -1,2 +1,179 @@
 <!--pages/Admin/Admin.wxml-->
-<text>pages/Admin/Admin.wxml</text>
+<view >
+  <!-- 用户信息 -->
+  <view wx:if="{{targetUserInfo}}">
+    <van-divider contentPosition="center">客户信息</van-divider>
+    <van-cell-group inset>
+      <van-cell
+       title="车主姓名" 
+       value="{{targetUserInfo.user_name}}" 
+      />
+      <van-cell 
+        title="车型" 
+        value="{{targetUserInfo.make}}" 
+      />
+      <van-cell 
+        title="车牌号" 
+        value="{{targetUserInfo.plate}}" 
+      />
+      <van-cell 
+        title="手机号码" 
+        value="{{targetUserInfo.phone}}" 
+      />
+      <van-cell 
+        title="换油证号" 
+        value="{{targetUserInfo.record_num}}" 
+      />
+      <van-button 
+        type="primary"
+        icon="add-o"
+        size="large"
+        bind:click="showNewRecordForm">
+        创建保养记录
+      </van-button>
+    </van-cell-group>
+  </view>
+  <view wx:else>
+    错误：无客户信息
+  </view>
+  <!-- 创建记录 -->
+    <van-popup 
+      show="{{ isShowNewRecordForm }}" 
+      round
+      closeable
+      custom-style="padding: 10px; width: 80vw;"
+      bind:close="closeNewRecordForm">
+      <van-cell-group title="创建保养记录">
+        <van-field
+          value="{{ newRecordInput.date }}"
+          label="日期"
+          placeholder="输入日期"
+          id="new-record-input-date"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{ newRecordInput.product_name }}"
+          label="项目名称"
+          placeholder="输入项目名称"
+          id="new-record-input-product"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{ newRecordInput.milage }}"
+          label="里程"
+          placeholder="输入里程"
+          id="new-record-input-milage"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{ newRecordInput.gift }}"
+          label="赠品"
+          placeholder="输入赠品"
+          id="new-record-input-gift"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{ newRecordInput.operator }}"
+          label="操作人"
+          placeholder="输入操作人"
+          id="new-record-input-operator"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{ newRecordInput.detail }}"
+          label="备注/积分"
+          placeholder="输入备注"
+          id="new-record-input-detail"
+          bind:change="onChange"
+        />
+      </van-cell-group>
+      <view
+        style="width: 100%">
+        <van-button 
+          plain
+          type="primary"
+          custom-style="width: 50%">
+          创建
+        </van-button>
+        <van-button 
+          plain
+          type="default"
+          custom-style="width: 50%"
+          bind:click="closeNewRecordForm">
+          取消
+        </van-button>
+      </view>
+    </van-popup>
+  <view wx:if="{{targetUserRecord && targetUserRecord !== []}}">
+    <van-divider contentPosition="center">保养记录</van-divider>
+    <!-- 记录列表 -->
+    <block wx:for="{{targetUserRecord}}" wx:key="unique">
+      <van-cell-group 
+        inset 
+        data-record="{{item}}"
+        bind:tap="showRecordPopup">
+        <van-cell 
+          title="{{item.date}}" 
+        />
+        <van-cell 
+          title="{{item.product_name}}" 
+          value="{{item.milage}} km" 
+        />
+      </van-cell-group>
+    </block>
+<!-- 记录详情 -->
+    <van-popup 
+      show="{{ isShowRecordPopup }}" 
+      round
+      closeable
+      custom-style="padding: 10px; width: 80vw;"
+      bind:close="closeRecordPopup">
+      <van-cell-group title="记录详情">
+        <van-cell 
+          title="日期" 
+          value="{{selectedRecord.date}}" 
+        />
+        <van-cell 
+          title="项目" 
+          value="{{selectedRecord.product_name}}" 
+        />
+        <van-cell 
+          title="操作员" 
+          value="{{selectedRecord.operator}}" 
+        />
+        <van-cell 
+          title="里程" 
+          value="{{selectedRecord.milage}}" 
+        />
+        <van-cell 
+          title="赠品" 
+          value="{{selectedRecord.gift}}" 
+        />
+        <van-cell 
+          title="备注" 
+          value="{{selectedRecord.detail}}" 
+        />
+      </van-cell-group>
+      <view
+        style="width: 100%">
+        <van-button 
+          plain
+          type="primary"
+          custom-style="width: 50%"
+          bind:click="closeRecordPopup">
+          关闭
+        </van-button>
+        <van-button 
+          plain
+          type="danger"
+          custom-style="width: 50%"
+          bind:click="showDeleteConfirmPopup">
+          删除
+        </van-button>
+      </view>
+    </van-popup>
+  </view>
+    <!-- 弹窗 -->
+    <van-dialog id="van-dialog" />
+    <van-toast id="van-toast" />
+</view>
