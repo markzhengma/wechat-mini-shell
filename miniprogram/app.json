@@ -45,7 +45,10 @@
     "pages/shellPages/msgPage/msgPage"
   ],
   "usingComponents": {
-    "van-button": "@vant/weapp/button/index"
-    
+    "van-button": "@vant/weapp/button/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-divider": "@vant/weapp/divider/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-dialog": "@vant/weapp/dialog/index"
   }
 }

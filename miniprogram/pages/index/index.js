@@ -1,4 +1,6 @@
 // pages/index/index.js
+import Dialog from '@vant/weapp/dialog/dialog';
+
 const app = getApp()
 
 Page({
@@ -9,7 +11,12 @@ Page({
   data: {
     isLoading: false,
     isPermitted: false,
-    retryCountdown: 0
+    retryCountdown: 0,
+    isAdmin: false,
+    findUserFormIsShow: false,
+    createUserFormIsShow: false,
+    findUserFilter: "plate",
+    findUserInput: ""
   },
 
   getJSCode: function() {
@@ -78,8 +85,7 @@ Page({
 					const unionId = res.data.unionId;
           app.setAppData('unionId', unionId);
 
-          // TODO uncomment this part
-          // this.checkManagerRoleByUid(app.globalData.unionId);
+          this.checkAdminRoleByUid(app.globalData.unionId);
 
           this.getUserDataWithUnionId();
 				}
@@ -141,6 +147,123 @@ Page({
   switchPage: function(event) {
     wx.switchTab({
       url: event.currentTarget.dataset.path
+    })
+  },
+
+  goToAdminPage: function() {
+    wx.navigateTo({
+      url: '/pages/Admin/Admin'
+    })
+  },
+
+  checkAdminRoleByUid: function(unionid) {
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/admin/auth/unionid',
+      data: { unionid },
+      success: res => {
+        // console.log(res);
+        if(res.data.code === 200) {
+          const adminInfo = {
+            admin_name: res.data.data.admin_name,
+            location: res.data.data.location,
+            location_char: res.data.data.location_char,
+            super_admin: res.data.data.super_admin
+          }
+          app.setAppData('adminData', adminInfo);
+          app.setAppData('isAdmin', true);
+
+          this.setData({
+            isAdmin: true
+          })
+        }
+      }
+    })
+  },
+
+  showFindUserForm: function() {
+    this.setData({
+      findUserFormIsShow: true
+    })
+  },
+  hideFindUserForm: function() {
+    this.setData({
+      findUserFormIsShow: false
+    })
+  },
+  
+  showCreateUserForm: function() {
+    this.setData({
+      createUserFormIsShow: true
+    })
+  },
+  hideCreateUserForm: function() {
+    this.setData({
+      createUserFormIsShow: false
+    })
+  },
+
+  onChange(e) {
+    switch(e.currentTarget.id) {
+      case("find-user-input"):
+        this.setData({
+          findUserInput: e.detail
+        });
+        break;
+      default:
+        break;
+    }
+  },
+
+  changeFindUserFilter: function(e){
+    this.setData({
+      findUserFilter: e.currentTarget.dataset.filter,
+      findUserInput: ""
+    })
+  },
+
+  findUserWithFilterAndValue: function() {
+    wx.showLoading();
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single?filter=${this.data.findUserFilter}&value=${this.data.findUserInput}`,
+      success: res => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          console.log("user not found, see error below");
+          console.log(res);
+          Dialog.alert({
+            title: "未找到用户",
+            message: "【错误信息】" + JSON.stringify(res.data)
+          })
+          .then(() => {
+            console.log("closed");
+          })
+        } else {
+          let findUserRes = res.data.data;
+          Dialog.alert({
+            title: "找到用户",
+            message: `用户名：${findUserRes.user_name}\n车牌号：${findUserRes.plate}`
+          })
+          .then(() => {
+            wx.navigateTo({
+              url: "/pages/Admin/Admin",
+              success: res => {
+                res.eventChannel.emit('acceptDataFromOpenerPage', { data: findUserRes })
+              }
+            })
+          })
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+        Dialog.alert({
+          title: "未找到用户",
+          message: "【错误信息】" + JSON.stringify(err)
+        })
+        .then(() => {
+          console.log("closed");
+        })
+      }
     })
   },
 

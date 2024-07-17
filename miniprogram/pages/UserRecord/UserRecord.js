@@ -33,7 +33,6 @@ Page({
       url: `https://api.hulunbuirshell.com/api/record/user/${recordNum}`,
       success: res => {
         wx.hideLoading();
-        console.log(res);
         if(res.data.code !== 200) {
           throw(err => {
             console.log(err);

@@ -1,11 +1,9 @@
 <!--index.wxml-->
 <view>
   <text >
-    首页
-  </text>
-  <text >
     公众号文章链接
   </text>
+  <!-- 已登录 -->
   <view wx:if="{{isLoggedIn}}" >
     <text >
       用户名：{{userData.user_name ? userData.user_name : "无"}}
@@ -14,6 +12,7 @@
       最近的一条养护提醒
     </text>
     <van-button 
+      icon="star-o" 
       type="primary" 
       data-path="/pages/UserRecord/UserRecord"
       bind:click="switchPage"
@@ -21,6 +20,7 @@
       查看养护记录
     </van-button>
   </view>
+  <!-- 重新登录等待 -->
   <view wx:elif="{{retryCountdown > 0}}">
     <van-button 
       type="primary" 
@@ -29,6 +29,7 @@
       重试登录（{{retryCountdown}}秒后）
     </van-button>
   </view>
+  <!-- 未登录 -->
   <view wx:else>
     <van-button 
       type="primary" 
@@ -37,4 +38,97 @@
       用户登录
     </van-button>
   </view>
+<!-- 管理员身份 -->
+  <view wx:if="{{isAdmin}}">
+    <van-divider contentPosition="center">
+      管理员操作
+    </van-divider>
+    <van-button 
+      icon="medal-o" 
+      type="info"
+      bind:click="showFindUserForm"
+    >
+      查询客户
+    </van-button>
+    <van-button 
+      icon="add-o" 
+      type="warning"
+      bind:click="showFindUserForm"
+    >
+      创建客户
+    </van-button>
+    <van-divider />
+    <van-popup 
+      show="{{ findUserFormIsShow }}" 
+      round
+      closeable
+      custom-style="padding: 10px"
+      bind:close="hideFindUserForm"
+    >
+      <text>查询客户</text>
+      <view>
+        <view >
+          <van-button 
+            type="primary"
+            wx:if="{{findUserFilter == 'plate'}}"
+          >
+            车牌号
+          </van-button>
+          <van-button 
+            data-filter="plate"
+            type="default"
+            bind:click="changeFindUserFilter"
+            wx:else
+          >
+            车牌号
+          </van-button>
+        </view>
+        <view >
+          <van-button 
+            type="primary"
+            wx:if="{{findUserFilter == 'phone'}}"
+          >
+            手机号
+          </van-button>
+          <van-button 
+            data-filter="phone"
+            type="default"
+            bind:click="changeFindUserFilter"
+            wx:else
+          >
+            手机号
+          </van-button>
+        </view>
+        <view >
+          <van-button 
+            type="primary"
+            wx:if="{{findUserFilter == 'record_num'}}"
+          >
+            换油证号
+          </van-button>
+          <van-button 
+            data-filter="record_num"
+            type="default"
+            bind:click="changeFindUserFilter"
+            wx:else
+          >
+            换油证号
+          </van-button>
+        </view>
+      </view>
+      <van-field
+        value="{{ findUserInput }}"
+        id="find-user-input"
+        placeholder="请输入"
+        bind:change="onChange"
+      />
+      <van-button 
+        type="primary"
+        bind:click="findUserWithFilterAndValue"
+      >
+        查询
+      </van-button>
+    </van-popup>
+  </view>
+  <van-dialog id="van-dialog" />
 </view>
