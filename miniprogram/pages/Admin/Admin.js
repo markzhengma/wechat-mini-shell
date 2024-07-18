@@ -15,6 +15,13 @@ Page({
     selectedRecord: "",
     isShowNewRecordForm: false,
     newRecordInput: "",
+    isShowCalendarInput: false,
+    isShowGiftInput: false,
+    isShowOperatorInput: false,
+    isShowProductInput: false,
+    giftList: [],
+    operatorList: [],
+    productList: [],
     // TODO: testing
     "targetUserInfo": {
       "detail": "新客户",
@@ -70,17 +77,84 @@ Page({
       selectedRecord: ""
     })
   },
+
+  resetNewRecordForm: function() {
+    this.setData({
+      newRecordInput: {
+        date: this.formatDate(new Date()),
+        product_name: "",
+        milage: "",
+        gift: "",
+        operator: "",
+        detail: "",
+        reminder: "reminder"
+      }
+    })
+  },
   showNewRecordForm: function() {
     this.setData({
       isShowNewRecordForm: true,
-      newRecordInput: ""
     });
+    this.resetNewRecordForm();
   },
   closeNewRecordForm: function() {
     this.setData({
       isShowNewRecordForm: false,
-      newRecordInput: ""
-    })
+    });
+    this.resetNewRecordForm();
+  },
+
+  showPicker: function(e) {
+    switch(e.currentTarget.dataset.pickerInput) {
+      case("product"):
+        this.setData({
+          isShowProductInput: true
+        })
+        break;
+      case("gift"):
+        this.setData({
+          isShowGiftInput: true
+        })
+        break;
+      case("operator"):
+        this.setData({
+          isShowOperatorInput: true
+        })
+        break;
+      case("date"):
+        this.setData({
+          isShowCalendarInput: true
+        })
+        break;
+      default:
+        break;
+    }
+  },
+  closePicker: function(e) {
+    switch(e.currentTarget.dataset.pickerInput) {
+      case("product"):
+        this.setData({
+          isShowProductInput: false
+        })
+        break;
+      case("gift"):
+        this.setData({
+          isShowGiftInput: false
+        })
+        break;
+      case("operator"):
+        this.setData({
+          isShowOperatorInput: false
+        })
+        break;
+      case("date"):
+        this.setData({
+          isShowCalendarInput: false
+        })
+        break;
+      default:
+        break;
+    }
   },
 
   showDeleteConfirmPopup: function() {
@@ -119,53 +193,190 @@ Page({
     })
   },
 
+  formatDate: function(date) {
+    let paramsDate = new Date(date),
+      month = '' + (paramsDate.getMonth() + 1),
+      day = '' + paramsDate.getDate(),
+      year = paramsDate.getFullYear();
+      
+    if (month.length < 2) 
+    month = '0' + month;
+    if (day.length < 2) 
+    day = '0' + day;
+    
+    return [year, month, day].join('-');
+  },
+
+  loadGiftList: function() {
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/gift/all',
+      success: res => {
+        if(res.statusCode !== 200 || res.data.length === 0) {
+          Dialog.alert({
+            title: "赠品信息获取失败",
+            message: "【错误信息】" + JSON.stringify(res)
+          });
+        } else {
+          const giftRes = res.data.map(gift => {
+            return gift.gift_name
+          })
+          this.setData({
+            giftList: giftRes
+          })
+        }
+      },
+      fail: err => {
+        console.log(err);
+        Dialog.alert({
+          title: "赠品信息获取失败",
+          message: "【错误信息】" + JSON.stringify(err)
+        });
+      }
+    })
+  },
+
+  loadOperatorList: function() {
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/operator/all',
+      success: (res) => {
+        if(res.statusCode !== 200 || res.data.length === 0) {
+          Dialog.alert({
+            title: "赠品信息获取失败",
+            message: "【错误信息】" + JSON.stringify(res)
+          });
+        } else {
+          const opRes = res.data.map(op => {
+            return op.op_name
+          })
+          this.setData({
+            operatorList: opRes
+          })
+        }
+      },
+      fail: err => {
+        console.log(err);
+        Dialog.alert({
+          title: "操作人列表获取失败",
+          message: "【错误信息】" + JSON.stringify(err)
+        });
+      }
+    });
+  },
+
+  loadProductList: function() {
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/product/all',
+      success: (res) => {
+        if(res.statusCode !== 200 || res.data.length === 0) {
+          Dialog.alert({
+            title: "赠品信息获取失败",
+            message: "【错误信息】" + JSON.stringify(res)
+          });
+        } else {
+          const productRes = res.data.map(product => {
+            return product.product_name
+          })
+          this.setData({
+            productList: productRes
+          })
+        }
+      },
+      fail: err => {
+        console.log(err);
+        Dialog.alert({
+          title: "项目列表获取失败",
+          message: "【错误信息】" + JSON.stringify(err)
+        });
+      }
+    });
+  },
+
+  confirmPickerInput: function(e) {
+    switch(e.currentTarget.dataset.pickerInput) {
+      case("product"):
+        this.setData({
+          isShowProductInput: false,
+          newRecordInput: {
+            ...this.data.newRecordInput,
+            product_name: e.detail.value
+          }
+        })
+        break;
+      case("gift"):
+        this.setData({
+          isShowGiftInput: false,
+          newRecordInput: {
+            ...this.data.newRecordInput,
+            gift: e.detail.value
+          }
+        })
+        break;
+      case("operator"):
+        this.setData({
+          isShowOperatorInput: false,
+          newRecordInput: {
+            ...this.data.newRecordInput,
+            operator: e.detail.value
+          }
+        })
+        break;
+      case("date"):
+        this.setData({
+          isShowCalendarInput: false,
+          newRecordInput: {
+            ...this.data.newRecordInput,
+            date: this.formatDate(e.detail)
+          }
+        });
+      default:
+        break;
+    }
+  },
+
+  createNewRecord: function() {
+    wx.showLoading();
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/record/user/${this.data.targetUserInfo.record_num}`,
+      method: 'POST',
+      data: this.data.newRecordInput,
+      success: (res) => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          if(res.data.code === 422){
+            Dialog.alert({
+              title: "创建保养记录失败",
+              message: "请检查必填项是否都填写内容"
+            });
+            console.log(res);
+          } else {
+            Dialog.alert({
+              title: "创建保养记录失败",
+              message: "【错误信息】" + JSON.stringify(res.data)
+            });
+          }
+        } else {
+          Toast.success('创建成功');
+          this.findUserRecord(this.data.targetUserInfo.record_num);
+          this.closeNewRecordForm();
+        }
+      },
+      fail: err => {
+        Dialog.alert({
+          title: "创建保养记录失败",
+          message: "【错误信息】" + JSON.stringify(err)
+        });
+        console.log(err);
+      }
+    })
+  },
+
   onChange(e) {
     switch(e.currentTarget.id) {
-      case("new-record-input-date"):
-        this.setData({
-          newRecordInput: {
-            ...this.data.newRecordInput,
-            date: e.detail
-          }
-        });
-        break;
-      case("new-record-input-product"):
-        this.setData({
-          newRecordInput: {
-            ...this.data.newRecordInput,
-            product_name: e.detail
-          }
-        });
-        break;
       case("new-record-input-milage"):
         this.setData({
           newRecordInput: {
             ...this.data.newRecordInput,
             milage: e.detail
-          }
-        });
-        break;
-      case("new-record-input-gift"):
-        this.setData({
-          newRecordInput: {
-            ...this.data.newRecordInput,
-            gift: e.detail
-          }
-        });
-        break;
-      case("new-record-input-gift"):
-        this.setData({
-          newRecordInput: {
-            ...this.data.newRecordInput,
-            gift: e.detail
-          }
-        });
-        break;
-      case("new-record-input-operator"):
-        this.setData({
-          newRecordInput: {
-            ...this.data.newRecordInput,
-            operator: e.detail
           }
         });
         break;
@@ -195,6 +406,9 @@ Page({
     //   });
     // })
     that.findUserRecord(that.data.targetUserInfo.record_num);
+    that.loadGiftList();
+    that.loadOperatorList();
+    that.loadProductList();
   },
 
   /**

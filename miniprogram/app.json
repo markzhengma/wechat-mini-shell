@@ -55,6 +55,8 @@
     "van-card": "@vant/weapp/card/index",
     "van-row": "@vant/weapp/row/index",
     "van-col": "@vant/weapp/col/index",
-    "van-toast": "@vant/weapp/toast/index"
+    "van-toast": "@vant/weapp/toast/index",
+    "van-calendar": "@vant/weapp/calendar/index",
+    "van-picker": "@vant/weapp/picker/index"
   }
 }

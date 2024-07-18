@@ -44,45 +44,44 @@
       custom-style="padding: 10px; width: 80vw;"
       bind:close="closeNewRecordForm">
       <van-cell-group title="创建保养记录">
-        <van-field
+        <van-cell 
+          title="日期" 
           value="{{ newRecordInput.date }}"
-          label="日期"
-          placeholder="输入日期"
-          id="new-record-input-date"
-          bind:change="onChange"
+          data-picker-input="date"
+          bind:click="showPicker" 
         />
-        <van-field
+        <van-cell 
+          title="项目名称" 
           value="{{ newRecordInput.product_name }}"
-          label="项目名称"
-          placeholder="输入项目名称"
-          id="new-record-input-product"
-          bind:change="onChange"
+          data-picker-input="product"
+          bind:click="showPicker" 
         />
         <van-field
           value="{{ newRecordInput.milage }}"
           label="里程"
           placeholder="输入里程"
+          type="number"
+          input-align="right"
           id="new-record-input-milage"
           bind:change="onChange"
         />
-        <van-field
+        <van-cell 
+          title="赠品" 
           value="{{ newRecordInput.gift }}"
-          label="赠品"
-          placeholder="输入赠品"
-          id="new-record-input-gift"
-          bind:change="onChange"
+          data-picker-input="gift"
+          bind:click="showPicker" 
         />
-        <van-field
+        <van-cell 
+          title="操作人" 
           value="{{ newRecordInput.operator }}"
-          label="操作人"
-          placeholder="输入操作人"
-          id="new-record-input-operator"
-          bind:change="onChange"
+          data-picker-input="operator"
+          bind:click="showPicker" 
         />
         <van-field
           value="{{ newRecordInput.detail }}"
           label="备注/积分"
           placeholder="输入备注"
+          input-align="right"
           id="new-record-input-detail"
           bind:change="onChange"
         />
@@ -92,7 +91,8 @@
         <van-button 
           plain
           type="primary"
-          custom-style="width: 50%">
+          custom-style="width: 50%"
+          bind:click="createNewRecord">
           创建
         </van-button>
         <van-button 
@@ -174,6 +174,54 @@
     </van-popup>
   </view>
     <!-- 弹窗 -->
+    <van-calendar 
+      show="{{ isShowCalendarInput }}" 
+      data-picker-input="date"
+      bind:close="closePicker" 
+      bind:confirm="confirmPickerInput" 
+    />
+    <van-popup
+      round
+      position="bottom"
+      show="{{isShowProductInput}}"
+      custom-style="height: 80%">
+      <van-picker
+        show-toolbar
+        title="项目选择"
+        columns="{{ productList }}"
+        bind:confirm="confirmPickerInput"
+        data-picker-input="product"
+        bind:cancel="closePicker"
+      />
+    </van-popup>
+    <van-popup
+      round
+      position="bottom"
+      show="{{isShowGiftInput}}"
+      custom-style="height: 80%">
+      <van-picker
+        show-toolbar
+        title="赠品选择"
+        columns="{{ giftList }}"
+        bind:confirm="confirmPickerInput"
+        data-picker-input="gift"
+        bind:cancel="closePicker"
+      />
+    </van-popup>
+    <van-popup
+      round
+      position="bottom"
+      show="{{isShowOperatorInput}}"
+      custom-style="height: 80%">
+      <van-picker
+        show-toolbar
+        title="操作人选择"
+        columns="{{ operatorList }}"
+        bind:confirm="confirmPickerInput"
+        data-picker-input="operator"
+        bind:cancel="closePicker"
+      />
+    </van-popup>
     <van-dialog id="van-dialog" />
     <van-toast id="van-toast" />
 </view>
