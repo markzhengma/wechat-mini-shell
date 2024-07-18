@@ -12,6 +12,7 @@ Page({
   data: {
     isLoading: false,
     isPermitted: false,
+    uidIsInDB: false,
     retryCountdown: 0,
     isAdmin: false,
     findUserFormIsShow: false,
@@ -40,7 +41,113 @@ Page({
     })
   },
 
+  bindUidWithUserData: function(userData) {
+    const unionId = app.globalData.unionId;
+
+    wx.showLoading();
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single/${userData.record_num}`,
+      method: 'PUT',
+      data: {
+        user_name: userData.user_name,
+        phone: userData.phone,
+        plate: userData.plate,
+        make: userData.make,
+        detail: userData.detail,
+        union_id: unionId
+      },
+      success: res => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          Dialog.alert({
+            title: "出错了",
+            message: "微信关联失败，请联系我们帮您解决"
+          });
+          console.log('error binding record num with union id');
+          console.log(res);
+        } else {
+          Toast.success('微信关联成功');
+          let userRes = res.data.data;
+
+          app.setAppData('userData', userRes);
+          this.setData({
+            userData: userRes,
+            uidIsInDB: true
+          })
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        Dialog.alert({
+          title: "出错了",
+          message: "微信关联失败，请联系我们帮您解决"
+        });
+        console.log('error binding record num with union id');
+        console.log(err);
+      }
+    })
+  },
+
+  // TODO: fix api scope and use this to get phone num
+  getPhoneNumber: function() {
+    let phoneNum = "18600043907";
+    this.getUserDataWithPhone(phoneNum);
+  },
+
+  getUserDataWithPhone: function(phoneNum) {
+    wx.showLoading();
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/user/all',
+      data: {
+        filter: 'phone',
+        value: phoneNum
+      },
+      success: (res) => {
+        wx.hideLoading();
+        app.globalData.isLoading = false;
+
+        console.log(res);
+        if(res.data.code !== 200) {
+          if(res.data.code === 401){
+            // TODO：欢迎新用户
+            Dialog.alert({
+              title: "很高兴认识您",
+              message: "看来您是我们的新客户，请联系门店为您创建信息再试试登录吧！"
+            });
+          } else {
+            Dialog.alert({
+              title: "出错了",
+              message: "查询错误，请联系我们帮您解决"
+            });
+          }
+        } else {
+          const userDataList = res.data.data;
+        
+          if(Array.isArray(userDataList)) {
+            this.setData({
+              userDataListFoundWithPhone: userDataList
+            });
+            if(userDataList.length === 1) {
+              this.bindUidWithUserData(userDataList[0]);
+            } else if(userDataList.length > 1) {
+              // TODO: show user info list and let user to pick his data
+              console.log("found more than one user with this phone, ready to pick one");
+            }
+          } else {
+            console.log("request failed");
+          }
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log('failed to get user data with union id:');
+        console.log(err);
+      }
+    })
+  },
+
   getUserDataWithUnionId: function() {
+    wx.showLoading();
     wx.request({
       url: 'https://api.hulunbuirshell.com/api/user/all',
       data: {
@@ -52,8 +159,15 @@ Page({
         app.globalData.isLoading = false;
 
         if(res.data.code !== 200) {
-          console.log('failed to get user data with union id:');
-          console.log(res);
+          if(res.data.code === 401){
+            console.log("wechat not bind to user, try to get userData with phone number");
+            app.setAppData("isLoggedIn", true);
+            this.setData({
+              isLoggedIn: true
+            });
+          } else {
+            console.log('request failed');
+          }
         } else {
           app.setAppData('userData', res.data.data[0]);
           app.setAppData('sameUserList', res.data.data);
@@ -61,7 +175,8 @@ Page({
 
           this.setData({
             userData: app.globalData.userData,
-            isLoggedIn: true
+            isLoggedIn: true,
+            uidIsInDB: true
           })
         }
 

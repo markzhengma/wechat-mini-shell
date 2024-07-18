@@ -1,24 +1,39 @@
 <!--index.wxml-->
 <view>
   <text >
-    公众号文章链接
+    （公众号文章链接）
   </text>
   <!-- 已登录 -->
   <view wx:if="{{isLoggedIn}}" >
-    <text >
-      用户名：{{userData.user_name ? userData.user_name : "无"}}
-    </text>
-    <text >
-      最近的一条养护提醒
-    </text>
-    <van-button 
-      icon="star-o" 
-      type="primary" 
-      data-path="/pages/UserRecord/UserRecord"
-      bind:click="switchPage"
-    >
-      查看养护记录
-    </van-button>
+    <view wx:if="{{uidIsInDB}}">
+      <text >
+        用户名：{{userData.user_name ? userData.user_name : "无"}}
+      </text>
+      <text >
+        最近的一条养护提醒
+      </text>
+      <van-button 
+        icon="star-o" 
+        type="primary" 
+        data-path="/pages/UserRecord/UserRecord"
+        bind:click="switchPage"
+      >
+        查看养护记录
+      </van-button>
+    </view>
+    <view wx:else>
+      <text>未找到关联的微信号记录</text>
+      <!-- <button 
+        open-type="getPhoneNumber" 
+        bindgetphonenumber="getPhoneNumber">
+        通过手机号查询保养记录
+      </button> -->
+      <van-button 
+        type="primary"
+        bind:click="getPhoneNumber">
+        通过手机号查询保养记录
+      </van-button>
+    </view>
   </view>
   <!-- 重新登录等待 -->
   <view wx:elif="{{retryCountdown > 0}}">
