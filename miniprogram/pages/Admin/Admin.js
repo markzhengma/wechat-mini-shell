@@ -21,19 +21,7 @@ Page({
     isShowProductInput: false,
     giftList: [],
     operatorList: [],
-    productList: [],
-    // TODO: testing
-    "targetUserInfo": {
-      "detail": "新客户",
-      "make": "夏利",
-      "phone": "18600043907",
-      "plate": "辽A12345",
-      "record_num": "HD01217",
-      "union_id": "oqLMf6SnHRwdhPo9880e_Ge2dCSI",
-      "user_name": "马铮",
-      "__v": 0,
-      "_id": "5fd8c1d73ab3ea09b5b42748"
-    },
+    productList: []
   },
 
   findUserRecord: function(recordNum) {
@@ -399,16 +387,15 @@ Page({
   onLoad() {
     let that = this;
     const eventChannel = this.getOpenerEventChannel();
-    // TODO: testing
-    // eventChannel.on('adminFindUserInfo', function(data) {
-    //   that.setData({
-    //     targetUserInfo: data.data
-    //   });
-    // })
-    that.findUserRecord(that.data.targetUserInfo.record_num);
-    that.loadGiftList();
-    that.loadOperatorList();
-    that.loadProductList();
+    eventChannel.on('adminFindUserInfo', function(data) {
+      that.setData({
+        targetUserInfo: data.data
+      });
+      that.findUserRecord(that.data.targetUserInfo.record_num);
+      that.loadGiftList();
+      that.loadOperatorList();
+      that.loadProductList();
+    })
   },
 
   /**

@@ -52,10 +52,11 @@
     <van-button 
       icon="add-o" 
       type="warning"
-      bind:click="showFindUserForm">
+      bind:click="showCreateUserForm">
       创建客户
     </van-button>
     <van-divider />
+    <!-- 查询用户弹窗 -->
     <van-popup 
       show="{{ findUserFormIsShow }}" 
       round
@@ -126,6 +127,99 @@
         查询
       </van-button>
     </van-popup>
+    <!-- 创建用户弹窗 -->
+     <van-popup 
+      show="{{ createUserFormIsShow }}" 
+      round
+      closeable
+      custom-style="padding: 10px; width: 80vw;"
+      bind:close="hideCreateUserForm">
+      <van-cell-group title="创建用户">
+        <van-cell 
+          title="门店" 
+          value="{{ newUserInput.location }}"
+          id="create-location"
+          bind:click="showLocationPicker"
+        />
+        <van-field
+          value="{{newUserInput.user_name}}"
+          id="create-user-name"
+          label="车主姓名"
+          placeholder="请输入"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{newUserInput.phone}}"
+          id="create-phone"
+          label="联系方式"
+          type="number"
+          placeholder="请输入"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{newUserInput.make}}"
+          id="create-make"
+          label="车型"
+          placeholder="请输入"
+          bind:change="onChange"
+        />
+        <van-field
+          value="{{newUserInput.plate}}"
+          id="create-plate"
+          label="车牌号"
+          placeholder="请输入"
+          bind:change="onChange"
+        />
+      </van-cell-group>
+      <van-button 
+        type="primary"
+        bind:click="createUser"
+      >
+        创建
+      </van-button>
+      <van-button 
+        type="default"
+        bind:click="hideCreateUserForm"
+      >
+        取消
+      </van-button>
+    </van-popup>
   </view>
   <van-dialog id="van-dialog" />
+  <van-toast id="van-toast" />
+  <van-popup 
+    show="{{ findUserListIsShow }}" 
+    closeable
+    custom-style="padding: 4px; height: 100vh; width: 100vw; overflow: scroll"
+    bind:close="hideFindUserList">
+    <text>找到多个客户</text>
+    <block wx:for="{{findUserList}}" wx:key="unique">
+      <van-cell-group 
+        inset 
+        border="{{false}}"
+        data-listed-user="{{item}}"
+        custom-style="margin: 2px"
+        title="{{item.record_num}}"
+        bind:tap="takeUserDataToAdminPage">
+        <van-cell 
+          title="{{item.user_name}}" 
+          label="{{item.phone}}"
+          value="{{item.plate}} " 
+          center
+        />
+      </van-cell-group>
+    </block>
+  </van-popup>
+  <van-popup
+    round
+    position="bottom"
+    show="{{locationPickerIsShow}}">
+    <van-picker
+      show-toolbar
+      title="门店选择"
+      columns="{{ locationList }}"
+      bind:confirm="confirmLocationPick"
+      bind:cancel="closeLocationPicker"
+    />
+  </van-popup>
 </view>

@@ -1,5 +1,6 @@
 // pages/index/index.js
 import Dialog from '@vant/weapp/dialog/dialog';
+import Toast from '@vant/weapp/toast/toast';
 
 const app = getApp()
 
@@ -17,7 +18,14 @@ Page({
     createUserFormIsShow: false,
     findUserFilter: "plate",
     findUserInput: "",
-    findUserInputPlaceholder: "车牌号"
+    findUserInputPlaceholder: "车牌号",
+    locationList: [
+      "海拉尔河东",
+      "海拉尔河西",
+      "满洲里",
+      "满洲里二店",
+      "牙克石"
+    ]
   },
 
   getJSCode: function() {
@@ -188,18 +196,169 @@ Page({
   },
   hideFindUserForm: function() {
     this.setData({
-      findUserFormIsShow: false
+      findUserFormIsShow: false,
+      findUserInput: ""
     })
   },
   
   showCreateUserForm: function() {
     this.setData({
       createUserFormIsShow: true
-    })
+    });
+    this.resetNewUserInput();
   },
   hideCreateUserForm: function() {
     this.setData({
       createUserFormIsShow: false
+    });
+    this.resetNewUserInput();
+  },
+
+  showFindUserList: function() {
+    this.setData({
+      findUserListIsShow: true
+    })
+  },
+  hideFindUserList: function() {
+    this.setData({
+      findUserListIsShow: false,
+      findUserList: []
+    })
+  },
+
+  resetNewUserInput: function() {
+    this.setData({
+      newUserInput: {
+        user_name: "",
+        phone: "",
+        make: "",
+        plate: ""
+      }
+    });
+    this.setLocation();
+  },
+
+  setLocation: function() {
+    const locationChar = app.globalData.adminData.location_char;
+    const locationCharList = ["HD", "HX", "MA", "MB", "YA"];
+    let locationIndex = locationCharList.indexOf(locationChar);
+    this.setData({
+      newUserInput: {
+        ...this.data.newUserInput,
+        location: locationIndex !== -1 ? this.data.locationList[locationIndex] : ""
+      }
+    });
+  },
+
+  showLocationPicker: function() {
+    this.setData({
+      locationPickerIsShow: true
+    })
+  },
+
+  closeLocationPicker: function() {
+    this.setData({
+      locationPickerIsShow: false
+    })
+  },
+
+  confirmLocationPick: function(e){
+    this.setData({
+      newUserInput: {
+        ...this.data.newUserInput,
+        location: e.detail.value
+      }
+    })
+    this.closeLocationPicker();
+  },
+
+  createUser: function() {
+    const locationCharList = ["HD", "HX", "MA", "MB", "YA"];
+    let newUserInfo = this.data.newUserInput;
+    let locationIndex = this.data.locationList.indexOf(newUserInfo.location);
+    let locationChar = locationCharList[locationIndex];
+
+    const REGEX_CHINESE = /^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+    if(!newUserInfo.user_name.match(REGEX_CHINESE)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【车主姓名】哦"
+      })
+    } else if((newUserInfo.phone.length !== 7 && newUserInfo.phone.length !== 11) || !newUserInfo.phone.match(/^\d+$/)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【联系方式】哦"
+      })
+    } else if(!newUserInfo.make.match(REGEX_CHINESE)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【车型】哦"
+      })
+    } else if((newUserInfo.plate.length !== 7 && newUserInfo.plate.length !== 8) || !newUserInfo.plate.match(REGEX_CHINESE)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【车牌号】哦"
+      })
+    } else {
+      console.log(locationChar);
+      console.log(newUserInfo);
+      
+      Dialog.confirm({
+        title: "确认新客户信息",
+        message: `【车主姓名】${newUserInfo.user_name}\n
+        【联系方式】${newUserInfo.phone}\n
+        【车型】${newUserInfo.make}\n
+        【车牌号】${newUserInfo.plate}\n
+        【换油证号】自动生成-${locationChar}`
+      })
+        .then(() => {
+          this.confirmUserCreate(locationChar, newUserInfo);
+        })
+        .catch(() => {
+          console.log("canceled");
+        })
+    }
+  },
+
+  confirmUserCreate: function(locationChar, newUserInfo) {
+    wx.showLoading();
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/single/${locationChar}`,
+      method: 'POST',
+      data: {
+        user_name: newUserInfo.user_name.length === 1 ? newUserInfo.user_name + '先生/女士' : newUserInfo.user_name,
+        phone: newUserInfo.phone,
+        make: newUserInfo.make,
+        plate: newUserInfo.plate
+      },
+      success: (res) => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          console.log(res);
+          Dialog.alert({
+            title: "创建失败",
+            message: "【错误信息】" + JSON.stringify(res.data)
+          });
+        } else {
+          Toast.success('创建成功');
+          const newUserInfo = res.data.data;
+
+          wx.navigateTo({
+            url: "/pages/Admin/Admin",
+            success: res => {
+              res.eventChannel.emit('adminFindUserInfo', { data: newUserInfo })
+            }
+          })
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.log(err);
+        Dialog.alert({
+          title: "创建失败",
+          message: "【错误信息】" + JSON.stringify(err.data)
+        });
+      }
     })
   },
 
@@ -209,6 +368,39 @@ Page({
         this.setData({
           findUserInput: e.detail
         });
+        break;
+      case("create-user-name"):
+        this.setData({
+          newUserInput: {
+            ...this.data.newUserInput,
+            user_name: e.detail
+          }
+        });
+        break;
+      case("create-phone"):
+        this.setData({
+          newUserInput: {
+            ...this.data.newUserInput,
+            phone: e.detail
+          }
+        });
+        break;
+      case("create-make"):
+        this.setData({
+          newUserInput: {
+            ...this.data.newUserInput,
+            make: e.detail
+          }
+        });
+        break;
+      case("create-plate"):
+        this.setData({
+          newUserInput: {
+            ...this.data.newUserInput,
+            plate: e.detail
+          }
+        });
+        break;
       default:
         break;
     }
@@ -240,44 +432,75 @@ Page({
     }
   },
 
-  findUserWithFilterAndValue: function() {
-    wx.showLoading();
-    wx.request({
-      url: `https://api.hulunbuirshell.com/api/user/single?filter=${this.data.findUserFilter}&value=${this.data.findUserInput}`,
+  takeUserDataToAdminPage: function(e) {
+    let userData = e.currentTarget.dataset.listedUser;
+    wx.navigateTo({
+      url: "/pages/Admin/Admin",
       success: res => {
-        wx.hideLoading();
-        if(res.data.code !== 200) {
-          console.log("user not found, see error below");
-          console.log(res);
-          Dialog.alert({
-            title: "未找到用户",
-            message: "【错误信息】" + JSON.stringify(res.data)
-          })
-        } else {
-          let findUserRes = res.data.data;
-          Dialog.alert({
-            title: "查询成功",
-            message: `用户名：${findUserRes.user_name}\n车牌号：${findUserRes.plate}`
-          })
-          .then(() => {
-            wx.navigateTo({
-              url: "/pages/Admin/Admin",
-              success: res => {
-                res.eventChannel.emit('adminFindUserInfo', { data: findUserRes })
-              }
-            })
-          })
-        }
-      },
-      fail: err => {
-        wx.hideLoading();
-        console.log(err);
-        Dialog.alert({
-          title: "未找到用户",
-          message: "【错误信息】" + JSON.stringify(err)
-        })
+        res.eventChannel.emit('adminFindUserInfo', { data: userData })
       }
     })
+  },
+
+  findUserWithFilterAndValue: function() {
+    if(this.data.findUserInput.length < 4) {
+      Dialog.alert({
+        title: "无法查询",
+        message: "【错误信息】至少输入4个字符才能查询"
+      })
+    } else {
+      wx.showLoading();
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/user/all?filter=${this.data.findUserFilter}&value=${this.data.findUserInput}`,
+        success: res => {
+          wx.hideLoading();
+          if(res.data.code !== 200) {
+            console.log("user not found, see error below");
+            console.log(res);
+            Dialog.alert({
+              title: "未找到用户",
+              message: "【错误信息】" + JSON.stringify(res.data)
+            })
+          } else {
+            console.log(res);
+            let findUserList = res.data.data;
+
+            if(Array.isArray(findUserList) && findUserList.length === 1) {
+              Dialog.alert({
+                title: "查询成功",
+                message: `用户名：${findUserList[0].user_name}\n车牌号：${findUserList[0].plate}`
+              })
+              .then(() => {
+                wx.navigateTo({
+                  url: "/pages/Admin/Admin",
+                  success: res => {
+                    res.eventChannel.emit('adminFindUserInfo', { data: findUserList[0] })
+                  }
+                })
+              })
+            } else if(Array.isArray(findUserList) && findUserList.length > 1) {
+              this.setData({
+                findUserList
+              });
+              this.showFindUserList();
+            } else {
+              Dialog.alert({
+                title: "未找到用户",
+                message: "【错误信息】" + JSON.stringify(res.data)
+              })
+            }
+          }
+        },
+        fail: err => {
+          wx.hideLoading();
+          console.log(err);
+          Dialog.alert({
+            title: "未找到用户",
+            message: "【错误信息】" + JSON.stringify(err)
+          })
+        }
+      })
+    }
   },
 
   /**
