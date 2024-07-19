@@ -20,6 +20,13 @@
       >
         查看养护记录
       </van-button>
+      <van-button 
+        type="danger" 
+        bind:click="showUserDataList"
+        wx:if="{{userDataList.length > 1}}"
+      >
+        切换账号
+      </van-button>
     </view>
     <view wx:else>
       <text>未找到关联的微信号记录</text>
@@ -30,7 +37,8 @@
       </button> -->
       <van-button 
         type="primary"
-        bind:click="getPhoneNumber">
+        open-type="getPhoneNumber"
+        bindgetphonenumber="getPhoneAuthCode">
         通过手机号查询保养记录
       </van-button>
     </view>
@@ -53,6 +61,7 @@
       用户登录
     </van-button>
   </view>
+
 <!-- 管理员身份 -->
   <view wx:if="{{isAdmin}}">
     <van-divider contentPosition="center">
@@ -70,7 +79,9 @@
       bind:click="showCreateUserForm">
       创建客户
     </van-button>
+
     <van-divider />
+
     <!-- 查询用户弹窗 -->
     <van-popup 
       show="{{ findUserFormIsShow }}" 
@@ -142,6 +153,7 @@
         查询
       </van-button>
     </van-popup>
+
     <!-- 创建用户弹窗 -->
      <van-popup 
       show="{{ createUserFormIsShow }}" 
@@ -200,8 +212,10 @@
       </van-button>
     </van-popup>
   </view>
+
   <van-dialog id="van-dialog" />
   <van-toast id="van-toast" />
+
   <van-popup 
     show="{{ findUserListIsShow }}" 
     closeable
@@ -225,6 +239,7 @@
       </van-cell-group>
     </block>
   </van-popup>
+
   <van-popup
     round
     position="bottom"
@@ -236,5 +251,33 @@
       bind:confirm="confirmLocationPick"
       bind:cancel="closeLocationPicker"
     />
+  </van-popup>
+
+  <van-popup 
+    show="{{ userDataListIsShow }}" 
+    closeable
+    custom-style="padding: 4px; height: 100vh; width: 100vw; overflow: scroll"
+    bind:close="hideUserDataList">
+    <view >
+      <text>您好，{{userDataList[0].user_name}}</text>
+    </view>
+    <view >
+      <text>请选择想要查看的账号</text>
+    </view>
+    <block wx:for="{{userDataList}}" wx:key="unique">
+      <van-cell-group 
+        inset 
+        border="{{false}}"
+        data-listed-user="{{item}}"
+        custom-style="margin: 2px"
+        title="{{item.record_num}}"
+        bind:tap="selectFromUserDataList">
+        <van-cell 
+          title="{{item.make}}" 
+          value="{{item.plate}} " 
+          center
+        />
+      </van-cell-group>
+    </block>
   </van-popup>
 </view>

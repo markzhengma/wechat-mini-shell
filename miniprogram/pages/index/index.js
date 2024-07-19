@@ -41,57 +41,145 @@ Page({
     })
   },
 
-  bindUidWithUserData: function(userData) {
-    const unionId = app.globalData.unionId;
+  bindUidWithUserData: function(userDataList) {
+    let bindUidPromiseList = [];
+
+    userDataList.forEach(data => {
+      bindUidPromiseList.push(this.bindUidPromise(data));
+    });
 
     wx.showLoading();
-    wx.request({
-      url: `https://api.hulunbuirshell.com/api/user/single/${userData.record_num}`,
-      method: 'PUT',
-      data: {
-        user_name: userData.user_name,
-        phone: userData.phone,
-        plate: userData.plate,
-        make: userData.make,
-        detail: userData.detail,
-        union_id: unionId
-      },
-      success: res => {
-        wx.hideLoading();
-        if(res.data.code !== 200) {
-          Dialog.alert({
-            title: "出错了",
-            message: "微信关联失败，请联系我们帮您解决"
-          });
-          console.log('error binding record num with union id');
-          console.log(res);
-        } else {
-          Toast.success('微信关联成功');
-          let userRes = res.data.data;
 
-          app.setAppData('userData', userRes);
-          this.setData({
-            userData: userRes,
-            uidIsInDB: true
-          })
-        }
-      },
-      fail: err => {
+    Promise.all(bindUidPromiseList)
+      .then(res => {
         wx.hideLoading();
+        console.log('promise all successful');
+        console.log(res);
+        Toast.success('微信关联成功');
+
+        this.setData({
+          uidIsInDB: true
+        });
+      })
+      .catch(err => {
+        wx.hideLoading();
+        console.log("promise all failed");
+        console.log(err);
         Dialog.alert({
           title: "出错了",
           message: "微信关联失败，请联系我们帮您解决"
         });
-        console.log('error binding record num with union id');
-        console.log(err);
-      }
+      });
+
+      if(userDataList.length > 1) {
+        this.showUserDataList();
+      };
+      this.setUserDataList(userDataList);
+  },
+
+  setUserDataList: function(list) {
+    app.setAppData("userDataList", list);
+    this.setData({
+      userDataList: list
+    });
+    this.selectUserData(list[0]);
+  },
+
+  selectFromUserDataList: function(e) {
+    let userData = e.currentTarget.dataset.listedUser;
+    this.selectUserData(userData);
+    this.hideUserDataList();
+  },
+
+  showUserDataList: function(){
+    this.setData({
+      userDataListIsShow: true
+    })
+  },
+  hideUserDataList: function(){
+    this.setData({
+      userDataListIsShow: false
+    })
+  },
+  
+  bindUidPromise: function(userData){
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/user/single/${userData.record_num}`,
+        method: 'PUT',
+        data: {
+          user_name: userData.user_name,
+          phone: userData.phone,
+          plate: userData.plate,
+          make: userData.make,
+          detail: userData.detail,
+          union_id: app.globalData.unionId
+        },
+        success: res => {
+          if(res.data.code !== 200) {
+            console.log('error binding record num with union id');
+            reject(res);
+          } else {
+            console.log("success");
+            resolve(res);
+          }
+        },
+        fail: err => {
+          console.log('error binding record num with union id');
+          console.log(err);
+          reject (err);
+        }
+      })
     })
   },
 
-  // TODO: fix api scope and use this to get phone num
-  getPhoneNumber: function() {
-    let phoneNum = "18600043907";
-    this.getUserDataWithPhone(phoneNum);
+  selectUserData: function(userData){
+    app.setAppData('userData', userData);
+    this.setData({
+      userData
+    })
+  },
+
+  getPhoneAuthCode: function(e) {
+    if(!e.detail.code) {
+      console.log('NOT authorized by user');
+    } else {
+      const code = e.detail.code;
+      this.getUserPhoneNum(code);
+    }
+  },
+
+  getUserPhoneNum: function(code) {
+    wx.showLoading();
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/user/auth/phone`,
+      method: "POST",
+      data: {
+        code
+      },
+      success: res => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          console.log(res);
+          Dialog.alert({
+            title: "出错了",
+            message: "无法获取您的手机号，请联系我们帮您解决"
+          });
+        } else {
+          let phone = res.data.data.purePhoneNumber;
+
+          this.getUserDataWithPhone(phone);
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+        Dialog.alert({
+          title: "出错了",
+          message: "无法获取您的手机号，请联系我们帮您解决"
+        });
+      }
+    });
   },
 
   getUserDataWithPhone: function(phoneNum) {
@@ -105,11 +193,9 @@ Page({
       success: (res) => {
         wx.hideLoading();
         app.globalData.isLoading = false;
-
-        console.log(res);
         if(res.data.code !== 200) {
           if(res.data.code === 401){
-            // TODO：欢迎新用户
+            // TODO: phone and plate input for temporary search
             Dialog.alert({
               title: "很高兴认识您",
               message: "看来您是我们的新客户，请联系门店为您创建信息再试试登录吧！"
@@ -127,12 +213,8 @@ Page({
             this.setData({
               userDataListFoundWithPhone: userDataList
             });
-            if(userDataList.length === 1) {
-              this.bindUidWithUserData(userDataList[0]);
-            } else if(userDataList.length > 1) {
-              // TODO: show user info list and let user to pick his data
-              console.log("found more than one user with this phone, ready to pick one");
-            }
+
+            this.bindUidWithUserData(userDataList);
           } else {
             console.log("request failed");
           }
@@ -169,15 +251,19 @@ Page({
             console.log('request failed');
           }
         } else {
-          app.setAppData('userData', res.data.data[0]);
-          app.setAppData('sameUserList', res.data.data);
           app.setAppData("isLoggedIn", true);
 
           this.setData({
-            userData: app.globalData.userData,
             isLoggedIn: true,
             uidIsInDB: true
-          })
+          });
+
+          let userDataList = res.data.data;
+
+          this.setUserDataList(userDataList);
+          if(userDataList.length > 1) {
+            this.showUserDataList();
+          };
         }
 
       },
@@ -577,7 +663,6 @@ Page({
               message: "【错误信息】" + JSON.stringify(res.data)
             })
           } else {
-            console.log(res);
             let findUserList = res.data.data;
 
             if(Array.isArray(findUserList) && findUserList.length === 1) {
