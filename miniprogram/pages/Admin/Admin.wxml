@@ -104,8 +104,8 @@
         </van-button>
       </view>
     </van-popup>
+  <van-divider contentPosition="center">保养记录</van-divider>
   <view wx:if="{{targetUserRecord && targetUserRecord !== []}}">
-    <van-divider contentPosition="center">保养记录</van-divider>
     <!-- 记录列表 -->
     <block wx:for="{{targetUserRecord}}" wx:key="unique">
       <van-cell-group 
@@ -172,6 +172,9 @@
         </van-button>
       </view>
     </van-popup>
+  </view>
+  <view wx:else>
+    无保养记录
   </view>
     <!-- 弹窗 -->
     <van-calendar 

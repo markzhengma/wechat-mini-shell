@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/Admin/Admin",
     "pages/UserRecord/UserRecord",
+    "pages/ManualSearchRecord/ManualSearchRecord",
     "pages/User/User",
     "pages/Contact/Contact"
   ],

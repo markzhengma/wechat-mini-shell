@@ -41,40 +41,44 @@ Page({
     })
   },
 
-  bindUidWithUserData: function(userDataList) {
-    let bindUidPromiseList = [];
+  bindUidWithAllRecordsOfSamePhone: function(phone, union_id){
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url:'https://api.hulunbuirshell.com/api/user/binduidwithphone',
+        method: 'PUT',
+        data: {
+          phone,
+          union_id
+        },
+        success: res => {
+          wx.hideLoading();
 
-    userDataList.forEach(data => {
-      bindUidPromiseList.push(this.bindUidPromise(data));
-    });
-
-    wx.showLoading();
-
-    Promise.all(bindUidPromiseList)
-      .then(res => {
-        wx.hideLoading();
-        console.log('promise all successful');
-        console.log(res);
-        Toast.success('微信关联成功');
-
-        this.setData({
-          uidIsInDB: true
-        });
+          if(res.data.code !== 200) {
+            Dialog.alert({
+              title: "出错了",
+              message: "微信关联失败，请联系我们帮您解决"
+            });
+            reject(res);
+          } else {
+            const count = res.data.data.data.n;
+            Toast.success(`成功关联全部账号`);
+            
+            this.setData({
+              uidIsInDB: true
+            });
+            resolve(res);
+          }
+        },
+        fail: err => {
+          wx.hideLoading();
+          Dialog.alert({
+            title: "出错了",
+            message: "微信关联失败，请联系我们帮您解决"
+          });
+          reject(err);
+        }
       })
-      .catch(err => {
-        wx.hideLoading();
-        console.log("promise all failed");
-        console.log(err);
-        Dialog.alert({
-          title: "出错了",
-          message: "微信关联失败，请联系我们帮您解决"
-        });
-      });
-
-      if(userDataList.length > 1) {
-        this.showUserDataList();
-      };
-      this.setUserDataList(userDataList);
+    })
   },
 
   setUserDataList: function(list) {
@@ -99,37 +103,6 @@ Page({
   hideUserDataList: function(){
     this.setData({
       userDataListIsShow: false
-    })
-  },
-  
-  bindUidPromise: function(userData){
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: `https://api.hulunbuirshell.com/api/user/single/${userData.record_num}`,
-        method: 'PUT',
-        data: {
-          user_name: userData.user_name,
-          phone: userData.phone,
-          plate: userData.plate,
-          make: userData.make,
-          detail: userData.detail,
-          union_id: app.globalData.unionId
-        },
-        success: res => {
-          if(res.data.code !== 200) {
-            console.log('error binding record num with union id');
-            reject(res);
-          } else {
-            console.log("success");
-            resolve(res);
-          }
-        },
-        fail: err => {
-          console.log('error binding record num with union id');
-          console.log(err);
-          reject (err);
-        }
-      })
     })
   },
 
@@ -214,7 +187,19 @@ Page({
               userDataListFoundWithPhone: userDataList
             });
 
-            this.bindUidWithUserData(userDataList);
+            let unionId = app.globalData.unionId;
+
+            this.bindUidWithAllRecordsOfSamePhone(phoneNum, unionId)
+              .then(res => {
+                console.log(res);
+                this.setUserDataList(userDataList);
+                if(userDataList.length > 1) {
+                  this.showUserDataList();
+                };
+              })
+              .catch(err => {
+                console.log(err);
+              });
           } else {
             console.log("request failed");
           }
@@ -223,6 +208,58 @@ Page({
       fail: err => {
         wx.hideLoading();
         console.log('failed to get user data with union id:');
+        console.log(err);
+      }
+    })
+  },
+
+  checkNonUidDataWithPhone: function() {
+    let phone = app.globalData.userData.phone;
+    let unionId = app.globalData.unionId;
+    wx.request({
+      url: 'https://api.hulunbuirshell.com/api/user/all',
+      data: {
+        filter: 'phone',
+        value: phone
+      },
+      success: (res) => {
+        if(res.data.code === 200) {
+          const dataList = res.data.data;
+          let nonUidDataList = [];
+
+          dataList.map(item => {
+            if(item.union_id !== unionId){
+              nonUidDataList.push(item);
+            };
+          });
+
+          if(nonUidDataList.length > 0) {
+            Dialog.confirm({
+              title: `找到了您的${nonUidDataList.length}个未关联账号`,
+              message: '关联到您的微信，就能更快地查看保养记录啦',
+              confirmButtonText: "关联"
+            })
+              .then(() => {
+                this.bindUidWithAllRecordsOfSamePhone(phone, unionId)
+                  .then(() => {
+                    this.setUserDataList(dataList);
+                    if(dataList.length > 1) {
+                      this.showUserDataList();
+                    };
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              })
+              .catch(() => {
+                console.log("canceled");
+              })
+          } else {
+            console.log("all user data is linked with uid, all good.");
+          };
+        }
+      },
+      fail: err => {
         console.log(err);
       }
     })
@@ -252,15 +289,17 @@ Page({
           }
         } else {
           app.setAppData("isLoggedIn", true);
-
+          
           this.setData({
             isLoggedIn: true,
             uidIsInDB: true
           });
-
+          
           let userDataList = res.data.data;
 
+          
           this.setUserDataList(userDataList);
+          this.checkNonUidDataWithPhone();
           if(userDataList.length > 1) {
             this.showUserDataList();
           };
@@ -523,8 +562,9 @@ Page({
 
   confirmUserCreate: function(locationChar, newUserInfo) {
     wx.showLoading();
+    const domain = "https://api.hulunbuirshell.com";
     wx.request({
-      url: `https://api.hulunbuirshell.com/api/user/single/${locationChar}`,
+      url: `${domain}/api/user/single/${locationChar}`,
       method: 'POST',
       data: {
         user_name: newUserInfo.user_name.length === 1 ? newUserInfo.user_name + '先生/女士' : newUserInfo.user_name,
@@ -599,6 +639,22 @@ Page({
           newUserInput: {
             ...this.data.newUserInput,
             plate: e.detail
+          }
+        });
+        break;
+      case("manual-search-plate"):
+        this.setData({
+          userInputPlateAndPhone: {
+            ...this.data.userInputPlateAndPhone,
+            plate: e.detail
+          }
+        });
+        break;
+      case("manual-search-phone"):
+        this.setData({
+          userInputPlateAndPhone: {
+            ...this.data.userInputPlateAndPhone,
+            phone: e.detail
           }
         });
         break;
@@ -701,6 +757,111 @@ Page({
         }
       })
     }
+  },
+
+  manualSearchSubmit: function() {
+    const { phone, plate } = this.data.userInputPlateAndPhone
+    const REGEX_CHINESE = /^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
+    if((plate.length !== 7 && plate.length !== 8) || !plate.match(REGEX_CHINESE)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【车牌号】哦"
+      })
+    } else if((phone.length !== 7 && phone.length !== 11) || !phone.match(/^\d+$/)) {
+      Dialog.alert({
+        title: "出错了",
+        message: "请重新检查输入的【手机号】哦"
+      })
+    } else  {
+      wx.showLoading();
+
+      this.findUserWithPhoneAndPlate(phone, plate)
+        .then(res => {
+          wx.hideLoading();
+          const manualSearchUserData = res.data.data[0];
+
+          Dialog.confirm({
+            title: `查询成功`,
+            messageAlign: 'left',
+            message: `车主：${manualSearchUserData.user_name} \n 手机号：${manualSearchUserData.phone} \n 车型：${manualSearchUserData.make}`,
+            confirmButtonText: "查看保养记录"
+          })
+            .then(() => {
+              wx.navigateTo({
+                url: "/pages/ManualSearchRecord/ManualSearchRecord",
+                success: res => {
+                  res.eventChannel.emit('manualSearchUser', { data: manualSearchUserData })
+                }
+              })
+            })
+            .catch(() => {
+              console.log("canceled");
+            })
+        })
+        .catch(err => {
+          wx.hideLoading();
+          console.error(err);
+          Dialog.alert({
+            title: "出错了",
+            message: "请重新检查输入的信息哦"
+          })
+        })
+    }
+  },
+
+  findUserWithPhoneAndPlate: function(phone, plate) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/user/phone-plate?phone=${phone}&plate=${plate}`,
+        success: res => {
+          if(res.data.code !== 200) {
+            reject(res);
+          } else {
+            resolve(res);
+          }
+        },
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
+  },
+
+  findUserSingleData: function(plate) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/user/single?filter=plate&value=${plate}`,
+        success: res => {
+          if(res.data.code !== 200) {
+            reject(res);
+          } else {
+            resolve(res);
+          }
+        },
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
+  },
+
+  showManualSearchForm: function() {
+    this.setData({
+      manualSearchIsShow: true,
+      userInputPlateAndPhone: {
+        phone: "",
+        plate: ""
+      }
+    })
+  },
+  hideManualSearchForm: function() {
+    this.setData({
+      manualSearchIsShow: false,
+      userInputPlateAndPhone: {
+        phone: "",
+        plate: ""
+      }
+    })
   },
 
   /**

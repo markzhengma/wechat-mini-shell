@@ -1,0 +1,90 @@
+<!--pages/Admin/Admin.wxml-->
+<view >
+  <!-- 用户信息 -->
+  <view wx:if="{{targetUserInfo}}">
+    <van-divider contentPosition="center">个人及爱车信息</van-divider>
+    <van-cell-group inset>
+      <van-cell
+       title="车主姓名" 
+       value="{{targetUserInfo.user_name}}" 
+      />
+      <van-cell 
+        title="车型" 
+        value="{{targetUserInfo.make}}" 
+      />
+      <van-cell 
+        title="车牌号" 
+        value="{{targetUserInfo.plate}}" 
+      />
+      <van-cell 
+        title="手机号码" 
+        value="{{targetUserInfo.phone}}" 
+      />
+      <van-cell 
+        title="换油证号" 
+        value="{{targetUserInfo.record_num}}" 
+      />
+    </van-cell-group>
+  </view>
+  <view wx:else>
+    载入中……
+  </view>
+  <van-divider contentPosition="center">保养记录</van-divider>
+  <view wx:if="{{targetUserRecord && targetUserRecord !== []}}">
+    <!-- 记录列表 -->
+    <block wx:for="{{targetUserRecord}}" wx:key="unique">
+      <van-cell-group 
+        inset 
+        data-record="{{item}}"
+        bind:tap="showRecordPopup">
+        <van-cell 
+          title="{{item.date}}" 
+        />
+        <van-cell 
+          title="{{item.product_name}}" 
+          value="{{item.milage}} km" 
+        />
+      </van-cell-group>
+    </block>
+<!-- 记录详情 -->
+    <van-popup 
+      show="{{ isShowRecordPopup }}" 
+      round
+      closeable
+      custom-style="padding: 10px; width: 80vw;"
+      bind:close="closeRecordPopup">
+      <van-cell-group title="记录详情">
+        <van-cell 
+          title="日期" 
+          value="{{selectedRecord.date}}" 
+        />
+        <van-cell 
+          title="项目" 
+          value="{{selectedRecord.product_name}}" 
+        />
+        <van-cell 
+          title="操作员" 
+          value="{{selectedRecord.operator}}" 
+        />
+        <van-cell 
+          title="里程" 
+          value="{{selectedRecord.milage}}" 
+        />
+        <van-cell 
+          title="赠品" 
+          value="{{selectedRecord.gift}}" 
+        />
+        <van-cell 
+          title="备注" 
+          value="{{selectedRecord.detail}}" 
+        />
+      </van-cell-group>
+    </van-popup>
+  </view>
+  <view wx:else>
+    无保养记录
+  </view>
+  <!-- 弹窗 -->
+  <van-dialog id="van-dialog" />
+  <van-toast id="van-toast" />
+</view>
