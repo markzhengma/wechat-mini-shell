@@ -26,6 +26,23 @@ Page({
       "满洲里",
       "满洲里二店",
       "牙克石"
+    ],
+    bannerList: [
+      {
+        title: "三合一数据线",
+        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127789&idx=1&sn=87f428ee690c9312b0551da58f28bfe7&chksm=813015e8b6479cfe57f09035eb97ecf958d2f2ff19f7fdc1935445b85fdb824d0026e7ef0a4f#rd",
+        thumb_url: "http://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1HVKGsJkXNxE4ylTG35W91xThdP8zzGIsWuvjzv9TZCu6IE0as8WJCzquApHjAq9wBKQRH2hNfNw/0?wx_fmt=jpeg",
+      },
+      {
+        title: "头灯",
+        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127778&idx=1&sn=4aca35662292b0920ad0b5e223ac6496&chksm=813015e7b6479cf1eaec9d8ad970e6a96b904ea37a1cab683fb49eb19113c7d33a3fe641a54d#rd",
+        thumb_url: "http://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1pcml1QWz5eZk9Ko3HGxwoLh6EIMhRXwzV27fyKkuicR9SicJffVUPIWBbRAsOQ1vYw0AotRibGKa7w/0?wx_fmt=jpeg",
+      },
+      {
+        title: "纽曼车载充电器",
+        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127773&idx=1&sn=7aad626f0015677648e8682a9b1711e5&chksm=813015d8b6479cce0f749e86bd58d721b04591ed09964ca35aa52e707dddabd9cf5b63d57fac#rd",
+        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1pcml1QWz5eZk9Ko3HGxwoNDiaSEhV7mliaIPDCgkiaHeePTXrZibHRpeAmGGaGgao2h6I3biaL8GZosg/0?wx_fmt=jpeg",
+      }
     ]
   },
 
@@ -213,7 +230,7 @@ Page({
     })
   },
 
-  checkNonUidDataWithPhone: function() {
+  checkNonUidDataWithPhone: function(e) {
     let phone = app.globalData.userData.phone;
     let unionId = app.globalData.unionId;
     wx.request({
@@ -255,7 +272,13 @@ Page({
                 console.log("canceled");
               })
           } else {
-            console.log("all user data is linked with uid, all good.");
+            if(!e){
+              console.log("all user data is linked with uid, all good.");
+            } else {
+              if(e.currentTarget.id === "manual-check") {
+                Toast.success("全部关联完成")
+              }
+            }
           };
         }
       },
@@ -783,10 +806,11 @@ Page({
           Dialog.confirm({
             title: `查询成功`,
             messageAlign: 'left',
-            message: `车主：${manualSearchUserData.user_name} \n 手机号：${manualSearchUserData.phone} \n 车型：${manualSearchUserData.make}`,
+            message: `【车主】${manualSearchUserData.user_name} \n 【手机号】${manualSearchUserData.phone} \n 【车型】${manualSearchUserData.make}`,
             confirmButtonText: "查看保养记录"
           })
             .then(() => {
+              this.hideManualSearchForm();
               wx.navigateTo({
                 url: "/pages/ManualSearchRecord/ManualSearchRecord",
                 success: res => {

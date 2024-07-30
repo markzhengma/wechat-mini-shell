@@ -30,7 +30,7 @@
       },
       {
         "pagePath": "pages/User/User",
-        "text": "我的信息",
+        "text": "我的",
         "iconPath": "icons/user-1.png",
         "selectedIconPath": "icons/user-2.png"
       }
@@ -58,6 +58,12 @@
     "van-col": "@vant/weapp/col/index",
     "van-toast": "@vant/weapp/toast/index",
     "van-calendar": "@vant/weapp/calendar/index",
-    "van-picker": "@vant/weapp/picker/index"
+    "van-picker": "@vant/weapp/picker/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-image": "@vant/weapp/image/index"
+
   }
 }

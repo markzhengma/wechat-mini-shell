@@ -51,6 +51,19 @@ Page({
     })
   },
 
+  showRecordPopup: function(e) {
+    this.setData({
+      isShowRecordPopup: true,
+      selectedRecord: e.currentTarget.dataset.record
+    });
+  },
+  closeRecordPopup: function() {
+    this.setData({
+      isShowRecordPopup: false,
+      selectedRecord: ""
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

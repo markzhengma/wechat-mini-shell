@@ -30,22 +30,27 @@
     载入中……
   </view>
   <van-divider contentPosition="center">保养记录</van-divider>
-  <view wx:if="{{targetUserRecord && targetUserRecord !== []}}">
+  <view wx:if="{{targetUserRecord && targetUserRecord.lenth !== 0}}">
     <!-- 记录列表 -->
-    <block wx:for="{{targetUserRecord}}" wx:key="unique">
+    <view
+      style="display: flex; flex-direction: column"
+      wx:for="{{targetUserRecord}}" 
+      wx:key="unique">
       <van-cell-group 
         inset 
+        style="margin-top: 8px"
         data-record="{{item}}"
         bind:tap="showRecordPopup">
         <van-cell 
           title="{{item.date}}" 
+          custom-style="background-color: #f8d148; color: gray"
         />
         <van-cell 
           title="{{item.product_name}}" 
           value="{{item.milage}} km" 
         />
       </van-cell-group>
-    </block>
+    </view>
 <!-- 记录详情 -->
     <van-popup 
       show="{{ isShowRecordPopup }}" 
@@ -69,14 +74,6 @@
         <van-cell 
           title="里程" 
           value="{{selectedRecord.milage}}" 
-        />
-        <van-cell 
-          title="赠品" 
-          value="{{selectedRecord.gift}}" 
-        />
-        <van-cell 
-          title="备注" 
-          value="{{selectedRecord.detail}}" 
         />
       </van-cell-group>
     </van-popup>

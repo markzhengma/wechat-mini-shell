@@ -1,30 +1,85 @@
 <view >
-  <text>
-    记录列表
-  </text>
   <view wx:if="{{!isLoggedIn}}" >
-    <van-button 
-      type="primary"
-      data-path="/pages/index/index"
-      bind:click="switchPage"
-    >
-      回首页登录
-    </van-button>
+    <van-empty description="未登录，无法获取您的保养记录">
+      <van-button 
+        round 
+        type="primary" 
+        data-path="/pages/index/index"
+        bind:click="switchPage">
+        回首页登录
+      </van-button>
+    </van-empty>
   </view>
   <view wx:else>
-    <text >
-      用户名： {{userData.user_name}}
-      证号：{{userData.record_num}}
-    </text>
-    <view wx:if="{{userRecords.length === 0}}">
-      无记录
+    <view wx:if="{{!userRecords || userRecords.length === 0}}">
+      <van-empty description="还没有您的记录，来门店给爱车做一次保养吧！"/>
     </view>
     <view wx:else>
-      <block wx:for="{{userRecords}}" wx:key="unique">
-        <view>
-          {{item.date}} - {{item.product_name}} - {{item.milage}} - {{item.operator}}
-        </view>
-      </block>
+      <view 
+      style="display: flex; flex-direction: row; justify-content: center">
+        <van-button 
+          plain
+          icon="sort" 
+          size="small"
+          disabled
+          custom-style="width: 120px; margin-top: 6px"
+          type="default">
+          按时间排序
+        </van-button>
+        <van-button 
+          plain
+          icon="notes" 
+          size="small"
+          disabled
+          custom-style="width: 120px; margin-top: 6px"
+          type="default">
+          筛选
+        </van-button>
+      </view>
+      <view 
+        style="display: flex; flex-direction: column"
+        wx:for="{{userRecords}}" 
+        wx:key="unique">
+        <van-cell-group 
+          inset 
+          style="margin-top: 8px"
+          data-record="{{item}}"
+          bind:tap="showRecordPopup">
+          <van-cell 
+            title="{{item.date}}" 
+            custom-style="background-color: #f8d148; color: gray"
+          />
+          <van-cell 
+            title="{{item.product_name}}" 
+            value="{{item.milage}} km" 
+          />
+        </van-cell-group>
+      </view>
+      <van-popup 
+        show="{{ isShowRecordPopup }}" 
+        round
+        closeable
+        custom-style="padding: 10px; width: 80vw;"
+        bind:close="closeRecordPopup">
+        <van-cell-group title="记录详情">
+          <van-cell 
+            title="日期" 
+            value="{{selectedRecord.date}}" 
+          />
+          <van-cell 
+            title="项目" 
+            value="{{selectedRecord.product_name}}" 
+          />
+          <van-cell 
+            title="操作员" 
+            value="{{selectedRecord.operator}}" 
+          />
+          <van-cell 
+            title="里程" 
+            value="{{selectedRecord.milage}}" 
+          />
+        </van-cell-group>
+      </van-popup>
     </view>
   </view>
 </view>

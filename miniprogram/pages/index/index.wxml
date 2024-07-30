@@ -1,81 +1,175 @@
 <!--index.wxml-->
 <view>
-  <text >
-    （公众号文章链接）
-  </text>
+  <swiper 
+    class="home-swiper"
+		indicator-dots="true" 
+		autoplay="true" 
+    interval="5000"
+    duration="1000"
+    indicator-color="#808080"
+    indicator-active-color="#f8d148"
+    easing-function="easeInOutCubic"
+    circular="true"
+  >
+    <block wx:for="{{bannerList}}" wx:key="unique">
+      <swiper-item>
+        <image src="{{item.thumb_url}}" style="width: 100%; height: 100%;"/>
+      </swiper-item>
+    </block>
+  </swiper>
   <!-- 已登录 -->
   <view wx:if="{{isLoggedIn}}" >
-    <view wx:if="{{uidIsInDB}}">
-      <text >
-        用户名：{{userData.user_name ? userData.user_name : "无"}}
-      </text>
-      <text >
-        最近的一条养护提醒
-      </text>
-      <van-button 
-        icon="star-o" 
-        type="primary" 
-        data-path="/pages/UserRecord/UserRecord"
-        bind:click="switchPage"
+    <view style="display: flex; flex-direction: column" wx:if="{{uidIsInDB}}">
+      <van-cell-group 
+        inset
+        style="margin-top: 6px"
+        >
+        <van-cell
+          title="{{userData.user_name ? userData.user_name : ''}}"
+          center="true"
+          icon="user"
+        >
+          <van-button 
+            type="default" 
+            icon="exchange"
+            custom-style="width: 30px; height: 30px"
+            bind:click="showUserDataList"
+            wx:if="{{userDataList.length > 1}}"
+          />
+        </van-cell>
+      </van-cell-group>
+      <!-- TODO: 最近的一条养护提醒 -->
+      <van-cell-group 
+        inset
+        style="margin-top: 6px"
+        >
+        <van-cell>
+          <van-button 
+            icon="star-o" 
+            size="large"
+            custom-style="margin: 16px 0; background-color: #f8d148"
+            data-path="/pages/UserRecord/UserRecord"
+            bind:click="switchPage"
+          >
+          查看养护记录
+          </van-button>
+        </van-cell>
+      </van-cell-group>
+      <view
+        style="margin-top: 6px; padding: 0 6px"
       >
-        查看养护记录
-      </van-button>
-      <van-button 
-        type="danger" 
-        bind:click="showUserDataList"
-        wx:if="{{userDataList.length > 1}}"
-      >
-        切换账号
-      </van-button>
-      <van-button 
-        type="warning"
-        bind:click="checkNonUidDataWithPhone"
-        wx:if="{{userData.phone && userData.phone !== ''}}">
-        关联其他账号
-      </van-button>
-      <van-button 
-        type="default"
-        bind:click="showManualSearchForm">
-        手动输入查询
-      </van-button>
+        <van-grid gutter="10" column-num="3" clickable>
+          <van-grid-item 
+            icon="link-o" 
+            text="关联其他账号" 
+            id="manual-check" 
+            bind:click="checkNonUidDataWithPhone"/>
+          <van-grid-item 
+            icon="search" 
+            text="手动输入查询" 
+            bind:tap="showManualSearchForm" />
+          <van-grid-item 
+            icon="phone-o" 
+            text="联系我们" />
+        </van-grid>
+      </view>
     </view>
-    <view wx:else>
-      <text>未找到关联的微信号记录</text>
-      <van-button 
-        type="primary"
-        open-type="getPhoneNumber"
-        bindgetphonenumber="getPhoneAuthCode">
-        通过手机号查询保养记录
-      </van-button>
-      <van-button 
-        type="default"
-        bind:click="showManualSearchForm">
-        手动输入查询
-      </van-button>
+    <view style="display: flex; flex-direction: column" wx:else>
+      <van-cell-group 
+        inset
+        style="margin-top: 6px"
+        >
+        <van-cell
+          title="未找到关联的微信号记录"
+          center="true"
+          icon="user"
+        >
+        </van-cell>
+      </van-cell-group>
+      <van-cell-group 
+        inset
+        style="margin-top: 6px"
+        >
+        <van-cell>
+          <van-button 
+            icon="star-o" 
+            size="large"
+            custom-style="margin: 16px 0; background-color: #f8d148"
+            open-type="getPhoneNumber"
+            bindgetphonenumber="getPhoneAuthCode"
+          >
+          通过手机号关联保养记录
+          </van-button>
+        </van-cell>
+      </van-cell-group>
+      <view
+        style="margin-top: 6px; padding: 0 6px"
+      >
+        <van-grid gutter="10" column-num="3" clickable>
+          <van-grid-item 
+            icon="search" 
+            text="手动输入查询" 
+            bind:tap="showManualSearchForm" />
+          <van-grid-item 
+            icon="phone-o" 
+            text="联系我们" />
+        </van-grid>
+      </view>
     </view>
   </view>
   <!-- 重新登录等待 -->
-  <view wx:elif="{{retryCountdown > 0}}">
-    <van-button 
-      type="primary" 
-      disabled
+  <view style="display: flex; flex-direction: column" wx:elif="{{retryCountdown > 0}}">
+    <van-cell-group 
+      inset
+      style="margin-top: 6px"
+      >
+      <van-cell>
+        <van-button 
+          icon="star-o" 
+          size="large"
+          custom-style="margin: 16px 0; background-color: #f8d148"
+          disabled
+        >
+        重试登录（{{retryCountdown}}秒后）
+        </van-button>
+      </van-cell>
+    </van-cell-group>
+    <view
+      style="margin-top: 6px; padding: 0 6px"
     >
-      重试登录（{{retryCountdown}}秒后）
-    </van-button>
-    <van-button 
-      type="default"
-      bind:click="showManualSearchForm">
-      手动输入查询
-    </van-button>
+      <van-grid gutter="10" column-num="3" clickable>
+        <!-- <van-grid-item 
+          icon="link-o" 
+          text="关联其他账号" 
+          id="manual-check" 
+          bind:click="checkNonUidDataWithPhone"/> -->
+        <van-grid-item 
+          icon="search" 
+          text="手动输入查询" 
+          bind:tap="showManualSearchForm" />
+        <van-grid-item 
+          icon="phone-o" 
+          text="联系我们" />
+      </van-grid>
+    </view>
   </view>
   <!-- 未登录 -->
-  <view wx:else>
-    <van-button 
-      type="primary" 
-      bind:click="setUserData"
-    >
-      用户登录
-    </van-button>
+  <view style="display: flex; flex-direction: column" wx:else>
+    <van-cell-group 
+      inset
+      style="margin-top: 6px"
+      >
+      <van-cell>
+        <van-button 
+          icon="star-o" 
+          size="large"
+          custom-style="margin: 16px 0; background-color: #f8d148"
+          bind:click="setUserData"
+        >
+        用户登录
+        </van-button>
+      </van-cell>
+    </van-cell-group>
   </view>
 
 <!-- 管理员身份 -->
@@ -83,39 +177,41 @@
     <van-divider contentPosition="center">
       管理员操作
     </van-divider>
-    <van-button 
-      icon="medal-o" 
-      type="info"
-      bind:click="showFindUserForm">
-      查询客户
-    </van-button>
-    <van-button 
-      icon="add-o" 
-      type="warning"
-      bind:click="showCreateUserForm">
-      创建客户
-    </van-button>
-
+    <view
+        style="margin-top: 6px; padding: 0 6px"
+      >
+      <van-grid gutter="10" column-num="3" clickable>
+        <van-grid-item 
+          icon="todo-list-o" 
+          text="查询客户" 
+          bind:click="showFindUserForm"/>
+        <van-grid-item 
+          icon="add-o" 
+          text="创建客户" 
+          bind:tap="showCreateUserForm" />
+      </van-grid>
+    </view>
     <van-divider />
 
     <!-- 查询用户弹窗 -->
     <van-popup 
       show="{{ findUserFormIsShow }}" 
       round
-      closeable
-      custom-style="padding: 10px"
+      custom-style="padding: 10px; width: 90%"
       bind:close="hideFindUserForm">
-      <text>查询客户</text>
-      <view>
+      <view style="padding: 0 16px 8px 16px">查询客户</view>
+      <view style="padding: 0 16px 8px 16px; display: flex; flex-direction: row">
         <view >
           <van-button 
-            type="primary"
+            size="small"
+            type="warning"
             wx:if="{{findUserFilter == 'plate'}}"
           >
             车牌号
           </van-button>
           <van-button 
             data-filter="plate"
+            size="small"
             type="default"
             bind:click="changeFindUserFilter"
             wx:else
@@ -125,13 +221,15 @@
         </view>
         <view >
           <van-button 
-            type="primary"
+            size="small"
+            type="warning"
             wx:if="{{findUserFilter == 'phone'}}"
           >
             手机号
           </van-button>
           <van-button 
             data-filter="phone"
+            size="small"
             type="default"
             bind:click="changeFindUserFilter"
             wx:else
@@ -141,13 +239,15 @@
         </view>
         <view >
           <van-button 
-            type="primary"
+            size="small"
+            type="warning"
             wx:if="{{findUserFilter == 'record_num'}}"
           >
             换油证号
           </van-button>
           <van-button 
             data-filter="record_num"
+            size="small"
             type="default"
             bind:click="changeFindUserFilter"
             wx:else
@@ -162,22 +262,32 @@
         placeholder="请输入{{findUserInputPlaceholder}}"
         bind:change="onChange"
       />
-      <van-button 
-        type="primary"
-        bind:click="findUserWithFilterAndValue"
-      >
-        查询
-      </van-button>
+      <van-cell>
+        <van-button 
+          type="primary"
+          custom-style="width: 50%"
+          bind:click="findUserWithFilterAndValue"
+        >
+          查询
+        </van-button>
+        <van-button 
+          type="default"
+          custom-style="width: 50%"
+          bind:click="hideFindUserForm"
+        >
+          取消
+        </van-button>
+      </van-cell>
     </van-popup>
 
     <!-- 创建用户弹窗 -->
      <van-popup 
       show="{{ createUserFormIsShow }}" 
       round
-      closeable
       custom-style="padding: 10px; width: 80vw;"
       bind:close="hideCreateUserForm">
-      <van-cell-group title="创建用户">
+      <view style="padding: 0 16px 8px 16px">创建用户</view>
+      <van-cell-group>
         <van-cell 
           title="门店" 
           value="{{ newUserInput.location }}"
@@ -213,19 +323,23 @@
           placeholder="请输入"
           bind:change="onChange"
         />
-      </van-cell-group>
-      <van-button 
-        type="primary"
-        bind:click="createUser"
-      >
-        创建
-      </van-button>
-      <van-button 
-        type="default"
-        bind:click="hideCreateUserForm"
-      >
+        <van-cell>
+          <van-button 
+            type="primary"
+            bind:click="createUser"
+            custom-style="width: 50%"
+          >
+            创建
+          </van-button>
+          <van-button 
+            type="default"
+            bind:click="hideCreateUserForm"
+            custom-style="width: 50%"
+          >
         取消
       </van-button>
+        </van-cell>
+      </van-cell-group>
     </van-popup>
   </view>
 
@@ -235,7 +349,7 @@
     position="bottom"
     custom-style="height: fit-content; padding: 20px 0"
     bind:close="hideFindUserList">
-    <text>找到多个客户</text>
+    <view style="padding: 0 16px 8px 16px">找到多个客户</view>
     <block 
       wx:for="{{findUserList}}" 
       wx:key="unique"
@@ -299,10 +413,11 @@
   <van-popup 
     show="{{ manualSearchIsShow }}" 
     position="bottom"
+    round
     custom-style="height: fit-content; padding: 20px 0"
     bind:close="hideManualSearchForm">
-    <van-cell-group
-      title="通过车牌号查询">
+    <view style="padding: 0 16px 8px 16px">手动输入查询</view>
+    <van-cell-group>
       <van-field
         value="{{ userInputPlateAndPhone.plate }}"
         id="manual-search-plate"
@@ -317,7 +432,7 @@
         placeholder="请输入"
         bind:change="onChange"
       />
-      <block>
+      <van-cell>
         <van-button 
           type="primary"
           custom-style="width: 50%"
@@ -332,7 +447,7 @@
         >
           取消
         </van-button>
-      </block>
+      </van-cell>
     </van-cell-group>
   </van-popup>
 
