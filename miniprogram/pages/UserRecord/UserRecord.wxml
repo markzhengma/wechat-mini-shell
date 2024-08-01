@@ -58,10 +58,11 @@
       <van-popup 
         show="{{ isShowRecordPopup }}" 
         round
-        closeable
-        custom-style="padding: 10px; width: 80vw;"
+        position="bottom"
+        custom-style="padding: 20px 10px"
         bind:close="closeRecordPopup">
-        <van-cell-group title="记录详情">
+        <view style="padding: 0 16px 8px 16px">记录详情</view>
+        <van-cell-group>
           <van-cell 
             title="日期" 
             value="{{selectedRecord.date}}" 
@@ -71,13 +72,20 @@
             value="{{selectedRecord.product_name}}" 
           />
           <van-cell 
-            title="操作员" 
-            value="{{selectedRecord.operator}}" 
-          />
-          <van-cell 
             title="里程" 
             value="{{selectedRecord.milage}}" 
           />
+          <van-cell 
+            title="操作员" 
+            value="{{selectedRecord.operator}}" 
+          />
+          <van-button 
+            type="primary"
+            bind:click="closeRecordPopup"
+            custom-style="margin: 0 16px; width: calc(100% - 32px)"
+          >
+            确认
+          </van-button>
         </van-cell-group>
       </van-popup>
     </view>

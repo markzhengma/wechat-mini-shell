@@ -26,8 +26,8 @@
         >
         <van-cell
           title="{{userData.user_name ? userData.user_name : ''}}"
+          label="{{userData.plate ? userData.plate : ''}}"
           center="true"
-          icon="user"
         >
           <van-button 
             type="default" 
@@ -70,7 +70,8 @@
             bind:tap="showManualSearchForm" />
           <van-grid-item 
             icon="phone-o" 
-            text="联系我们" />
+            text="联系我们"
+            bind:tap="showContactPopup" />
         </van-grid>
       </view>
     </view>
@@ -138,11 +139,6 @@
       style="margin-top: 6px; padding: 0 6px"
     >
       <van-grid gutter="10" column-num="3" clickable>
-        <!-- <van-grid-item 
-          icon="link-o" 
-          text="关联其他账号" 
-          id="manual-check" 
-          bind:click="checkNonUidDataWithPhone"/> -->
         <van-grid-item 
           icon="search" 
           text="手动输入查询" 
@@ -199,7 +195,7 @@
       round
       custom-style="padding: 10px; width: 90%"
       bind:close="hideFindUserForm">
-      <view style="padding: 0 16px 8px 16px">查询客户</view>
+      <view style="padding: 0 16px 16px 16px">查询客户</view>
       <view style="padding: 0 16px 8px 16px; display: flex; flex-direction: row">
         <view >
           <van-button 
@@ -262,31 +258,29 @@
         placeholder="请输入{{findUserInputPlaceholder}}"
         bind:change="onChange"
       />
-      <van-cell>
-        <van-button 
-          type="primary"
-          custom-style="width: 50%"
-          bind:click="findUserWithFilterAndValue"
-        >
-          查询
-        </van-button>
-        <van-button 
-          type="default"
-          custom-style="width: 50%"
-          bind:click="hideFindUserForm"
-        >
-          取消
-        </van-button>
-      </van-cell>
+      <van-button 
+        type="primary"
+        custom-style="margin-left: 16px; width: calc(50% - 16px)"
+        bind:click="findUserWithFilterAndValue"
+      >
+        查询
+      </van-button>
+      <van-button 
+        type="default"
+        custom-style="width: calc(50% - 16px)"
+        bind:click="hideFindUserForm"
+      >
+        取消
+      </van-button>
     </van-popup>
 
     <!-- 创建用户弹窗 -->
      <van-popup 
       show="{{ createUserFormIsShow }}" 
       round
-      custom-style="padding: 10px; width: 80vw;"
+      custom-style="padding: 10px; width: 90%;"
       bind:close="hideCreateUserForm">
-      <view style="padding: 0 16px 8px 16px">创建用户</view>
+      <view style="padding: 0 16px 16px 16px">创建用户</view>
       <van-cell-group>
         <van-cell 
           title="门店" 
@@ -323,22 +317,20 @@
           placeholder="请输入"
           bind:change="onChange"
         />
-        <van-cell>
-          <van-button 
-            type="primary"
-            bind:click="createUser"
-            custom-style="width: 50%"
-          >
-            创建
-          </van-button>
-          <van-button 
-            type="default"
-            bind:click="hideCreateUserForm"
-            custom-style="width: 50%"
-          >
-        取消
-      </van-button>
-        </van-cell>
+        <van-button 
+          type="primary"
+          bind:click="createUser"
+          custom-style="margin-left: 16px; width: calc(50% - 16px)"
+        >
+          创建
+        </van-button>
+        <van-button 
+          type="default"
+          bind:click="hideCreateUserForm"
+          custom-style="width: calc(50% - 16px)"
+        >
+          取消
+        </van-button>
       </van-cell-group>
     </van-popup>
   </view>
@@ -387,13 +379,11 @@
 
   <van-popup 
     show="{{ userDataListIsShow }}" 
-    closeable
+    round
     position="bottom"
     custom-style="height: fit-content; padding: 20px 0"
     bind:close="hideUserDataList">
-    <view >
-      <text>请选择账号</text>
-    </view>
+    <view style="padding: 0 16px 16px 32px">请选择爱车</view>
     <block wx:for="{{userDataList}}" wx:key="unique">
       <van-cell-group 
         inset 
@@ -416,7 +406,7 @@
     round
     custom-style="height: fit-content; padding: 20px 0"
     bind:close="hideManualSearchForm">
-    <view style="padding: 0 16px 8px 16px">手动输入查询</view>
+    <view style="padding: 0 16px 16px 16px">手动输入查询</view>
     <van-cell-group>
       <van-field
         value="{{ userInputPlateAndPhone.plate }}"
@@ -432,22 +422,47 @@
         placeholder="请输入"
         bind:change="onChange"
       />
-      <van-cell>
-        <van-button 
-          type="primary"
-          custom-style="width: 50%"
-          bind:click="manualSearchSubmit"
-        >
-          查询
-        </van-button>
-        <van-button 
-          type="default"
-          custom-style="width: 50%"
-          bind:click="hideManualSearchForm"
-        >
-          取消
-        </van-button>
-      </van-cell>
+      <van-button 
+        type="primary"
+        custom-style="margin-left: 16px; width: calc(50% - 16px)"
+        bind:click="manualSearchSubmit"
+      >
+        查询
+      </van-button>
+      <van-button 
+        type="default"
+        custom-style="width: calc(50% - 16px)"
+        bind:click="hideManualSearchForm"
+      >
+        取消
+      </van-button>
+    </van-cell-group>
+  </van-popup>
+
+  <van-popup 
+    show="{{ isShowContactPopup }}" 
+    position="bottom"
+    round
+    custom-style="height: fit-content; padding: 20px 0"
+    bind:close="hideContactPopup">
+    <view style="padding: 0 16px 16px 16px">点击联系门店</view>
+    <van-cell-group
+      wx:for="{{ locationPhoneList }}">
+      <van-cell
+        title="{{ item.divider }}"
+        icon="location-o"
+        custom-style="color: gray"
+        wx:if="{{ !item.location }}"
+      />
+      <van-cell
+        title="{{ item.location }}"
+        value="{{ item.phone }}"
+        data-phone="{{ item.phone }}"
+        border="{{ false }}"
+        icon="phone-o"
+        bind:tap="callLocation"
+        wx:else
+      />
     </van-cell-group>
   </van-popup>
 

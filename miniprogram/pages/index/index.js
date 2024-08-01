@@ -27,6 +27,7 @@ Page({
       "满洲里二店",
       "牙克石"
     ],
+    locationPhoneList:[],
     bannerList: [
       {
         title: "三合一数据线",
@@ -888,10 +889,71 @@ Page({
     })
   },
 
+  setLocationPhoneList: function() {
+    const phoneList = [
+      {
+        divider: '海拉尔'
+      },
+      {
+        location: '海拉尔河东门店',
+        phone: '0470-8223779'
+      },
+      {
+        location: '海拉尔河西门店',
+        phone: '0470-8307711'
+      },
+      {
+        divider: '满洲里'
+      },
+      {
+        location: '满洲里四道街店',
+        phone: '0470-2205900'
+      },
+      {
+        location: '满洲里粮库综合楼店',
+        phone: '0470-6221541'
+      },
+      {
+        divider: '牙克石'
+      },
+      {
+        location: '牙克石光明南路店',
+        phone: '0470-7379457'
+      },
+      {
+        location: '牙克石一道街店',
+        phone: '13088520439'
+      },
+    ];
+    app.setAppData("locationPhoneList", phoneList);
+    this.setData({
+      locationPhoneList: phoneList
+    });
+  },
+
+  callLocation: function(e){
+    wx.makePhoneCall({
+      phoneNumber: e.currentTarget.dataset.phone,
+    });
+  },
+
+  showContactPopup: function() {
+    this.setData({
+      isShowContactPopup: true
+    })
+  },
+
+  hideContactPopup: function() {
+    this.setData({
+      isShowContactPopup: false
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
+    this.setLocationPhoneList();
     this.setUserData();
   },
 

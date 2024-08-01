@@ -104,23 +104,28 @@
         </van-button>
       </view>
     </van-popup>
-  <van-divider contentPosition="center">保养记录</van-divider>
-  <view wx:if="{{targetUserRecord && targetUserRecord !== []}}">
+  <view wx:if="{{targetUserRecord && targetUserRecord.length > 0}}">
+    <van-divider contentPosition="center">保养记录</van-divider>
     <!-- 记录列表 -->
-    <block wx:for="{{targetUserRecord}}" wx:key="unique">
+    <view 
+      wx:for="{{targetUserRecord}}" 
+      wx:key="unique"
+      style="display: flex; flex-direction: column">
       <van-cell-group 
         inset 
+        style="margin-top: 8px"
         data-record="{{item}}"
         bind:tap="showRecordPopup">
         <van-cell 
           title="{{item.date}}" 
+          custom-style="background-color: #f8d148; color: gray"
         />
         <van-cell 
           title="{{item.product_name}}" 
           value="{{item.milage}} km" 
         />
       </van-cell-group>
-    </block>
+    </view>
 <!-- 记录详情 -->
     <van-popup 
       show="{{ isShowRecordPopup }}" 
@@ -174,7 +179,7 @@
     </van-popup>
   </view>
   <view wx:else>
-    无保养记录
+    <van-empty description="无保养记录"/>
   </view>
     <!-- 弹窗 -->
     <van-calendar 
