@@ -7,7 +7,25 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userRecords: []
+    userRecords: [],
+    isSortedAsc: false,
+    minDate: '',
+    startDate: '',
+    endDate: '',
+    timePickerList: [
+      '全部',
+      '近1个月',
+      '近3个月',
+      '近6个月',
+      '近1年'
+    ],
+    timePickerMap: [
+      -120,
+      -1,
+      -3,
+      -6,
+      -12
+    ]
   },
 
   initData: function() {
@@ -39,6 +57,37 @@ Page({
             console.log(res);
           })
         } else {
+          let minDate = res.data.data[res.data.data.length-1].date;
+          this.setData({
+            userRecords: res.data.data,
+            minDate: minDate,
+            startDate: minDate,
+            endDate: this.formatDate(new Date())
+          })
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        console.log(err);
+      }
+    })
+  },
+
+  sortUserRecordsBetweenDates: function() {
+    wx.showLoading({
+			title: '加载中...',
+		});
+
+    wx.request({
+      url: `https://api.hulunbuirshell.com/api/record/user-date-sort/${app.globalData.userData.record_num}?start=${this.data.startDate}&end=${this.data.endDate}&sort=${this.data.isSortedAsc ? 1 : -1}`,
+      success: res => {
+        wx.hideLoading();
+        if(res.data.code !== 200) {
+          throw(err => {
+            console.log(err);
+            console.log(res);
+          })
+        } else {
           this.setData({
             userRecords: res.data.data
           })
@@ -62,6 +111,64 @@ Page({
       isShowRecordPopup: false,
       selectedRecord: ""
     })
+  },
+
+  changeSort: function() {
+    this.setData({
+      isSortedAsc: !this.data.isSortedAsc
+    });
+
+    this.sortUserRecordsBetweenDates();
+  },
+
+  formatDate(date) {
+    let paramsDate = new Date(date),
+      month = '' + (paramsDate.getMonth() + 1),
+      day = '' + paramsDate.getDate(),
+      year = paramsDate.getFullYear();
+      
+    if (month.length < 2) 
+    month = '0' + month;
+    if (day.length < 2) 
+    day = '0' + day;
+    
+    return [year, month, day].join('-');
+  },
+
+  addMonths: function(date, months) {
+    date.setMonth(date.getMonth() + months);
+    return date;
+  },
+
+  showOrHideTimePicker: function() {
+    this.setData({
+      isShowTimePicker: !this.data.isShowTimePicker
+    })
+  },
+
+  confirmStartDate: function(e) {
+    let { index } = e.detail;
+
+    if(index === 0) {
+      this.setData({
+        startDate: this.data.minDate
+      });
+    } else {
+      let startDate = this.addMonths(new Date(), this.data.timePickerMap[index]);
+      
+      this.setData({
+        startDate: this.formatDate(startDate)
+      });
+    }
+    this.showOrHideTimePicker();
+    this.sortUserRecordsBetweenDates();
+  },
+
+  resetStartDate: function() {
+    this.setData({
+      startDate: this.data.minDate
+    });
+    this.sortUserRecordsBetweenDates();
   },
 
   /**

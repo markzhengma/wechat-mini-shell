@@ -30,20 +30,20 @@ Page({
     locationPhoneList:[],
     bannerList: [
       {
-        title: "三合一数据线",
-        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127789&idx=1&sn=87f428ee690c9312b0551da58f28bfe7&chksm=813015e8b6479cfe57f09035eb97ecf958d2f2ff19f7fdc1935445b85fdb824d0026e7ef0a4f#rd",
-        thumb_url: "http://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1HVKGsJkXNxE4ylTG35W91xThdP8zzGIsWuvjzv9TZCu6IE0as8WJCzquApHjAq9wBKQRH2hNfNw/0?wx_fmt=jpeg",
+        title: "壳牌爱车养护中心，祝您元宵节快乐！",
+        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128079&idx=1&sn=f14fcc2ade5fa3b728b16a8f7d5d5101&chksm=8130148ab6479d9c8c8593c19b1368afb013cce6f8edb05deed4c5fa92efde3fead5b10cb536&token=930081675&lang=zh_CN#rd",
+        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1caibpsTQZdKGltaxXNibwAPGLJb5gGgxLe8gx3fkKC8Gspwb01ephgMmaNiayvkXiaicBhxQ3oA8LwibQ/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
       },
       {
-        title: "头灯",
-        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127778&idx=1&sn=4aca35662292b0920ad0b5e223ac6496&chksm=813015e7b6479cf1eaec9d8ad970e6a96b904ea37a1cab683fb49eb19113c7d33a3fe641a54d#rd",
-        thumb_url: "http://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1pcml1QWz5eZk9Ko3HGxwoLh6EIMhRXwzV27fyKkuicR9SicJffVUPIWBbRAsOQ1vYw0AotRibGKa7w/0?wx_fmt=jpeg",
+        title: "春风十里，不如有你，壳牌爱车养护中心祝所有女性，女神节快乐！",
+        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128085&idx=1&sn=8a7257a502cd091d63a9dd45a96d8606&chksm=81301490b6479d860e5de8373b237d4f9f6f64db59b9883afbd13ad444c61b2a679e08f1216d&token=930081675&lang=zh_CN#rd",
+        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT2EhBpLpJ7jfVGUkUAmgF3lM24D2yLYDibzchBuE5L50rTiaXJGEG5pS29nNscnxSeJRtp5qlkgKcGQ/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
       },
       {
-        title: "纽曼车载充电器",
-        url: "http://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454127773&idx=1&sn=7aad626f0015677648e8682a9b1711e5&chksm=813015d8b6479cce0f749e86bd58d721b04591ed09964ca35aa52e707dddabd9cf5b63d57fac#rd",
-        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1pcml1QWz5eZk9Ko3HGxwoNDiaSEhV7mliaIPDCgkiaHeePTXrZibHRpeAmGGaGgao2h6I3biaL8GZosg/0?wx_fmt=jpeg",
-      }
+        title: "端午道安康 粽擎好时光",
+        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128128&idx=1&sn=4f9f5ceabdb3602d216a2742a87b66fb&chksm=81301745b6479e530258e1a22475940ecdc501f554503f062f82fe9a6d80b61039ee9eae4a12&token=930081675&lang=zh_CN#rd",
+        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT0arMCrx7belSVibVQiaBHXnJo41CWgDM8BUxoQdgOeibLz2MDycbxiaiauRS4gMAacPJNQQhJFqibvbH3Q/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
+      },
     ]
   },
 
@@ -186,7 +186,6 @@ Page({
         app.globalData.isLoading = false;
         if(res.data.code !== 200) {
           if(res.data.code === 401){
-            // TODO: phone and plate input for temporary search
             Dialog.alert({
               title: "很高兴认识您",
               message: "看来您是我们的新客户，请联系门店为您创建信息再试试登录吧！"
@@ -811,7 +810,7 @@ Page({
             confirmButtonText: "查看保养记录"
           })
             .then(() => {
-              this.hideManualSearchForm();
+              this.showOrHideManualSearchForm();
               wx.navigateTo({
                 url: "/pages/ManualSearchRecord/ManualSearchRecord",
                 success: res => {
@@ -870,18 +869,9 @@ Page({
     })
   },
 
-  showManualSearchForm: function() {
+  showOrHideManualSearchForm: function() {
     this.setData({
-      manualSearchIsShow: true,
-      userInputPlateAndPhone: {
-        phone: "",
-        plate: ""
-      }
-    })
-  },
-  hideManualSearchForm: function() {
-    this.setData({
-      manualSearchIsShow: false,
+      manualSearchIsShow: !this.data.manualSearchIsShow,
       userInputPlateAndPhone: {
         phone: "",
         plate: ""
@@ -937,15 +927,19 @@ Page({
     });
   },
 
-  showContactPopup: function() {
+  showOrHideContactPopup: function() {
     this.setData({
-      isShowContactPopup: true
+      isShowContactPopup: !this.data.isShowContactPopup
     })
   },
 
-  hideContactPopup: function() {
-    this.setData({
-      isShowContactPopup: false
+  openWxArticle: function(e) {
+    let url = e.currentTarget.dataset.url;
+    wx.navigateTo({
+      url: "/pages/WxArticle/WxArticle",
+      success: res => {
+        res.eventChannel.emit('wxArticleUrl', { data: url })
+      }
     })
   },
 

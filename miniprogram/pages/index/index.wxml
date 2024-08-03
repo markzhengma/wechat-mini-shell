@@ -1,24 +1,33 @@
 <!--index.wxml-->
 <view>
   <swiper 
-    class="home-swiper"
-		indicator-dots="true" 
+    style="height: 360px"
+		indicator-dots="false" 
 		autoplay="true" 
-    interval="5000"
-    duration="1000"
-    indicator-color="#808080"
+    interval="10000"
+    duration="2000"
     indicator-active-color="#f8d148"
     easing-function="easeInOutCubic"
     circular="true"
   >
-    <block wx:for="{{bannerList}}" wx:key="unique">
-      <swiper-item>
-        <image src="{{item.thumb_url}}" style="width: 100%; height: 100%;"/>
-      </swiper-item>
+    <block 
+      wx:for="{{bannerList}}" 
+      wx:key="unique"
+      style="height: 100%"
+    >
+      <swiper-item
+        style="background-image: url({{item.thumb_url}}); background-position: center top; background-size: cover; background-repeat: no-repeat; -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(70%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0))); mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0)) 100%;"
+        data-url="{{item.url}}"
+        bind:tap="openWxArticle"
+      />
     </block>
   </swiper>
+
   <!-- 已登录 -->
-  <view wx:if="{{isLoggedIn}}" >
+  <view 
+    wx:if="{{isLoggedIn}}" 
+    style="margin-top: -80px"
+  >
     <view style="display: flex; flex-direction: column" wx:if="{{uidIsInDB}}">
       <van-cell-group 
         inset
@@ -38,7 +47,6 @@
           />
         </van-cell>
       </van-cell-group>
-      <!-- TODO: 最近的一条养护提醒 -->
       <van-cell-group 
         inset
         style="margin-top: 6px"
@@ -67,11 +75,11 @@
           <van-grid-item 
             icon="search" 
             text="手动输入查询" 
-            bind:tap="showManualSearchForm" />
+            bind:tap="showOrHideManualSearchForm" />
           <van-grid-item 
             icon="phone-o" 
             text="联系我们"
-            bind:tap="showContactPopup" />
+            bind:tap="showOrHideContactPopup" />
         </van-grid>
       </view>
     </view>
@@ -110,16 +118,20 @@
           <van-grid-item 
             icon="search" 
             text="手动输入查询" 
-            bind:tap="showManualSearchForm" />
+            bind:tap="showOrHideManualSearchForm" />
           <van-grid-item 
             icon="phone-o" 
-            text="联系我们" />
+            text="联系我们"
+            bind:tap="showOrHideContactPopup" />
         </van-grid>
       </view>
     </view>
   </view>
   <!-- 重新登录等待 -->
-  <view style="display: flex; flex-direction: column" wx:elif="{{retryCountdown > 0}}">
+  <view 
+    style="display: flex; flex-direction: column; margin-top: -80px"
+    wx:elif="{{retryCountdown > 0}}"
+  >
     <van-cell-group 
       inset
       style="margin-top: 6px"
@@ -142,15 +154,19 @@
         <van-grid-item 
           icon="search" 
           text="手动输入查询" 
-          bind:tap="showManualSearchForm" />
+          bind:tap="showOrHideManualSearchForm" />
         <van-grid-item 
           icon="phone-o" 
-          text="联系我们" />
+          text="联系我们"
+          bind:tap="showOrHideContactPopup" />
       </van-grid>
     </view>
   </view>
   <!-- 未登录 -->
-  <view style="display: flex; flex-direction: column" wx:else>
+  <view 
+    style="display: flex; flex-direction: column; margin-top: -80px" 
+    wx:else
+  >
     <van-cell-group 
       inset
       style="margin-top: 6px"
@@ -166,6 +182,20 @@
         </van-button>
       </van-cell>
     </van-cell-group>
+    <view
+      style="margin-top: 6px; padding: 0 6px"
+    >
+      <van-grid gutter="10" column-num="3" clickable>
+        <van-grid-item 
+          icon="search" 
+          text="手动输入查询" 
+          bind:tap="showOrHideManualSearchForm" />
+        <van-grid-item 
+          icon="phone-o" 
+          text="联系我们"
+          bind:tap="showOrHideContactPopup" />
+      </van-grid>
+    </view>
   </view>
 
 <!-- 管理员身份 -->
@@ -193,7 +223,8 @@
     <van-popup 
       show="{{ findUserFormIsShow }}" 
       round
-      custom-style="padding: 10px; width: 90%"
+      position="bottom"
+      custom-style="padding: 10px"
       bind:close="hideFindUserForm">
       <view style="padding: 0 16px 16px 16px">查询客户</view>
       <view style="padding: 0 16px 8px 16px; display: flex; flex-direction: row">
@@ -278,7 +309,8 @@
      <van-popup 
       show="{{ createUserFormIsShow }}" 
       round
-      custom-style="padding: 10px; width: 90%;"
+      position="bottom"
+      custom-style="padding: 10px"
       bind:close="hideCreateUserForm">
       <view style="padding: 0 16px 16px 16px">创建用户</view>
       <van-cell-group>
@@ -337,7 +369,7 @@
 
   <van-popup 
     show="{{ findUserListIsShow }}" 
-    closeable
+    round
     position="bottom"
     custom-style="height: fit-content; padding: 20px 0"
     bind:close="hideFindUserList">
@@ -405,7 +437,7 @@
     position="bottom"
     round
     custom-style="height: fit-content; padding: 20px 0"
-    bind:close="hideManualSearchForm">
+    bind:close="showOrHideManualSearchForm">
     <view style="padding: 0 16px 16px 16px">手动输入查询</view>
     <van-cell-group>
       <van-field
@@ -432,7 +464,7 @@
       <van-button 
         type="default"
         custom-style="width: calc(50% - 16px)"
-        bind:click="hideManualSearchForm"
+        bind:click="showOrHideManualSearchForm"
       >
         取消
       </van-button>
@@ -444,10 +476,11 @@
     position="bottom"
     round
     custom-style="height: fit-content; padding: 20px 0"
-    bind:close="hideContactPopup">
+    bind:close="showOrHideContactPopup">
     <view style="padding: 0 16px 16px 16px">点击联系门店</view>
     <van-cell-group
-      wx:for="{{ locationPhoneList }}">
+      wx:for="{{ locationPhoneList }}"
+      wx:key="unique">
       <van-cell
         title="{{ item.divider }}"
         icon="location-o"

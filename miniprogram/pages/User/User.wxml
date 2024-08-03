@@ -55,7 +55,7 @@
         <van-button 
           icon="phone-o" 
           size="large"
-          disabled
+          bind:tap="showContactPopup"
           custom-style="margin: 6px 0; background-color: #f8d148"
         >
         联系我们
@@ -66,5 +66,32 @@
       更多功能敬请期待
     </van-divider>
     
+    <van-popup 
+      show="{{ isShowContactPopup }}" 
+      position="bottom"
+      round
+      custom-style="height: fit-content; padding: 20px 0"
+      bind:close="hideContactPopup">
+      <view style="padding: 0 16px 16px 16px">点击联系门店</view>
+      <van-cell-group
+        wx:for="{{ locationPhoneList }}"
+        wx:key="unique">
+        <van-cell
+          title="{{ item.divider }}"
+          icon="location-o"
+          custom-style="color: gray"
+          wx:if="{{ !item.location }}"
+        />
+        <van-cell
+          title="{{ item.location }}"
+          value="{{ item.phone }}"
+          data-phone="{{ item.phone }}"
+          border="{{ false }}"
+          icon="phone-o"
+          bind:tap="callLocation"
+          wx:else
+        />
+      </van-cell-group>
+    </van-popup>
   </view>
 </view>

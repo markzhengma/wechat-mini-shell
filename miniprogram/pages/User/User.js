@@ -24,11 +24,31 @@ Page({
     });
   },
 
+  callLocation: function(e){
+    wx.makePhoneCall({
+      phoneNumber: e.currentTarget.dataset.phone,
+    });
+  },
+
+  showContactPopup: function() {
+    this.setData({
+      isShowContactPopup: true
+    })
+  },
+
+  hideContactPopup: function() {
+    this.setData({
+      isShowContactPopup: false
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-
+  onLoad() {
+    this.setData({
+      locationPhoneList: app.globalData.locationPhoneList
+    })
   },
 
   /**

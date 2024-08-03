@@ -1,4 +1,4 @@
-// pages/Contact/Contact.js
+// pages/WxArticle/WxArticle.js
 Page({
 
   /**
@@ -11,10 +11,16 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-
+  onLoad() {
+    let that = this;
+    const eventChannel = this.getOpenerEventChannel();
+    eventChannel.on('wxArticleUrl', function(data) {
+      that.setData({
+        wxArticleUrl: data.data
+      });
+    })
   },
-
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

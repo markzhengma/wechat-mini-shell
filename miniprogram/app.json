@@ -5,14 +5,14 @@
     "pages/UserRecord/UserRecord",
     "pages/ManualSearchRecord/ManualSearchRecord",
     "pages/User/User",
-    "pages/Contact/Contact"
+    "pages/WxArticle/WxArticle"
   ],
   "window": {
-    "backgroundColor": "#808080",
+    "backgroundColor": "#f0f0f0",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#808080",
+    "navigationBarBackgroundColor": "#f0f0f0",
     "navigationBarTitleText": "乘驾无忧",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "list": [
@@ -37,14 +37,6 @@
     ]
   },
   "sitemapLocation": "sitemap.json",
-  "oldPages": [
-    "pages/prevIndex/prevIndex",
-    "pages/shellPages/userRecords/userRecords",
-    "pages/shellPages/adminLogin/adminLogin",
-    "pages/shellPages/adminPage/adminPage",
-    "pages/shellPages/contact/contact",
-    "pages/shellPages/msgPage/msgPage"
-  ],
   "usingComponents": {
     "van-button": "@vant/weapp/button/index",
     "van-popup": "@vant/weapp/popup/index",
@@ -64,6 +56,5 @@
     "van-grid-item": "@vant/weapp/grid-item/index",
     "van-empty": "@vant/weapp/empty/index",
     "van-image": "@vant/weapp/image/index"
-
   }
 }

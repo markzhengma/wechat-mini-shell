@@ -14,27 +14,41 @@
     <view wx:if="{{!userRecords || userRecords.length === 0}}">
       <van-empty description="还没有您的记录，来门店给爱车做一次保养吧！"/>
     </view>
-    <view wx:else>
+    <view 
+      wx:else>
       <view 
-      style="display: flex; flex-direction: row; justify-content: center">
+      style="margin: 8px 0; display: flex; flex-direction: row; justify-content: center">
         <van-button 
           plain
-          icon="sort" 
+          icon="ascending" 
           size="small"
-          disabled
+          custom-style="width: 30px; margin-top: 6px"
+          type="default"
+          bind:click="changeSort"
+          wx:if="{{isSortedAsc}}"/>
+        <van-button 
+          plain
+          icon="descending" 
+          size="small"
+          custom-style="width: 30px; margin-top: 6px"
+          type="default"
+          bind:click="changeSort"
+          wx:else/>
+        <van-button 
+          plain
+          size="small"
           custom-style="width: 120px; margin-top: 6px"
-          type="default">
-          按时间排序
+          type="default"
+          bind:click="showOrHideTimePicker">
+          自：{{startDate}}
         </van-button>
         <van-button 
           plain
-          icon="notes" 
           size="small"
-          disabled
-          custom-style="width: 120px; margin-top: 6px"
-          type="default">
-          筛选
-        </van-button>
+          icon="replay" 
+          custom-style="width: 30px; margin-top: 6px"
+          type="default"
+          bind:click="resetStartDate"/>
       </view>
       <view 
         style="display: flex; flex-direction: column"
@@ -87,6 +101,20 @@
             确认
           </van-button>
         </van-cell-group>
+      </van-popup>
+      <van-popup
+        show="{{ isShowTimePicker }}" 
+        round
+        position="top"
+        id="filter-time-picker"
+        custom-style="padding: 20px 10px"
+        bind:close="showOrHideTimePicker">
+        <van-picker 
+          show-toolbar
+          title="选择时间范围"
+          columns="{{ timePickerList }}" 
+          bind:cancel="showOrHideTimePicker"
+          bind:confirm="confirmStartDate" />
       </van-popup>
     </view>
   </view>
