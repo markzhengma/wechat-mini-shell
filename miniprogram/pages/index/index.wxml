@@ -7,7 +7,6 @@
     interval="10000"
     duration="2000"
     indicator-active-color="#f8d148"
-    easing-function="easeInOutCubic"
     circular="true"
   >
     <block 
@@ -89,9 +88,9 @@
         style="margin-top: 6px"
         >
         <van-cell
-          title="未找到关联的微信号记录"
+          title="您的微信还未关联至养护记录，试试手机号？"
           center="true"
-          icon="user"
+          icon="warning-o"
         >
         </van-cell>
       </van-cell-group>
@@ -114,7 +113,7 @@
       <view
         style="margin-top: 6px; padding: 0 6px"
       >
-        <van-grid gutter="10" column-num="3" clickable>
+        <van-grid gutter="10" column-num="1" clickable>
           <van-grid-item 
             icon="search" 
             text="手动输入查询" 
@@ -136,6 +135,17 @@
       inset
       style="margin-top: 6px"
       >
+      <van-cell
+        title="点击同意授权，就能解锁爱车的养护记录了！"
+        center="true"
+        icon="warning-o"
+      >
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group 
+      inset
+      style="margin-top: 6px"
+      >
       <van-cell>
         <van-button 
           icon="star-o" 
@@ -150,7 +160,7 @@
     <view
       style="margin-top: 6px; padding: 0 6px"
     >
-      <van-grid gutter="10" column-num="3" clickable>
+      <van-grid gutter="10" column-num="1" clickable>
         <van-grid-item 
           icon="search" 
           text="手动输入查询" 
@@ -171,6 +181,17 @@
       inset
       style="margin-top: 6px"
       >
+      <van-cell
+        title="登录微信，一键查看爱车的养护记录！"
+        center="true"
+        icon="chat-o"
+      >
+      </van-cell>
+    </van-cell-group>
+    <van-cell-group 
+      inset
+      style="margin-top: 6px"
+      >
       <van-cell>
         <van-button 
           icon="star-o" 
@@ -185,7 +206,7 @@
     <view
       style="margin-top: 6px; padding: 0 6px"
     >
-      <van-grid gutter="10" column-num="3" clickable>
+      <van-grid gutter="10" column-num="1" clickable>
         <van-grid-item 
           icon="search" 
           text="手动输入查询" 

@@ -57,13 +57,19 @@ Page({
             console.log(res);
           })
         } else {
-          let minDate = res.data.data[res.data.data.length-1].date;
           this.setData({
-            userRecords: res.data.data,
-            minDate: minDate,
-            startDate: minDate,
-            endDate: this.formatDate(new Date())
+            userRecords: res.data.data
           })
+          if(res.data.data.length === 0) {
+            console.log('no user record found');
+          } else {
+            let minDate = res.data.data[res.data.data.length-1].date;
+            this.setData({
+              minDate: minDate,
+              startDate: minDate,
+              endDate: this.formatDate(new Date())
+            })
+          }
         }
       },
       fail: err => {

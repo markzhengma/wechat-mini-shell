@@ -27,24 +27,7 @@ Page({
       "满洲里二店",
       "牙克石"
     ],
-    locationPhoneList:[],
-    bannerList: [
-      {
-        title: "壳牌爱车养护中心，祝您元宵节快乐！",
-        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128079&idx=1&sn=f14fcc2ade5fa3b728b16a8f7d5d5101&chksm=8130148ab6479d9c8c8593c19b1368afb013cce6f8edb05deed4c5fa92efde3fead5b10cb536&token=930081675&lang=zh_CN#rd",
-        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT1caibpsTQZdKGltaxXNibwAPGLJb5gGgxLe8gx3fkKC8Gspwb01ephgMmaNiayvkXiaicBhxQ3oA8LwibQ/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
-      },
-      {
-        title: "春风十里，不如有你，壳牌爱车养护中心祝所有女性，女神节快乐！",
-        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128085&idx=1&sn=8a7257a502cd091d63a9dd45a96d8606&chksm=81301490b6479d860e5de8373b237d4f9f6f64db59b9883afbd13ad444c61b2a679e08f1216d&token=930081675&lang=zh_CN#rd",
-        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT2EhBpLpJ7jfVGUkUAmgF3lM24D2yLYDibzchBuE5L50rTiaXJGEG5pS29nNscnxSeJRtp5qlkgKcGQ/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
-      },
-      {
-        title: "端午道安康 粽擎好时光",
-        url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128128&idx=1&sn=4f9f5ceabdb3602d216a2742a87b66fb&chksm=81301745b6479e530258e1a22475940ecdc501f554503f062f82fe9a6d80b61039ee9eae4a12&token=930081675&lang=zh_CN#rd",
-        thumb_url: "https://mmbiz.qpic.cn/mmbiz_jpg/r6JA6ugdpT0arMCrx7belSVibVQiaBHXnJo41CWgDM8BUxoQdgOeibLz2MDycbxiaiauRS4gMAacPJNQQhJFqibvbH3Q/640?wxfrom=12&tp=wxpic&usePicPrefetch=1&wx_fmt=jpeg",
-      },
-    ]
+    locationPhoneList:[]
   },
 
   getJSCode: function() {
@@ -943,12 +926,59 @@ Page({
     })
   },
 
+  initWxArticle: function() {
+    this.getWxArticleList()
+      .then(res => {
+        const articleList = res.data.data;
+
+        this.setData({
+          bannerList: articleList
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        this.setData({
+          bannerList: [
+            {
+              title: "劲涌开赛，不息向前！",
+              url: "https://mp.weixin.qq.com/s/9YjChRaWcDoczhqRgbENJQ",
+              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70U0CWEqwz3EdWicrovcw1vTIWhUZJF2dhGA00G1yxmBLIAYgZc1iaRuAFeEajH7Fj7BtcQ6ltcp2pCw/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1",
+            },
+            {
+              title: "再添荣耀！壳牌润滑油斩获LubTop2023总评榜九项大奖！",
+              url: "https://mp.weixin.qq.com/s/SLYiYhsG34aqi9M8DwLJBg",
+              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70UHvMicQDl01FXBY31g87z2G5lhxD3W6sL4suP2VK8bXO19RJxcfRqG8e9g4yJhCs7Qq0jE6FGa21A/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1",
+            }
+          ]
+        })
+      })
+  },
+
+  getWxArticleList: function() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/wxarticle/recent`,
+        success: res => {
+          if(res.data.code !== 200) {
+            reject(res);
+          } else {
+            resolve(res);
+          }
+        },
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
     this.setLocationPhoneList();
     this.setUserData();
+    this.initWxArticle();
   },
 
   /**
