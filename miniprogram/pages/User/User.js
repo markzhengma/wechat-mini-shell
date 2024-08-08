@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    isShowContactPopup: false
   },
 
   initData: function() {
@@ -30,15 +30,9 @@ Page({
     });
   },
 
-  showContactPopup: function() {
+  showOrHideContactPopup: function() {
     this.setData({
-      isShowContactPopup: true
-    })
-  },
-
-  hideContactPopup: function() {
-    this.setData({
-      isShowContactPopup: false
+      isShowContactPopup: !this.data.isShowContactPopup
     })
   },
 

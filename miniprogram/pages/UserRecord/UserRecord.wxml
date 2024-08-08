@@ -1,9 +1,8 @@
 <view >
   <view wx:if="{{!isLoggedIn}}" >
-    <van-empty description="未登录，无法获取您的保养记录">
+    <van-empty description="未登录，无法获取您的养护记录">
       <van-button 
-        round 
-        type="primary" 
+        color="#f8d148"
         data-path="/pages/index/index"
         bind:click="switchPage">
         回首页登录
@@ -22,7 +21,7 @@
           plain
           icon="ascending" 
           size="small"
-          custom-style="width: 30px; margin-top: 6px"
+          custom-style="width: 30px; margin-top: 6px; font-size: 14px"
           type="default"
           bind:click="changeSort"
           wx:if="{{isSortedAsc}}"/>
@@ -30,23 +29,23 @@
           plain
           icon="descending" 
           size="small"
-          custom-style="width: 30px; margin-top: 6px"
+          custom-style="width: 30px; margin-top: 6px; font-size: 14px"
           type="default"
           bind:click="changeSort"
           wx:else/>
         <van-button 
           plain
           size="small"
-          custom-style="width: 120px; margin-top: 6px"
+          custom-style="width: 140px; margin: 6px 4px 0 4px; font-size: 14px; font-weight: 500"
           type="default"
           bind:click="showOrHideTimePicker">
-          自：{{startDate}}
+          {{startDate}} 至今
         </van-button>
         <van-button 
           plain
           size="small"
           icon="replay" 
-          custom-style="width: 30px; margin-top: 6px"
+          custom-style="width: 30px; margin-top: 6px; font-size: 14px"
           type="default"
           bind:click="resetStartDate"/>
       </view>
@@ -56,17 +55,41 @@
         wx:key="unique">
         <van-cell-group 
           inset 
-          style="margin-top: 8px"
-          data-record="{{item}}"
-          bind:tap="showRecordPopup">
+          style="margin-top: 16px"
+        >
           <van-cell 
+            icon="calendar-o"
             title="{{item.date}}" 
-            custom-style="background-color: #f8d148; color: gray"
+            custom-style="background-color: #f8d148; color: gray; font-size: 16px"
+            size="large"
           />
           <van-cell 
-            title="{{item.product_name}}" 
-            value="{{item.milage}} km" 
+            icon="shopping-cart"
+            title="【项目】{{item.product_name}}" 
+            custom-style="font-size: 16px; font-weight: 600"
+            border="{{false}}"
+            size="large"
           />
+          <van-cell 
+            icon="/icons/gauge.png"
+            title="【里程】{{item.milage}} km" 
+            custom-style="font-size: 16px"
+            border="{{false}}"
+            size="large"
+          />
+          <van-cell 
+            border="{{false}}"
+            size="large"
+          >
+            <van-button
+              custom-style="font-size: 16px"
+              color="#aaaaaa"
+              data-record="{{item}}"
+              bind:click="showRecordPopup"
+            >
+              记录详情
+            </van-button>
+          </van-cell>
         </van-cell-group>
       </view>
       <van-popup 
@@ -75,28 +98,41 @@
         position="bottom"
         custom-style="padding: 20px 10px"
         bind:close="closeRecordPopup">
-        <view style="padding: 0 16px 8px 16px">记录详情</view>
-        <van-cell-group>
+        <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">记录详情</view>
+        <van-cell-group
+          border="{{false}}"
+        >
           <van-cell 
+            icon="calendar-o"
             title="日期" 
             value="{{selectedRecord.date}}" 
+            custom-style="font-size: 16px; font-weight: 500"
+            border="{{false}}"
           />
           <van-cell 
+            icon="shopping-cart"
             title="项目" 
             value="{{selectedRecord.product_name}}" 
+            custom-style="font-size: 16px; font-weight: 500"
+            border="{{false}}"
           />
           <van-cell 
+            icon="/icons/gauge.png"
             title="里程" 
             value="{{selectedRecord.milage}}" 
+            custom-style="font-size: 16px; font-weight: 500"
+            border="{{false}}"
           />
           <van-cell 
+            icon="manager"
             title="操作员" 
             value="{{selectedRecord.operator}}" 
+            custom-style="font-size: 16px; font-weight: 500"
+            border="{{false}}"
           />
           <van-button 
-            type="primary"
             bind:click="closeRecordPopup"
-            custom-style="margin: 0 16px; width: calc(100% - 32px)"
+            custom-style="margin: 10px 16px 0 16px; width: calc(100% - 32px); font-size: 16px; background-color: #f8d148"
           >
             确认
           </van-button>

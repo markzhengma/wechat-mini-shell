@@ -3,34 +3,48 @@
   <!-- 用户信息 -->
   <view wx:if="{{targetUserInfo}}">
     <van-divider contentPosition="center">个人及爱车信息</van-divider>
-    <van-cell-group inset>
+    <van-cell-group 
+      inset
+    >
       <van-cell
        title="车主姓名" 
+       icon="user"
+       custom-style="font-size: 16px; font-weight: 500"
        value="{{targetUserInfo.user_name}}" 
+       border="{{false}}"
       />
       <van-cell 
         title="车型" 
+        icon="/icons/car.png"
+        custom-style="font-size: 16px; font-weight: 500"
         value="{{targetUserInfo.make}}" 
+        border="{{false}}"
       />
       <van-cell 
-        title="车牌号" 
+        title="车牌号码" 
+        icon="/icons/plate.png"
+        custom-style="font-size: 16px; font-weight: 500"
         value="{{targetUserInfo.plate}}" 
+        border="{{false}}"
       />
       <van-cell 
-        title="手机号码" 
+        title="联系方式" 
+        icon="/icons/mobile.png"
+        custom-style="font-size: 16px; font-weight: 500"
         value="{{targetUserInfo.phone}}" 
+        border="{{false}}"
       />
       <van-cell 
         title="换油证号" 
+        icon="/icons/id.png"
+        custom-style="font-size: 16px; font-weight: 500"
         value="{{targetUserInfo.record_num}}" 
+        border="{{false}}"
       />
     </van-cell-group>
   </view>
-  <view wx:else>
-    载入中……
-  </view>
-  <van-divider contentPosition="center">保养记录</van-divider>
-  <view wx:if="{{targetUserRecord && targetUserRecord.lenth !== 0}}">
+  <van-divider contentPosition="center">养护记录</van-divider>
+  <view wx:if="{{targetUserRecord && targetUserRecord.length > 0}}">
     <!-- 记录列表 -->
     <view
       style="display: flex; flex-direction: column"
@@ -38,49 +52,93 @@
       wx:key="unique">
       <van-cell-group 
         inset 
-        style="margin-top: 8px"
-        data-record="{{item}}"
-        bind:tap="showRecordPopup">
+        style="margin-top: 16px">
         <van-cell 
+          icon="calendar-o"
           title="{{item.date}}" 
-          custom-style="background-color: #f8d148; color: gray"
+          custom-style="background-color: #f8d148; color: gray; font-size: 16px"
+          size="large"
         />
         <van-cell 
-          title="{{item.product_name}}" 
-          value="{{item.milage}} km" 
+          icon="shopping-cart"
+          title="【项目】{{item.product_name}}" 
+          custom-style="font-size: 16px; font-weight: 600"
+          size="large"
+          border="{{false}}"
         />
+        <van-cell 
+          icon="/icons/gauge.png"
+          title="【里程】{{item.milage}} km" 
+          custom-style="font-size: 16px"
+          size="large"
+          border="{{false}}"
+        />
+        <van-cell 
+          border="{{false}}"
+          size="large"
+        >
+          <van-button
+            custom-style="font-size: 16px"
+            color="#aaaaaa"
+            data-record="{{item}}"
+            bind:click="showRecordPopup"
+          >
+            记录详情
+          </van-button>
+        </van-cell>
       </van-cell-group>
     </view>
-<!-- 记录详情 -->
-    <van-popup 
-      show="{{ isShowRecordPopup }}" 
-      round
-      closeable
-      custom-style="padding: 10px; width: 80vw;"
-      bind:close="closeRecordPopup">
-      <van-cell-group title="记录详情">
-        <van-cell 
-          title="日期" 
-          value="{{selectedRecord.date}}" 
-        />
-        <van-cell 
-          title="项目" 
-          value="{{selectedRecord.product_name}}" 
-        />
-        <van-cell 
-          title="操作员" 
-          value="{{selectedRecord.operator}}" 
-        />
-        <van-cell 
-          title="里程" 
-          value="{{selectedRecord.milage}}" 
-        />
-      </van-cell-group>
-    </van-popup>
   </view>
   <view wx:else>
-    无保养记录
+    <van-empty description="无养护记录"/>
   </view>
+  <!-- 记录详情 -->
+  <van-popup 
+    show="{{ isShowRecordPopup }}" 
+    round
+    position="bottom"
+    custom-style="padding: 20px 10px;"
+    bind:close="closeRecordPopup">
+    <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">记录详情</view>
+    <van-cell-group
+      border="{{false}}"
+    >
+      <van-cell 
+        icon="calendar-o"
+        title="日期" 
+        value="{{selectedRecord.date}}" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
+      />
+      <van-cell 
+        icon="shopping-cart"
+        title="项目" 
+        value="{{selectedRecord.product_name}}" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
+      />
+      <van-cell 
+        icon="/icons/gauge.png"
+        title="里程" 
+        value="{{selectedRecord.milage}}" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
+      />
+      <van-cell 
+        icon="manager"
+        title="操作员" 
+        value="{{selectedRecord.operator}}" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
+      />
+      <van-button 
+        bind:click="closeRecordPopup"
+        custom-style="margin: 10px 16px 0 16px; width: calc(100% - 32px); font-size: 16px; background-color: #f8d148"
+      >
+        确认
+      </van-button>
+    </van-cell-group>
+  </van-popup>
   <!-- 弹窗 -->
   <van-dialog id="van-dialog" />
   <van-toast id="van-toast" />

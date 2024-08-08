@@ -6,54 +6,64 @@
     <van-cell-group inset>
       <van-cell
        title="车主姓名" 
+       custom-style="font-size: 16px; font-weight: 500"
+       border="{{false}}"
        value="{{targetUserInfo.user_name}}" 
       />
       <van-cell 
         title="车型" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
         value="{{targetUserInfo.make}}" 
       />
       <van-cell 
-        title="车牌号" 
+        title="车牌号码" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
         value="{{targetUserInfo.plate}}" 
       />
       <van-cell 
-        title="手机号码" 
+        title="联系方式" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
         value="{{targetUserInfo.phone}}" 
       />
       <van-cell 
         title="换油证号" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
         value="{{targetUserInfo.record_num}}" 
       />
       <van-button 
-        type="primary"
+        color="grey"
         icon="add-o"
         size="large"
         bind:click="showNewRecordForm">
-        创建保养记录
+        创建养护记录
       </van-button>
     </van-cell-group>
-  </view>
-  <view wx:else>
-    载入中……
   </view>
   <!-- 创建记录 -->
     <van-popup 
       show="{{ isShowNewRecordForm }}" 
       round
-      closeable
-      custom-style="padding: 10px; width: 80vw;"
+      position="bottom"
+      custom-style="padding: 20px 10px"
       bind:close="closeNewRecordForm">
-      <van-cell-group title="创建保养记录">
+      <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">创建养护记录</view>
+      <van-cell-group border="{{false}}">
         <van-cell 
           title="日期" 
           value="{{ newRecordInput.date }}"
           data-picker-input="date"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:click="showPicker" 
         />
         <van-cell 
           title="项目名称" 
           value="{{ newRecordInput.product_name }}"
           data-picker-input="product"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:click="showPicker" 
         />
         <van-field
@@ -63,18 +73,21 @@
           type="number"
           input-align="right"
           id="new-record-input-milage"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:change="onChange"
         />
         <van-cell 
           title="赠品" 
           value="{{ newRecordInput.gift }}"
           data-picker-input="gift"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:click="showPicker" 
         />
         <van-cell 
           title="操作人" 
           value="{{ newRecordInput.operator }}"
           data-picker-input="operator"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:click="showPicker" 
         />
         <van-field
@@ -83,29 +96,27 @@
           placeholder="输入备注"
           input-align="right"
           id="new-record-input-detail"
+          custom-style="font-size: 16px; font-weight: 500"
           bind:change="onChange"
         />
       </van-cell-group>
       <view
         style="width: 100%">
         <van-button 
-          plain
-          type="primary"
-          custom-style="width: 50%"
+          custom-style="margin-left: 16px; width: calc(50% - 16px); margin-top: 10px; font-size: 16px; background-color: #f8d148"
           bind:click="createNewRecord">
           创建
         </van-button>
         <van-button 
-          plain
           type="default"
-          custom-style="width: 50%"
+          custom-style="width: calc(50% - 16px); margin-top: 10px; font-size: 16px"
           bind:click="closeNewRecordForm">
           取消
         </van-button>
       </view>
     </van-popup>
   <view wx:if="{{targetUserRecord && targetUserRecord.length > 0}}">
-    <van-divider contentPosition="center">保养记录</van-divider>
+    <van-divider contentPosition="center">养护记录</van-divider>
     <!-- 记录列表 -->
     <view 
       wx:for="{{targetUserRecord}}" 
@@ -113,65 +124,105 @@
       style="display: flex; flex-direction: column">
       <van-cell-group 
         inset 
-        style="margin-top: 8px"
-        data-record="{{item}}"
-        bind:tap="showRecordPopup">
+        style="margin-top: 16px">
         <van-cell 
+          icon="calendar-o"
           title="{{item.date}}" 
-          custom-style="background-color: #f8d148; color: gray"
+          custom-style="background-color: #f8d148; color: gray; font-size: 16px"
         />
         <van-cell 
-          title="{{item.product_name}}" 
-          value="{{item.milage}} km" 
+          icon="shopping-cart"
+          title="【项目】{{item.product_name}}" 
+          custom-style="font-size: 16px; font-weight: 600"
+          border="{{false}}"
         />
+        <van-cell 
+          icon="/icons/gauge.png"
+          title="【里程】{{item.milage}} km" 
+          custom-style="font-size: 16px"
+          border="{{false}}"
+        />
+        <van-cell 
+          border="{{false}}"
+          size="large"
+        >
+          <van-button
+            custom-style="font-size: 16px"
+            color="#aaaaaa"
+            data-record="{{item}}"
+            bind:click="showRecordPopup"
+          >
+            记录详情
+          </van-button>
+        </van-cell>
       </van-cell-group>
     </view>
 <!-- 记录详情 -->
     <van-popup 
       show="{{ isShowRecordPopup }}" 
       round
-      closeable
-      custom-style="padding: 10px; width: 80vw;"
+      position="bottom"
+      custom-style="padding: 20px 10px"
       bind:close="closeRecordPopup">
-      <van-cell-group title="记录详情">
+      <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">记录详情</view>
+      <van-cell-group border="{{false}}">
         <van-cell 
+          icon="calendar-o"
           title="日期" 
           value="{{selectedRecord.date}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
         <van-cell 
+          icon="shopping-cart"
           title="项目" 
           value="{{selectedRecord.product_name}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
         <van-cell 
+          icon="manager"
           title="操作员" 
           value="{{selectedRecord.operator}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
         <van-cell 
+          icon="/icons/gauge.png"
           title="里程" 
           value="{{selectedRecord.milage}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
         <van-cell 
+          icon="gift"
           title="赠品" 
           value="{{selectedRecord.gift}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
         <van-cell 
+          icon="records"
           title="备注" 
           value="{{selectedRecord.detail}}" 
+          custom-style="font-size: 16px; font-weight: 500"
+          border="{{false}}"
         />
       </van-cell-group>
       <view
         style="width: 100%">
         <van-button 
           plain
-          type="primary"
-          custom-style="width: 50%"
+          color="grey"
+          custom-style="margin-left: 16px; width: calc(50% - 16px); margin-top: 10px; font-size: 16px"
           bind:click="closeRecordPopup">
           关闭
         </van-button>
         <van-button 
           plain
           type="danger"
-          custom-style="width: 50%"
+          icon="warning-o"
+          custom-style="width: calc(50% - 16px); margin-top: 10px; font-size: 16px"
           bind:click="showDeleteConfirmPopup">
           删除
         </van-button>
@@ -179,20 +230,22 @@
     </van-popup>
   </view>
   <view wx:else>
-    <van-empty description="无保养记录"/>
+    <van-empty description="无养护记录"/>
   </view>
     <!-- 弹窗 -->
     <van-calendar 
       show="{{ isShowCalendarInput }}" 
       data-picker-input="date"
+      min-date="{{minDate}}"
+      max-date="{{maxDate}}"
+      color="#f8d148"
       bind:close="closePicker" 
       bind:confirm="confirmPickerInput" 
     />
     <van-popup
       round
       position="bottom"
-      show="{{isShowProductInput}}"
-      custom-style="height: 80%">
+      show="{{isShowProductInput}}">
       <van-picker
         show-toolbar
         title="项目选择"
@@ -205,8 +258,7 @@
     <van-popup
       round
       position="bottom"
-      show="{{isShowGiftInput}}"
-      custom-style="height: 80%">
+      show="{{isShowGiftInput}}">
       <van-picker
         show-toolbar
         title="赠品选择"
@@ -219,8 +271,7 @@
     <van-popup
       round
       position="bottom"
-      show="{{isShowOperatorInput}}"
-      custom-style="height: 80%">
+      show="{{isShowOperatorInput}}">
       <van-picker
         show-toolbar
         title="操作人选择"

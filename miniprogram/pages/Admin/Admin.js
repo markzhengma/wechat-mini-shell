@@ -21,7 +21,9 @@ Page({
     isShowProductInput: false,
     giftList: [],
     operatorList: [],
-    productList: []
+    productList: [],
+    maxDate: new Date().getTime(),
+    minDate: new Date(new Date().getTime() - 13 * 24 * 60 * 60 * 1000).getTime()
   },
 
   findUserRecord: function(recordNum) {
@@ -149,6 +151,7 @@ Page({
     Dialog.confirm({
       title: '请确认',
       message: `即将删除记录：\n【日期】${this.data.selectedRecord.date}\n【项目】${this.data.selectedRecord.product_name}`,
+      confirmButtonText: "删除"
     })
     .then(() => {
       this.confirmDeleteRecord();
@@ -332,13 +335,13 @@ Page({
         if(res.data.code !== 200) {
           if(res.data.code === 422){
             Dialog.alert({
-              title: "创建保养记录失败",
+              title: "创建养护记录失败",
               message: "请检查必填项是否都填写内容"
             });
             console.log(res);
           } else {
             Dialog.alert({
-              title: "创建保养记录失败",
+              title: "创建养护记录失败",
               message: "【错误信息】" + JSON.stringify(res.data)
             });
           }
@@ -350,7 +353,7 @@ Page({
       },
       fail: err => {
         Dialog.alert({
-          title: "创建保养记录失败",
+          title: "创建养护记录失败",
           message: "【错误信息】" + JSON.stringify(err)
         });
         console.log(err);

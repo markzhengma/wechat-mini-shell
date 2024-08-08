@@ -19,7 +19,7 @@ Page({
     createUserFormIsShow: false,
     findUserFilter: "plate",
     findUserInput: "",
-    findUserInputPlaceholder: "车牌号",
+    findUserInputPlaceholder: "车牌号码",
     locationList: [
       "海拉尔河东",
       "海拉尔河西",
@@ -137,7 +137,7 @@ Page({
           console.log(res);
           Dialog.alert({
             title: "出错了",
-            message: "无法获取您的手机号，请联系我们帮您解决"
+            message: "无法获取您的手机号码，请联系我们帮您解决"
           });
         } else {
           let phone = res.data.data.purePhoneNumber;
@@ -150,7 +150,7 @@ Page({
         console.log(err);
         Dialog.alert({
           title: "出错了",
-          message: "无法获取您的手机号，请联系我们帮您解决"
+          message: "无法获取您的手机号码，请联系我们帮您解决"
         });
       }
     });
@@ -236,7 +236,7 @@ Page({
           if(nonUidDataList.length > 0) {
             Dialog.confirm({
               title: `找到了您的${nonUidDataList.length}个未关联账号`,
-              message: '关联到您的微信，就能更快地查看保养记录啦',
+              message: '关联到您的微信，就能一键查看养护记录啦',
               confirmButtonText: "关联"
             })
               .then(() => {
@@ -677,12 +677,12 @@ Page({
     switch(e.currentTarget.dataset.filter) {
       case("plate"):
         this.setData({
-          findUserInputPlaceholder: "车牌号"
+          findUserInputPlaceholder: "车牌号码"
         });
         break;
       case("phone"):
         this.setData({
-          findUserInputPlaceholder: "手机号"
+          findUserInputPlaceholder: "手机号码"
         });
         break;
       case("record_num"):
@@ -789,8 +789,8 @@ Page({
           Dialog.confirm({
             title: `查询成功`,
             messageAlign: 'left',
-            message: `【车主】${manualSearchUserData.user_name} \n 【手机号】${manualSearchUserData.phone} \n 【车型】${manualSearchUserData.make}`,
-            confirmButtonText: "查看保养记录"
+            message: `【车主】${manualSearchUserData.user_name} \n 【手机】${manualSearchUserData.phone} \n 【车型】${manualSearchUserData.make}`,
+            confirmButtonText: "查看养护记录"
           })
             .then(() => {
               this.showOrHideManualSearchForm();
@@ -940,14 +940,14 @@ Page({
         this.setData({
           bannerList: [
             {
-              title: "劲涌开赛，不息向前！",
-              url: "https://mp.weixin.qq.com/s/9YjChRaWcDoczhqRgbENJQ",
-              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70U0CWEqwz3EdWicrovcw1vTIWhUZJF2dhGA00G1yxmBLIAYgZc1iaRuAFeEajH7Fj7BtcQ6ltcp2pCw/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1",
+              title: "再添荣耀！壳牌润滑油斩获LubTop2023总评榜九项大奖！",
+              url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128158&idx=1&sn=1ed87e03c91c0d6bcc59efdd7db62fed&chksm=8130175bb6479e4d0ad44554f7c28593caa68d4c993c94bb509d17124c9b07bc2b780a87621e&token=1678010547&lang=zh_CN#rd",
+              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70UHvMicQDl01FXBY31g87z2G5lhxD3W6sL4suP2VK8bXO19RJxcfRqG8e9g4yJhCs7Qq0jE6FGa21A/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1"
             },
             {
-              title: "再添荣耀！壳牌润滑油斩获LubTop2023总评榜九项大奖！",
-              url: "https://mp.weixin.qq.com/s/SLYiYhsG34aqi9M8DwLJBg",
-              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70UHvMicQDl01FXBY31g87z2G5lhxD3W6sL4suP2VK8bXO19RJxcfRqG8e9g4yJhCs7Qq0jE6FGa21A/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1",
+              title: "劲涌开赛，不息向前！",
+              url: "https://mp.weixin.qq.com/s?__biz=MzIwMDAwOTc3MA==&mid=2454128164&idx=1&sn=e86e751de8b465df64f00bdd9502cd51&chksm=81301761b6479e77432fca505dbb54ef0592fe291151dc1f8a769c5fae3a07dca5421e1fa1f5&token=1678010547&lang=zh_CN#rd",
+              thumb_url: "https://mmbiz.qpic.cn/mmbiz_png/AAfx4P2w70U0CWEqwz3EdWicrovcw1vTIWhUZJF2dhGA00G1yxmBLIAYgZc1iaRuAFeEajH7Fj7BtcQ6ltcp2pCw/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1"
             }
           ]
         })
