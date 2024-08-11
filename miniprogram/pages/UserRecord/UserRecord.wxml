@@ -130,6 +130,13 @@
             custom-style="font-size: 16px; font-weight: 500"
             border="{{false}}"
           />
+          <van-cell 
+            icon="description"
+            title="备注" 
+            value="{{selectedRecord.detail}}" 
+            custom-style="font-size: 16px; font-weight: 500"
+            border="{{false}}"
+          />
           <van-button 
             bind:click="closeRecordPopup"
             custom-style="margin: 10px 16px 0 16px; width: calc(100% - 32px); font-size: 16px; background-color: #f8d148"

@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    
   },
 
   findUserRecord: function(recordNum) {
@@ -63,8 +63,11 @@ Page({
         targetUserInfo: data.data
       });
       that.findUserRecord(that.data.targetUserInfo.record_num);
+      let userPhone = app.globalData.userData.phone;
+      that.setData({
+        isDiffPhone: userPhone !== data.data.phone
+      })
     })
-    console.log(app.globalData);
   },
 
   /**

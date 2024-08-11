@@ -1,7 +1,10 @@
 <!--pages/Admin/Admin.wxml-->
 <view >
   <!-- 用户信息 -->
-  <view wx:if="{{targetUserInfo}}">
+  <view 
+    style="display: flex; flex-direction: column"
+    wx:if="{{targetUserInfo}}"
+  >
     <van-divider contentPosition="center">个人及爱车信息</van-divider>
     <van-cell-group 
       inset
@@ -40,6 +43,17 @@
         custom-style="font-size: 16px; font-weight: 500"
         value="{{targetUserInfo.record_num}}" 
         border="{{false}}"
+      />
+    </van-cell-group>
+    <van-cell-group 
+      inset
+      style="margin-top: 6px"
+      wx:if="{{isDiffPhone}}"
+    >
+      <van-cell
+        title="是您的记录？请联系我们为您更新手机号……" 
+        center="true"
+        icon="warning-o"
       />
     </van-cell-group>
   </view>
@@ -128,6 +142,13 @@
         icon="manager"
         title="操作员" 
         value="{{selectedRecord.operator}}" 
+        custom-style="font-size: 16px; font-weight: 500"
+        border="{{false}}"
+      />
+      <van-cell 
+        icon="description"
+        title="备注" 
+        value="{{selectedRecord.detail}}" 
         custom-style="font-size: 16px; font-weight: 500"
         border="{{false}}"
       />
