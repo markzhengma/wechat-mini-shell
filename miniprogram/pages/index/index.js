@@ -19,6 +19,7 @@ Page({
     createUserFormIsShow: false,
     findUserFilter: "plate",
     findUserInput: "",
+    upcomingReminder: "",
     findUserInputPlaceholder: "车牌号码",
     locationList: [
       "海拉尔河东",
@@ -111,7 +112,17 @@ Page({
     app.setAppData('userData', userData);
     this.setData({
       userData
-    })
+    });
+    this.getUpcomingReminder()
+      .then(data => {
+        console.log(data.data[0]);
+        this.setData({
+          upcomingReminder: data.data[0] || ""
+        })
+      })
+      .catch(err => {
+        console.err(err);
+      })
   },
 
   getPhoneAuthCode: function(e) {
@@ -963,6 +974,24 @@ Page({
             reject(res);
           } else {
             resolve(res);
+          }
+        },
+        fail: err => {
+          reject(err);
+        }
+      })
+    })
+  },
+
+  getUpcomingReminder: function() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://api.hulunbuirshell.com/api/reminder/user/${this.data.userData.record_num}?limit=1`,
+        success: res => {
+          if(res.data.code !== 200) {
+            reject(res.data);
+          } else {
+            resolve(res.data);
           }
         },
         fail: err => {

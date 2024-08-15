@@ -63,7 +63,7 @@ Page({
         targetUserInfo: data.data
       });
       that.findUserRecord(that.data.targetUserInfo.record_num);
-      let userPhone = app.globalData.userData.phone;
+      let userPhone = app.globalData.userData ? app.globalData.userData.phone : "";
       that.setData({
         isDiffPhone: userPhone !== data.data.phone
       })
