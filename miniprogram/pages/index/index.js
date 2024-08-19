@@ -21,14 +21,14 @@ Page({
     findUserInput: "",
     upcomingReminder: "",
     findUserInputPlaceholder: "车牌号码",
-    locationList: [
+    locationNameList: [
       "海拉尔河东",
       "海拉尔河西",
       "满洲里",
       "满洲里二店",
       "牙克石"
     ],
-    locationPhoneList:[]
+    locationList:[]
   },
 
   getJSCode: function() {
@@ -115,7 +115,6 @@ Page({
     });
     this.getUpcomingReminder()
       .then(data => {
-        console.log(data.data[0]);
         this.setData({
           upcomingReminder: data.data[0] || ""
         })
@@ -502,7 +501,7 @@ Page({
     this.setData({
       newUserInput: {
         ...this.data.newUserInput,
-        location: locationIndex !== -1 ? this.data.locationList[locationIndex] : ""
+        location: locationIndex !== -1 ? this.data.locationNameList[locationIndex] : ""
       }
     });
   },
@@ -532,7 +531,7 @@ Page({
   createUser: function() {
     const locationCharList = ["HD", "HX", "MA", "MB", "YA"];
     let newUserInfo = this.data.newUserInput;
-    let locationIndex = this.data.locationList.indexOf(newUserInfo.location);
+    let locationIndex = this.data.locationNameList.indexOf(newUserInfo.location);
     let locationChar = locationCharList[locationIndex];
 
     const REGEX_CHINESE = /^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
@@ -873,45 +872,52 @@ Page({
     })
   },
 
-  setLocationPhoneList: function() {
-    const phoneList = [
+  setLocationList: function() {
+    const locationList = [
       {
-        divider: '海拉尔'
+        location: '金壳润滑油商行（河东门店）',
+        city: '海拉尔',
+        phone: '0470-8223779',
+        address: "海拉尔建设大街109综合楼1号",
+        latitude: "49.219195", 
+        longitude: "119.778003",
       },
       {
-        location: '海拉尔河东门店',
-        phone: '0470-8223779'
+        location: '华泰隆汽车养护中心（河西门店）',
+        city: '海拉尔',
+        phone: '0470-8307711',
+        address: "夹信子二道街碧海金城2号楼6号门市",
+        latitude: "49.225699", 
+        longitude: "119.749008",
       },
       {
-        location: '海拉尔河西门店',
-        phone: '0470-8307711'
+        location: '华泰隆润滑油商行（五道街店）',
+        city: '满洲里',
+        phone: '0470-6221541',
+        address: "满洲里市东五道街青少年宫对面",
+        latitude: "49.583225428432314", 
+        longitude: "117.49421294927492",
       },
       {
-        divider: '满洲里'
+        location: '华泰隆汽车养护中心（四道街店）',
+        city: '满洲里',
+        phone: '0470-2205900',
+        address: "满洲里市四道街西头鑫华源1号楼A座",
+        latitude: "49.593869", 
+        longitude: "117.443362",
       },
       {
-        location: '满洲里四道街店',
-        phone: '0470-2205900'
-      },
-      {
-        location: '满洲里粮库综合楼店',
-        phone: '0470-6221541'
-      },
-      {
-        divider: '牙克石'
-      },
-      {
-        location: '牙克石光明南路店',
-        phone: '0470-7379457'
-      },
-      {
-        location: '牙克石一道街店',
-        phone: '13088520439'
+        location: '华太隆汽车养护中心',
+        city: '牙克石',
+        phone: '0470-7379457',
+        address: "牙克石西一道街润泽园小区1号楼2号门市",
+        latitude: "49.279249", 
+        longitude: "120.71937",
       },
     ];
-    app.setAppData("locationPhoneList", phoneList);
+    app.setAppData("locationList", locationList);
     this.setData({
-      locationPhoneList: phoneList
+      locationList: locationList
     });
   },
 
@@ -1005,7 +1011,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
-    this.setLocationPhoneList();
+    this.setLocationList();
     this.setUserData();
     this.initWxArticle();
   },

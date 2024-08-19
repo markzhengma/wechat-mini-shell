@@ -24,6 +24,12 @@ Page({
     });
   },
 
+  goToMapPage: function() {
+    wx.navigateTo({
+      url: '/pages/Map/Map'
+    })
+  },
+
   callLocation: function(e){
     wx.makePhoneCall({
       phoneNumber: e.currentTarget.dataset.phone,
@@ -41,7 +47,7 @@ Page({
    */
   onLoad() {
     this.setData({
-      locationPhoneList: app.globalData.locationPhoneList
+      locationList: app.globalData.locationList
     })
   },
 

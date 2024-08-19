@@ -1,0 +1,183 @@
+<view 
+  style="display: flex; flex-direction: column"
+>
+  <map 
+    latitude="{{currentLocation.latitude}}" 
+    longitude="{{currentLocation.longitude}}"
+    scale="{{scale}}"
+    style="width: 100vw; max-width: 400px; height: 40vh; max-height: 300px"
+    markers="{{markerList}}"
+    bindcallouttap="onTapCallout"
+  />
+   <van-cell-group
+    inset
+    style="margin-top: 6px"
+  >
+    <van-cell
+      title="门店列表"
+      border="{{false}}"
+      center="true"
+      custom-style="font-size: 18px; font-weight: 600; height: 50px; background-color: #f8d148"
+    />
+  </van-cell-group>
+  <view
+    style="height: calc(60vh - 70px); overflow: scroll"
+  >
+    <view 
+      wx:for="{{ locationList }}"
+      wx:key="unique"
+      style="display: flex; flex-direction: column"
+    >
+      <van-cell-group
+        inset
+        data-location="{{ item }}"
+        data-location-index="{{ index }}"
+        style="margin-top: 6px;"
+        bind:tap="onTapLocationList"
+      >
+        <van-cell
+          border="{{false}}"
+          custom-style="color: #808080; background-color: #dddddd"
+          clickable
+          wx:if="{{currentIndex === index}}"
+        >
+          <view slot="title">
+            <van-row
+              gutter="6"
+              style="color: #000000; font-size: 16px"
+              >
+              <van-col >
+                <van-icon 
+                  style="padding-top: 3px"
+                  name="/icons/shell.png"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{ item.location }}
+                </view>
+              </van-col>
+            </van-row>
+            <van-divider/>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="location"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{item.address}}
+                </view>
+              </van-col>
+            </van-row>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="phone"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{item.phone}}
+                </view>
+              </van-col>
+            </van-row>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="clock-o"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  8:30-17:30
+                </view>
+              </van-col>
+            </van-row>
+          </view>
+        </van-cell>
+        <van-cell
+          border="{{false}}"
+          custom-style="color: #808080"
+          clickable
+          wx:else
+        >
+          <view slot="title">
+            <van-row
+              gutter="6"
+              style="color: #000000; font-size: 16px"
+              >
+              <van-col >
+                <van-icon 
+                  name="/icons/shell.png"
+                  style="padding-top: 3px"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{ item.location }}
+                </view>
+              </van-col>
+            </van-row>
+            <van-divider/>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="location"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{item.address}}
+                </view>
+              </van-col>
+            </van-row>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="phone"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  {{item.phone}}
+                </view>
+              </van-col>
+            </van-row>
+            <van-row
+              gutter="6"
+              style="color: #808080"
+              >
+              <van-col >
+                <van-icon 
+                  name="clock-o"
+                />
+              </van-col>
+              <van-col>
+                <view>
+                  8:30-17:30
+                </view>
+              </van-col>
+            </van-row>
+          </view>
+        </van-cell>
+      </van-cell-group>
+    </view>
+  </view>
+</view>

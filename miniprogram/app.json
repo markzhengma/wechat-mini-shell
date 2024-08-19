@@ -5,7 +5,8 @@
     "pages/UserRecord/UserRecord",
     "pages/ManualSearchRecord/ManualSearchRecord",
     "pages/User/User",
-    "pages/WxArticle/WxArticle"
+    "pages/WxArticle/WxArticle",
+    "pages/Map/Map"
   ],
   "window": {
     "backgroundColor": "#f0f0f0",
@@ -57,6 +58,8 @@
     "van-empty": "@vant/weapp/empty/index",
     "van-image": "@vant/weapp/image/index",
     "van-tag": "@vant/weapp/tag/index",
-    "van-notice-bar": "@vant/weapp/notice-bar/index"
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index"
   }
 }

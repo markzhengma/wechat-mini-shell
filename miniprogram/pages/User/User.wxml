@@ -88,17 +88,32 @@
       inset
       style="margin-top: 16px"
     >
-      <van-cell>
+      <van-cell
+        border="{{false}}"
+        >
         <van-button 
           icon="phone" 
           size="large"
           bind:tap="showOrHideContactPopup"
-          custom-style="margin: 6px 0; background-color: #f8d148; font-weight: 600"
+          custom-style="margin-top: 6px; background-color: #f8d148; font-weight: 600"
         >
         联系我们
         </van-button>
       </van-cell>
+      <van-cell
+        border="{{false}}"
+        >
+        <van-button 
+          icon="location" 
+          size="large"
+          bind:tap="goToMapPage"
+          custom-style="margin-bottom: 6px; background-color: #f8d148; font-weight: 600"
+        >
+        查看门店
+        </van-button>
+      </van-cell>
     </van-cell-group>
+
     <van-divider contentPosition="center">
       更多功能敬请期待
     </van-divider>
@@ -112,25 +127,41 @@
       <view style="padding: 0 16px 16px 16px; font-size: 18px; font-weight: 600">点击联系门店</view>
       <van-cell-group
         border="{{false}}"
-        wx:for="{{ locationPhoneList }}"
+        wx:for="{{ locationList }}"
         wx:key="unique">
         <van-cell
-          title="{{ item.divider }}"
-          icon="location-o"
-          custom-style="color: gray; background-color: #f9f9f9"
-          wx:if="{{ !item.location }}"
-          border="{{ false }}"
-        />
-        <van-cell
-          title="{{ item.location }}"
-          value="{{ item.phone }}"
+          clickable
           data-phone="{{ item.phone }}"
-          
-          icon="phone-o"
-          custom-style="font-size: 16px; font-weight: 600"
+          size="large"
           bind:tap="callLocation"
-          wx:else
-        />
+        >
+          <view slot="title">
+            <van-row
+              style="font-size: 16px; font-weight: 600"
+              >
+              <van-col span="22">
+                <view>
+                  {{item.location}}
+                </view>
+              </van-col>
+              <van-col span="2">
+                <van-icon 
+                  name="phone-o"
+                  size="20px"
+                  style="padding: 2px; color: #808080; background: none; border: 1px solid #808080; border-radius: 4px;"
+                />
+              </van-col>
+            </van-row>
+            <van-row
+              style="color: #aaaaaa"
+              >
+              <view>
+                <van-icon name="location-o"/>
+                {{item.city}}
+              </view>
+            </van-row>
+          </view>
+        </van-cell>
       </van-cell-group>
     </van-popup>
   </view>
