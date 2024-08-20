@@ -84,6 +84,8 @@
             <van-button
               custom-style="font-size: 16px"
               color="#aaaaaa"
+              plain
+              icon="records-o"
               data-record="{{item}}"
               bind:click="showRecordPopup"
             >
@@ -98,7 +100,12 @@
         position="bottom"
         custom-style="padding: 20px 10px"
         bind:close="closeRecordPopup">
-        <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">记录详情</view>
+        <view 
+          style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600"
+        >
+          <van-icon name="records-o" />
+          记录详情
+        </view>
         <van-cell-group
           border="{{false}}"
         >

@@ -337,7 +337,12 @@
       position="bottom"
       custom-style="padding: 20px 10px; font-weight: 600"
       bind:close="hideFindUserForm">
-      <view style="padding: 0 16px 16px 16px; font-size: 18px">查询客户</view>
+      <view 
+        style="padding: 0 16px 16px 16px; font-size: 18px"
+      >
+        <van-icon name="search"/>
+        查询客户
+      </view>
       <view style="padding: 0 16px 8px 16px; display: flex; flex-direction: row">
         <view>
           <van-button 
@@ -439,7 +444,12 @@
       position="bottom"
       custom-style="padding: 20px 10px; font-weight: 600"
       bind:close="hideCreateUserForm">
-      <view style="padding: 0 16px 16px 16px; font-size: 18px">创建客户</view>
+      <view 
+        style="padding: 0 16px 16px 16px; font-size: 18px"
+      >
+        <van-icon name="add-o"/>
+        创建客户
+      </view>
       <van-cell-group border="{{false}}">
         <van-cell 
           title="门店" 
@@ -579,7 +589,12 @@
     round
     custom-style="height: fit-content; padding: 20px 10px; font-weight: 600"
     bind:close="showOrHideManualSearchForm">
-    <view style="padding: 0 16px 16px 16px; font-size: 18px">手动输入查询</view>
+    <view 
+      style="padding: 0 16px 16px 16px; font-size: 18px"
+    >
+      <van-icon name="search"/>
+      手动输入查询
+    </view>
     <van-cell-group border="{{false}}">
       <van-field
         value="{{ userInputPlateAndPhone.plate }}"
@@ -621,7 +636,12 @@
     round
     custom-style="height: fit-content; max-height: 50vh; padding: 20px 10px"
     bind:close="showOrHideContactPopup">
-    <view style="padding: 0 16px 16px 16px; font-size: 18px; font-weight: 600">点击联系门店</view>
+    <view 
+      style="padding: 0 16px 16px 16px; font-size: 18px; font-weight: 600"
+    >
+      <van-icon name="phone"/>
+      点击联系门店
+    </view>
     <van-cell-group
       border="{{false}}"
       wx:for="{{ locationList }}"
@@ -645,7 +665,7 @@
               <van-icon 
                 name="phone-o"
                 size="20px"
-                style="padding: 2px; color: #808080; background: none; border: 1px solid #808080; border-radius: 4px;"
+                style="padding: 2px; color: #cccccc; background: none; border: 1px solid #cccccc; border-radius: 4px;"
               />
             </van-col>
           </van-row>

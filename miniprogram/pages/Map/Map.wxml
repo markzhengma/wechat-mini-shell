@@ -12,12 +12,12 @@
   />
   <van-row
     gutter="6"
-    style="margin: 3px 0; padding: 8px 26px; color: #000000; font-size: 16px; font-weight: 600; background-color: #f8d148"
+    style="padding: 8px 26px; color: #000000; font-size: 16px; font-weight: 600; background-color: #f8d148"
     >
     <van-col >
       <van-icon 
         style="padding-top: 4px"
-        name="location-o"
+        name="location"
       />
     </van-col>
     <van-col>

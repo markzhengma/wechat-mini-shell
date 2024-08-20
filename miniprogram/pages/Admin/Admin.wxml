@@ -6,30 +6,35 @@
     <van-cell-group inset>
       <van-cell
        title="车主姓名" 
+       icon="user"
        custom-style="font-size: 16px; font-weight: 500"
        border="{{false}}"
        value="{{targetUserInfo.user_name}}" 
       />
       <van-cell 
         title="车型" 
+        icon="/icons/car.png"
         custom-style="font-size: 16px; font-weight: 500"
         border="{{false}}"
         value="{{targetUserInfo.make}}" 
       />
       <van-cell 
         title="车牌号码" 
+        icon="/icons/plate.png"
         custom-style="font-size: 16px; font-weight: 500"
         border="{{false}}"
         value="{{targetUserInfo.plate}}" 
       />
       <van-cell 
         title="联系方式" 
+        icon="/icons/mobile.png"
         custom-style="font-size: 16px; font-weight: 500"
         border="{{false}}"
         value="{{targetUserInfo.phone}}" 
       />
       <van-cell 
         title="换油证号" 
+        icon="/icons/id.png"
         custom-style="font-size: 16px; font-weight: 500"
         border="{{false}}"
         value="{{targetUserInfo.record_num}}" 
@@ -50,10 +55,16 @@
       position="bottom"
       custom-style="padding: 20px 10px"
       bind:close="closeNewRecordForm">
-      <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">创建养护记录</view>
+      <view 
+        style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600"
+      >
+        <van-icon name="add-o" />
+        创建养护记录
+      </view>
       <van-cell-group border="{{false}}">
         <van-cell 
           title="日期" 
+          icon="calendar-o"
           value="{{ newRecordInput.date }}"
           data-picker-input="date"
           custom-style="font-size: 16px; font-weight: 500"
@@ -61,6 +72,7 @@
         />
         <van-cell 
           title="项目名称" 
+          icon="shopping-cart"
           value="{{ newRecordInput.product_name }}"
           data-picker-input="product"
           custom-style="font-size: 16px; font-weight: 500"
@@ -69,6 +81,7 @@
         <van-field
           value="{{ newRecordInput.milage }}"
           label="里程"
+          left-icon="/icons/gauge.png"
           placeholder="输入里程"
           type="number"
           input-align="right"
@@ -78,6 +91,7 @@
         />
         <van-cell 
           title="赠品" 
+          icon="gift"
           value="{{ newRecordInput.gift }}"
           data-picker-input="gift"
           custom-style="font-size: 16px; font-weight: 500"
@@ -85,6 +99,7 @@
         />
         <van-cell 
           title="操作人" 
+          icon="manager"
           value="{{ newRecordInput.operator }}"
           data-picker-input="operator"
           custom-style="font-size: 16px; font-weight: 500"
@@ -93,6 +108,7 @@
         <van-field
           value="{{ newRecordInput.detail }}"
           label="备注/积分"
+          left-icon="description"
           placeholder="输入备注"
           input-align="right"
           id="new-record-input-detail"
@@ -149,6 +165,8 @@
           <van-button
             custom-style="font-size: 16px"
             color="#aaaaaa"
+            plain
+            icon="records-o"
             data-record="{{item}}"
             bind:click="showRecordPopup"
           >
@@ -164,7 +182,12 @@
       position="bottom"
       custom-style="padding: 20px 10px"
       bind:close="closeRecordPopup">
-      <view style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600">记录详情</view>
+      <view 
+        style="padding: 0 16px 8px 16px; font-size: 18px; font-weight: 600"
+      >
+        <van-icon name="records-o" />
+        记录详情
+      </view>
       <van-cell-group border="{{false}}">
         <van-cell 
           icon="calendar-o"

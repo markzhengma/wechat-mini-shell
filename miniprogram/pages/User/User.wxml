@@ -122,7 +122,12 @@
       round
       custom-style="height: fit-content; max-height: 50vh; padding: 20px 10px"
       bind:close="showOrHideContactPopup">
-      <view style="padding: 0 16px 16px 16px; font-size: 18px; font-weight: 600">点击联系门店</view>
+      <view 
+        style="padding: 0 16px 16px 16px; font-size: 18px; font-weight: 600"
+      >
+        <van-icon name="phone"/>
+        点击联系门店
+      </view>
       <van-cell-group
         border="{{false}}"
         wx:for="{{ locationList }}"
@@ -146,7 +151,7 @@
                 <van-icon 
                   name="phone-o"
                   size="20px"
-                  style="padding: 2px; color: #808080; background: none; border: 1px solid #808080; border-radius: 4px;"
+                  style="padding: 2px; color: #aaaaaa; background: none; border: 1px solid #aaaaaa; border-radius: 4px;"
                 />
               </van-col>
             </van-row>
