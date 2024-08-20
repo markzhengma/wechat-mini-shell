@@ -90,34 +90,32 @@
     >
       <van-cell
         border="{{false}}"
-        >
+      >
+        <view style="text-align: left; margin-top: 6px">预约养护或者问题咨询，请联系我们</view>
         <van-button 
           icon="phone" 
           size="large"
           bind:tap="showOrHideContactPopup"
-          custom-style="margin-top: 6px; background-color: #f8d148; font-weight: 600"
+          custom-style="background-color: #f8d148; font-weight: 600"
         >
         联系我们
         </van-button>
       </van-cell>
       <van-cell
         border="{{false}}"
-        >
+      >
+        <view style="text-align: left">在地图上找到我们的授权门店</view>
         <van-button 
           icon="location" 
           size="large"
           bind:tap="goToMapPage"
-          custom-style="margin-bottom: 6px; background-color: #f8d148; font-weight: 600"
+          custom-style="margin-bottom: 6px; font-weight: 600"
         >
         查看门店
         </van-button>
       </van-cell>
     </van-cell-group>
 
-    <van-divider contentPosition="center">
-      更多功能敬请期待
-    </van-divider>
-    
     <van-popup 
       show="{{ isShowContactPopup }}" 
       position="bottom"

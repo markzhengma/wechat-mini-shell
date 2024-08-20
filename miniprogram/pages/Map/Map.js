@@ -26,10 +26,10 @@ Page({
         longitude: location.longitude, 
         callout: {
           content: location.location,
-          padding: 10,
+          padding: 6,
           borderRadius: 6,
-          display: 'BYCLICK',
-          fontSize: 16,
+          display: 'ALWAYS',
+          fontSize: 12,
           color: '#808080'
         },
         iconPath: '/icons/poi.png', 
@@ -62,6 +62,31 @@ Page({
   onTapCallout: function(e) {
     const index = e.markerId;
     this.changeCurrentLocation(this.data.locationList[index], index);
+  },
+  onTapMarker: function(e) {
+    const index = e.markerId;
+    this.changeCurrentLocation(this.data.locationList[index], index);
+  },
+
+  openLocationApp: function(e) {
+    const { latitude, longitude, location, address } = e.currentTarget.dataset.location;
+    wx.openLocation({
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      scale: 18,
+      name: location,
+      address,
+      fail: err => {
+        console.error(err)
+      }
+    })
+  },
+
+  callLocation: function(e) {
+    const { phone } = e.currentTarget.dataset.location;
+    wx.makePhoneCall({
+      phoneNumber: phone,
+    });
   },
 
   /**
