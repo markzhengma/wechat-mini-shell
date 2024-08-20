@@ -41,8 +41,50 @@ Page({
   },
 
   setLocationList: function() {
+    const locationList = [
+      {
+        location: '金壳润滑油商行（河东门店）',
+        city: '海拉尔',
+        phone: '0470-8223779',
+        address: "海拉尔区建设大街109综合楼1号",
+        latitude: "49.219195", 
+        longitude: "119.778003",
+      },
+      {
+        location: '华泰隆汽车养护中心（河西门店）',
+        city: '海拉尔',
+        phone: '0470-8307711',
+        address: "海拉尔区夹信子二道街碧海金城2号楼6号门市",
+        latitude: "49.225699", 
+        longitude: "119.749008",
+      },
+      {
+        location: '华泰隆润滑油商行（五道街店）',
+        city: '满洲里',
+        phone: '0470-6221541',
+        address: "满洲里市东五道街青少年宫对面",
+        latitude: "49.583225428432314", 
+        longitude: "117.49421294927492",
+      },
+      {
+        location: '华泰隆汽车养护中心（四道街店）',
+        city: '满洲里',
+        phone: '0470-2205900',
+        address: "满洲里市四道街西头鑫华源1号楼A座",
+        latitude: "49.593869", 
+        longitude: "117.443362",
+      },
+      {
+        location: '华太隆汽车养护中心',
+        city: '牙克石',
+        phone: '0470-7379457',
+        address: "牙克石市西一道街润泽园小区1号楼2号门市",
+        latitude: "49.279249", 
+        longitude: "120.71937",
+      },
+    ];
     this.setData({
-      locationList: app.globalData.locationList
+      locationList: app.globalData.locationList || locationList
     })
   },
 
