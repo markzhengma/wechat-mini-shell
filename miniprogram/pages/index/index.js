@@ -953,6 +953,7 @@ Page({
         })
       })
       .catch(err => {
+        console.log("wx article api failed, using back-up data");
         console.log(err);
         this.setData({
           bannerList: [
@@ -974,7 +975,7 @@ Page({
   getWxArticleList: function() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://api.hulunbuirshell.com/api/wxarticle/recent`,
+        url: `https://api.hulunbuirshell.com/api/wxarticle/display/all`,
         success: res => {
           if(res.data.code !== 200) {
             reject(res);
