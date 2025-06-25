@@ -18,11 +18,11 @@
 		</view>
 	</view>
 	<text class="location-title">满洲里</text>
-	<view class="store-box" bindtap='dail' id = "0470-2205900">
+	<view class="store-box" bindtap='dail' id = "0470-3189089">
 		<view class = "store-title">满洲里四道街店</view>
 		<view class = "store-phone">
 			<view class="store-icon icon-phone"/>
-			0470-2205900
+			0470-3189089
 		</view>
 	</view>
 	<view class="store-box" bindtap='dail' id = "0470-6221541">

@@ -33,7 +33,15 @@
       }
     ],
     "minifyWXSS": true,
-    "condition": false
+    "condition": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "swc": false,
+    "disableSWC": true
   },
   "appid": "wx1e21359edb78fd06",
   "projectname": "hailarshell",
